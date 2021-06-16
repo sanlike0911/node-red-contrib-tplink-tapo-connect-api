@@ -10,11 +10,6 @@ The node-red-contrib-tplink-tapo-connect-api requires `Node-RED 1.00` to be inst
 
 ## Install
 
-This `node-red-contrib-tplink-tapo-connect-api` is implemented according to the `dickydoouk
-/tp-link-tapo-connect` specification.
-
-See "[dickydoouk/tp-link-tapo-connect](https://github.com/dickydoouk/tp-link-tapo-connect)" for details
-
 ```cmd
 npm install node-red-contrib-tplink-tapo-connect-api
 ```

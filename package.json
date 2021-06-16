@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-tplink-tapo-connect-api",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Unofficial node-RED node for connecting to TP-Link Tapo devices. Currently limited to the P105 smart plugs.",
   "author": "sanlike",
   "license": "Apache",
