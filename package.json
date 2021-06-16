@@ -1,11 +1,13 @@
 {
   "name": "node-red-contrib-tplink-tapo-connect-api",
   "version": "0.0.1",
-  "description": "A Node-RED node for sending to line notifications.",
+  "description": "Unofficial node-RED node for connecting to TP-Link Tapo devices. Currently limited to the P105 smart plugs.",
   "author": "sanlike",
-  "license": "ISC",
+  "license": "Apache",
   "keywords": [
-    "node-red"
+    "node-red",
+    "tplink",
+    "p105"
   ],
   "main": "none",
   "scripts": {
