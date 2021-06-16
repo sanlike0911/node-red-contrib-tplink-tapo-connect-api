@@ -10,6 +10,8 @@ tsconfig.json
 dist/
 src/
 test/
+data/
+examples/
 
 # vscode #
 ###############
