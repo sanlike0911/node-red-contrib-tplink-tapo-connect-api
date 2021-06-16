@@ -1,0 +1,20 @@
+[
+    {
+        "id": "fb493813.249f08",
+        "type": "tplink_tapo_connect_api",
+        "z": "35250d14.0fb0b2",
+        "name": "",
+        "email": "your-email@gmail.com",
+        "password": "password",
+        "deviceIp": "192.168.0.100",
+        "deviceAlias": "3d printer power supply",
+        "deviceIpRange": "192.168.0.0/24",
+        "x": 450,
+        "y": 100,
+        "wires": [
+            [
+                "cf499ce.f7c2f6"
+            ]
+        ]
+    }
+]

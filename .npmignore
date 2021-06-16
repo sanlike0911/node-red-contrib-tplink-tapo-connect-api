@@ -1,0 +1,37 @@
+# Files #
+#########
+*.bak
+*.log
+build.bat
+tsconfig.json
+
+# Directories #
+###############
+dist/
+src/
+test/
+
+# vscode #
+###############
+.vscode/
+
+# Node.js #
+###########
+package-lock.json
+.npmignore
+/node_modules/
+
+# Temporary files #
+###################
+*~
+
+# Git #
+#######
+.gitignore
+
+# Utilities #
+#############
+.jshintrc
+.jshintignore
+.travis.yml
+.editorconfig

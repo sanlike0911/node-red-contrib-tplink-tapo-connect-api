@@ -1,0 +1,48 @@
+{
+  "name": "node-red-contrib-tplink-tapo-connect-api",
+  "version": "0.0.1",
+  "description": "A Node-RED node for sending to line notifications.",
+  "author": "sanlike",
+  "license": "ISC",
+  "keywords": [
+    "node-red"
+  ],
+  "main": "none",
+  "scripts": {
+    "test": "mocha \"src/test/*_spec.js\"",
+    "dev": "ts-node src/tplink_tapo_connect_api.ts",
+    "dev:watch": "ts-node-dev --respawn src/tplink_tapo_connect_api.ts",
+    "clean": "rimraf dist/*",
+    "tsc": "tsc",
+    "build": "npm-run-all clean tsc",
+    "start": "node ./node_modules/node-red/red.js --userDir ./data --settings ./data/settings.js",
+    "start:debug": "node --inspect-brk=0.0.0.0:9229 ./node_modules/node-red/red.js --userDir ./data --settings ./data/settings.js"
+  },
+  "node-red": {
+    "version": ">=1.0.0",
+    "nodes": {
+      "tplink_tapo_connect_api": "nodes/tplink_tapo_connect_api.js"
+    }
+  },
+  "dependencies": {
+    "tp-link-tapo-connect": "^1.0.3"
+  },
+  "devDependencies": {
+    "@types/node-red": "^1.1.1",
+    "node-red": "^1.3.5",
+    "node-red-node-test-helper": "^0.2.7",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
+    "ts-node": "^9.1.1",
+    "ts-node-dev": "^1.1.6",
+    "typescript": "^4.2.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sanlike0911/node-red-contrib-tplink-tapo-connect-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sanlike0911/node-red-contrib-tplink-tapo-connect-api/issues"
+  },
+  "homepage": "https://github.com/sanlike0911/node-red-contrib-tplink-tapo-connect-api#readme"
+}
