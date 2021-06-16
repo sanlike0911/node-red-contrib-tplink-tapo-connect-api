@@ -31,11 +31,11 @@ npm install node-red-contrib-tplink-tapo-connect-api
 
   - Email
 
-    set the email address registered with Tp Link
+    set the email address registered with Tp Link.
 
   - Password
 
-    set the password registered with Tp Link
+    set the password registered with Tp Link.
 
   - Tapo ip
 
@@ -47,7 +47,7 @@ npm install node-red-contrib-tplink-tapo-connect-api
 
   - Tapo alias
 
-    set the tapo device alias registered with Tp Link
+    set the tapo device alias registered with Tp Link.
 
   - Find ip range
 
