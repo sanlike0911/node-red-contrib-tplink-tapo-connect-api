@@ -41,7 +41,7 @@ npm install node-red-contrib-tplink-tapo-connect-api
 
     set the IP address to the Tapo device.
 
-    *This setting sets either `Tapo ip` or `Tapo alias and Ip Find ip rang`.
+    *This setting chooses either `Tapo ip` or `Tapo alias and Ip Find ip rang`.
 
     *Priority: `(Tapo ip > Tapo alias)`
 
@@ -79,4 +79,10 @@ npm install node-red-contrib-tplink-tapo-connect-api
         result: boolean; /* true: success, false: failure */
         errorInf?: Error;
     }
+    ```
+
+- example
+
+    ```json
+    [{"id":"35250d14.0fb0b2","type":"tab","label":"example-1","disabled":false,"info":""},{"id":"fb493813.249f08","type":"tplink_tapo_connect_api","z":"35250d14.0fb0b2","name":"","email":"your-email@gmail.com","password":"password","deviceIp":"192.168.0.100","deviceAlias":"3d printer power supply","deviceIpRange":"192.168.0.0/24","x":570,"y":140,"wires":[["2aa38c09.564724"]]},{"id":"8311f395.25e56","type":"inject","z":"35250d14.0fb0b2","name":"","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"1","payloadType":"num","x":310,"y":140,"wires":[["fb493813.249f08"]]},{"id":"2aa38c09.564724","type":"debug","z":"35250d14.0fb0b2","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"false","statusVal":"","statusType":"auto","x":790,"y":140,"wires":[]},{"id":"9158e6ef.dd5d78","type":"inject","z":"35250d14.0fb0b2","name":"","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"0","payloadType":"str","x":310,"y":220,"wires":[["fb493813.249f08"]]},{"id":"79f7a84a.4c4d88","type":"comment","z":"35250d14.0fb0b2","name":"power on","info":"","x":260,"y":100,"wires":[]},{"id":"27568da0.cc1852","type":"comment","z":"35250d14.0fb0b2","name":"power off","info":"","x":260,"y":180,"wires":[]}]
     ```
