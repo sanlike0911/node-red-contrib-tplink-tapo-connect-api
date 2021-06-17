@@ -1,6 +1,6 @@
 # node-red-contrib-tplink-tapo-connect-api
 
-Unofficial node-RED node for connecting to TP-Link Tapo devices. Currently limited to the P105 smart plugs.
+Unofficial node-RED node for connecting to TP-Link Tapo devices. Currently limited to the P100 & P105 smart plugs.
 
 ![node](./figs/sample00.png)
 
