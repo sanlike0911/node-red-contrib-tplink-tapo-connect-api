@@ -62,6 +62,14 @@ const nodeInit = (RED) => {
                                 result = await tplink_tapo_connect_wrapper_1.tplinkTapoConnectWrapper.getInstance().setTapoTurnOnAlias(config.email, config.password, config.deviceAlias, config.deviceIpRange);
                             }
                             break;
+                        case 255:
+                            if (0 < config.deviceIp.length) {
+                                result = await tplink_tapo_connect_wrapper_1.tplinkTapoConnectWrapper.getInstance().getTapoDeviceInfo(config.email, config.password, config.deviceIp);
+                            }
+                            else {
+                                result = await tplink_tapo_connect_wrapper_1.tplinkTapoConnectWrapper.getInstance().getTapoDeviceInfoAlias(config.email, config.password, config.deviceAlias);
+                            }
+                            break;
                         default:
                             result = { "result": "error" };
                             break;

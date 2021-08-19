@@ -66,6 +66,17 @@ class tplinkTapoConnectWrapper {
      *
      *
      * @private
+     * @param {object} obj
+     * @returns {boolean}
+     * @memberof tplinkTapoConnectWrapper
+     */
+    isEmpty(obj) {
+        return !Object.keys(obj).length;
+    }
+    /**
+     *
+     *
+     * @private
      * @param {string} [_email=process.env.TAPO_USERNAME || ""]
      * @param {string} [_password=process.env.TAPO_PASSWORD || ""]
      * @param {string} [_alias=process.env.TAPO_TARGET_ALIAS || ""]
@@ -157,19 +168,55 @@ class tplinkTapoConnectWrapper {
      * @returns {Promise< object >}
      * @memberof tplinkTapoConnectWrapper
      */
-    async getTapoDevice(_email, _password, _alias) {
-        let cloudToken = await tapo.cloudLogin(_email, _password);
-        let devices = await tapo.listDevicesByType(cloudToken, 'SMART.TAPOPLUG');
-        let _result = {};
-        for (const _items of devices) {
-            if (_items.alias === _alias) {
-                let _deviceToken = await tapo.loginDevice(_email, _password, _items);
-                _result = await tapo.getDeviceInfo(_deviceToken);
-                // _result = _items;
-                break;
+    async getTapoDeviceInfoAlias(_email, _password, _alias) {
+        try {
+            let cloudToken = await tapo.cloudLogin(_email, _password);
+            let devices = await tapo.listDevicesByType(cloudToken, 'SMART.TAPOPLUG');
+            let tapoDeviceInfo = {};
+            for (const _items of devices) {
+                if (_items.alias === _alias) {
+                    let _deviceToken = await tapo.loginDevice(_email, _password, _items);
+                    tapoDeviceInfo = await tapo.getDeviceInfo(_deviceToken);
+                    break;
+                }
             }
+            if (this.isEmpty(tapoDeviceInfo)) {
+                throw "not found.";
+            }
+            return { return: true, tapoDeviceInfo: tapoDeviceInfo };
         }
-        return _result;
+        catch (error) {
+            return { result: false, errorInf: error };
+        }
+    }
+    /**
+     * getTapoDeviceInfo
+     *
+     * @private
+     * @returns {Promise< object >}
+     * @memberof tplinkTapoConnectWrapper
+     */
+    async getTapoDeviceInfo(_email, _password, _ipaddr) {
+        try {
+            let cloudToken = await tapo.loginDeviceByIp(_email, _password, _ipaddr);
+            let tapoDeviceInfo = await tapo.getDeviceInfo(cloudToken);
+            if (this.isEmpty(tapoDeviceInfo)) {
+                throw "not found.";
+            }
+            return { return: true, tapoDeviceInfo: tapoDeviceInfo };
+        }
+        catch (error) {
+            return { result: false, errorInf: error };
+        }
+    }
+    async getDeviceInfo(_email, _password, _ipaddr) {
+        try {
+            await tapo.turnOff(await tapo.loginDeviceByIp(_email, _password, _ipaddr));
+            return { result: true };
+        }
+        catch (error) {
+            return { result: false, errorInf: error };
+        }
     }
     /**
      *
