@@ -10,8 +10,6 @@ tsconfig.json
 dist/
 src/
 test/
-data/
-examples/
 
 # vscode #
 ###############
@@ -21,7 +19,8 @@ examples/
 ###########
 package-lock.json
 .npmignore
-/node_modules/
+node_modules/
+data/
 
 # Temporary files #
 ###################
@@ -37,3 +36,7 @@ package-lock.json
 .jshintignore
 .travis.yml
 .editorconfig
+
+# Node-RED #
+#############
+#examples/
