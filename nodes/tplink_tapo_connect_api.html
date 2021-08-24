@@ -14,28 +14,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<script type="text/javascript" src="./tplink_tapo_connect_wrapper/tplink_tapo_connect_wrapper.js"></script>
 
 <script type="text/javascript">
-    //import { tplinkTapoConnectWrapper } from './tplink_tapo_connect_wrapper'
-
-    // const tplinkTapoConnectWrapper = import("./tplink_tapo_connect_wrapper");
-    // const tplinkTapoConnectWrapper = require("./tplink_tapo_connect_wrapper");
-
-    function _oneditprepare() {
-
-        // events
-        $("#node-input-load-device").on("click",function() {
-            // console.log("hoge");
-            const xx = require("./tplink_tapo_connect_wrapper");
-            xx.getInstance().setTapoTurnOn("sanlike0911@gmail.com", "lacasta0911", "192.168.0.122");
-
-            // let result = tplinkTapoConnectWrapper.getInstance().test();
-            // node.warn(result);
-            // console.log(result);
-        });
-
-    }
 
     function mk_conf(NAME) {
         console.log("mk_conf");
@@ -66,8 +46,7 @@
             },
             oneditprepare: function() {
                 console.log("oneditprepare");
-                _oneditprepare();
-            }            
+            }
         };
         return conf;
     }
