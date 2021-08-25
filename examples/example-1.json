@@ -19,9 +19,9 @@
             "bb6e5822918726d8"
         ],
         "x": 28,
-        "y": 693,
-        "w": 1844,
-        "h": 994
+        "y": 653,
+        "w": 1314,
+        "h": 894
     },
     {
         "id": "421a846636b2b25c",
@@ -50,11 +50,12 @@
             "141bfba31a265bb3",
             "c516288cbfb553d6",
             "a1171bc3101bb233",
-            "c6477e2a8bdc2603"
+            "c6477e2a8bdc2603",
+            "8b3a5ace48e5ffd7"
         ],
-        "x": 774,
-        "y": 719,
-        "w": 1072,
+        "x": 54,
+        "y": 1259,
+        "w": 1132,
         "h": 262
     },
     {
@@ -69,8 +70,8 @@
         "deviceAlias": "tapo alias",
         "deviceIpRange": "192.168.0.0/24",
         "mode": "command",
-        "x": 1110,
-        "y": 840,
+        "x": 450,
+        "y": 1380,
         "wires": [
             [
                 "6fbfb86d2dee8384",
@@ -92,8 +93,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1730,
-        "y": 820,
+        "x": 1070,
+        "y": 1360,
         "wires": []
     },
     {
@@ -117,8 +118,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 1360,
-        "y": 780,
+        "x": 700,
+        "y": 1320,
         "wires": [
             [
                 "e33543d7c10ed17b"
@@ -148,8 +149,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1590,
-        "y": 820,
+        "x": 930,
+        "y": 1360,
         "wires": [
             [
                 "127b834571b481b4"
@@ -176,8 +177,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1590,
-        "y": 900,
+        "x": 930,
+        "y": 1440,
         "wires": [
             [
                 "c6477e2a8bdc2603"
@@ -196,8 +197,8 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 910,
-        "y": 760,
+        "x": 250,
+        "y": 1300,
         "wires": [
             [
                 "8c3ee46cab85ef7a"
@@ -213,8 +214,8 @@
         "property": "payload",
         "action": "",
         "pretty": false,
-        "x": 1090,
-        "y": 760,
+        "x": 430,
+        "y": 1300,
         "wires": [
             [
                 "ee11fdd3fe79df74"
@@ -233,8 +234,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 920,
-        "y": 840,
+        "x": 260,
+        "y": 1380,
         "wires": [
             [
                 "6adac2787ceb52be"
@@ -255,8 +256,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1110,
-        "y": 920,
+        "x": 450,
+        "y": 1460,
         "wires": []
     },
     {
@@ -287,8 +288,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 3,
-        "x": 1290,
-        "y": 840,
+        "x": 630,
+        "y": 1380,
         "wires": [
             [
                 "a1535cdf08d27f16"
@@ -322,8 +323,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 1380,
-        "y": 900,
+        "x": 720,
+        "y": 1440,
         "wires": [
             [
                 "e33543d7c10ed17b"
@@ -354,8 +355,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 1380,
-        "y": 940,
+        "x": 720,
+        "y": 1480,
         "wires": [
             [
                 "e33543d7c10ed17b"
@@ -379,9 +380,30 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1710,
-        "y": 900,
+        "x": 1050,
+        "y": 1440,
         "wires": []
+    },
+    {
+        "id": "8b3a5ace48e5ffd7",
+        "type": "link in",
+        "z": "35250d14.0fb0b2",
+        "g": "421a846636b2b25c",
+        "name": "",
+        "links": [
+            "d2e9e59038e59833",
+            "f23ff3c1c6ef914e",
+            "13bde9358a699fc1",
+            "63f9bdd71123651a",
+            "82317b5523d65203"
+        ],
+        "x": 95,
+        "y": 1300,
+        "wires": [
+            [
+                "d9b0be80bc1bb9fb"
+            ]
+        ]
     },
     {
         "id": "626c02ede6d56ec3",
@@ -403,8 +425,8 @@
             "f61fd5dad9741d19"
         ],
         "x": 54,
-        "y": 719,
-        "w": 698,
+        "y": 679,
+        "w": 728,
         "h": 548
     },
     {
@@ -415,7 +437,7 @@
         "name": "TEST_NORMAL",
         "info": "",
         "x": 160,
-        "y": 760,
+        "y": 720,
         "wires": []
     },
     {
@@ -441,10 +463,11 @@
             "20c74420f0f0d39e",
             "bea01c6971e80117",
             "7183ceb9e0207769",
-            "2842e7c75cad1ee5"
+            "2842e7c75cad1ee5",
+            "d2e9e59038e59833"
         ],
         "x": 94,
-        "y": 799,
+        "y": 759,
         "w": 312,
         "h": 442
     },
@@ -481,11 +504,11 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 270,
-        "y": 920,
+        "x": 230,
+        "y": 880,
         "wires": [
             [
-                "d9b0be80bc1bb9fb"
+                "d2e9e59038e59833"
             ]
         ]
     },
@@ -497,7 +520,7 @@
         "name": "power off",
         "info": "",
         "x": 200,
-        "y": 880,
+        "y": 840,
         "wires": []
     },
     {
@@ -508,7 +531,7 @@
         "name": "power on",
         "info": "",
         "x": 200,
-        "y": 960,
+        "y": 920,
         "wires": []
     },
     {
@@ -544,11 +567,11 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 270,
-        "y": 1000,
+        "x": 230,
+        "y": 960,
         "wires": [
             [
-                "d9b0be80bc1bb9fb"
+                "d2e9e59038e59833"
             ]
         ]
     },
@@ -560,7 +583,7 @@
         "name": "tapo device infomation",
         "info": "",
         "x": 240,
-        "y": 1060,
+        "y": 1020,
         "wires": []
     },
     {
@@ -596,11 +619,11 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 280,
-        "y": 1100,
+        "x": 240,
+        "y": 1060,
         "wires": [
             [
-                "d9b0be80bc1bb9fb"
+                "d2e9e59038e59833"
             ]
         ]
     },
@@ -632,11 +655,11 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 250,
-        "y": 1200,
+        "x": 210,
+        "y": 1160,
         "wires": [
             [
-                "d9b0be80bc1bb9fb"
+                "d2e9e59038e59833"
             ]
         ]
     },
@@ -648,7 +671,7 @@
         "name": "mode: toggle case: ip address",
         "info": "",
         "x": 240,
-        "y": 1160,
+        "y": 1120,
         "wires": []
     },
     {
@@ -659,7 +682,20 @@
         "name": "mode: command case: ip address",
         "info": "",
         "x": 250,
-        "y": 840,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "d2e9e59038e59833",
+        "type": "link out",
+        "z": "35250d14.0fb0b2",
+        "g": "52fdf7c85fd688b6",
+        "name": "",
+        "links": [
+            "8b3a5ace48e5ffd7"
+        ],
+        "x": 355,
+        "y": 1160,
         "wires": []
     },
     {
@@ -685,11 +721,12 @@
             "700de514e57d8fa4",
             "f043b58a98353744",
             "d7b3283bd9c4d718",
-            "11281e15de675428"
+            "11281e15de675428",
+            "82317b5523d65203"
         ],
         "x": 434,
-        "y": 799,
-        "w": 292,
+        "y": 759,
+        "w": 322,
         "h": 442
     },
     {
@@ -725,11 +762,11 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 610,
-        "y": 920,
+        "x": 570,
+        "y": 880,
         "wires": [
             [
-                "d9b0be80bc1bb9fb"
+                "82317b5523d65203"
             ]
         ]
     },
@@ -741,7 +778,7 @@
         "name": "power off",
         "info": "",
         "x": 540,
-        "y": 880,
+        "y": 840,
         "wires": []
     },
     {
@@ -752,7 +789,7 @@
         "name": "power on",
         "info": "",
         "x": 540,
-        "y": 960,
+        "y": 920,
         "wires": []
     },
     {
@@ -788,11 +825,11 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 610,
-        "y": 1000,
+        "x": 570,
+        "y": 960,
         "wires": [
             [
-                "d9b0be80bc1bb9fb"
+                "82317b5523d65203"
             ]
         ]
     },
@@ -804,7 +841,7 @@
         "name": "tapo device infomation",
         "info": "",
         "x": 580,
-        "y": 1060,
+        "y": 1020,
         "wires": []
     },
     {
@@ -840,11 +877,11 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 620,
-        "y": 1100,
+        "x": 580,
+        "y": 1060,
         "wires": [
             [
-                "d9b0be80bc1bb9fb"
+                "82317b5523d65203"
             ]
         ]
     },
@@ -876,11 +913,11 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 590,
-        "y": 1200,
+        "x": 550,
+        "y": 1160,
         "wires": [
             [
-                "d9b0be80bc1bb9fb"
+                "82317b5523d65203"
             ]
         ]
     },
@@ -892,7 +929,7 @@
         "name": "mode: toggle case: alias",
         "info": "",
         "x": 570,
-        "y": 1160,
+        "y": 1120,
         "wires": []
     },
     {
@@ -903,7 +940,20 @@
         "name": "mode: command case: alias",
         "info": "",
         "x": 580,
-        "y": 840,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "82317b5523d65203",
+        "type": "link out",
+        "z": "35250d14.0fb0b2",
+        "g": "f61fd5dad9741d19",
+        "name": "",
+        "links": [
+            "8b3a5ace48e5ffd7"
+        ],
+        "x": 715,
+        "y": 1160,
         "wires": []
     },
     {
@@ -925,11 +975,12 @@
             "58b8a78fecc453bb",
             "7b99c85a29fca8c6",
             "4661de6ee7f57840",
-            "202173c1b476545c"
+            "202173c1b476545c",
+            "13bde9358a699fc1"
         ],
-        "x": 54,
-        "y": 1279,
-        "w": 452,
+        "x": 794,
+        "y": 679,
+        "w": 522,
         "h": 242
     },
     {
@@ -960,11 +1011,11 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 310,
-        "y": 1360,
+        "x": 1050,
+        "y": 760,
         "wires": [
             [
-                "d9b0be80bc1bb9fb"
+                "13bde9358a699fc1"
             ]
         ]
     },
@@ -996,11 +1047,11 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 320,
-        "y": 1400,
+        "x": 1060,
+        "y": 800,
         "wires": [
             [
-                "d9b0be80bc1bb9fb"
+                "13bde9358a699fc1"
             ]
         ]
     },
@@ -1032,11 +1083,11 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 320,
-        "y": 1440,
+        "x": 1060,
+        "y": 840,
         "wires": [
             [
-                "d9b0be80bc1bb9fb"
+                "13bde9358a699fc1"
             ]
         ]
     },
@@ -1073,11 +1124,11 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 300,
-        "y": 1480,
+        "x": 1040,
+        "y": 880,
         "wires": [
             [
-                "d9b0be80bc1bb9fb"
+                "13bde9358a699fc1"
             ]
         ]
     },
@@ -1088,8 +1139,21 @@
         "g": "2b6e9b2e5651defb",
         "name": "TEST_ABNORMAL1",
         "info": "",
-        "x": 170,
-        "y": 1320,
+        "x": 910,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "13bde9358a699fc1",
+        "type": "link out",
+        "z": "35250d14.0fb0b2",
+        "g": "2b6e9b2e5651defb",
+        "name": "",
+        "links": [
+            "8b3a5ace48e5ffd7"
+        ],
+        "x": 1275,
+        "y": 880,
         "wires": []
     },
     {
@@ -1108,11 +1172,12 @@
         },
         "nodes": [
             "cac6ef0664fb3b88",
-            "547990cb5d29505b"
+            "547990cb5d29505b",
+            "63f9bdd71123651a"
         ],
-        "x": 54,
-        "y": 1539,
-        "w": 452,
+        "x": 794,
+        "y": 939,
+        "w": 522,
         "h": 122
     },
     {
@@ -1148,11 +1213,11 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 320,
-        "y": 1620,
+        "x": 1060,
+        "y": 1020,
         "wires": [
             [
-                "d9b0be80bc1bb9fb"
+                "63f9bdd71123651a"
             ]
         ]
     },
@@ -1163,8 +1228,21 @@
         "g": "bb6e5822918726d8",
         "name": "TEST_ABNORMAL2",
         "info": "",
-        "x": 170,
-        "y": 1580,
+        "x": 910,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "63f9bdd71123651a",
+        "type": "link out",
+        "z": "35250d14.0fb0b2",
+        "g": "bb6e5822918726d8",
+        "name": "",
+        "links": [
+            "8b3a5ace48e5ffd7"
+        ],
+        "x": 1275,
+        "y": 1020,
         "wires": []
     },
     {

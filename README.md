@@ -86,6 +86,7 @@ The processing result is passed by msg.payload. It consists of an object that co
 ```javascript
 type tapoConnectResults = {
     result: boolean; /* true: success, false: failure */
+    tapoDeviceInfo?: tapoDeviceInfo; /* smart plug device infomation */
     errorInf?: Error;
 }
 ```
