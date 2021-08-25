@@ -1,21 +1,20 @@
 import { NodeInitializer } from "node-red";
 
 // tplinkTapoConnectApi
-import tplinkTapoConnect from "./type";
+import { tplinkTapoConnectApiType } from "./type";
 
 // tplinkTapoConnectWrapper
-import { tplinkTapoConnectWrapper } from "./tplink_tapo_connect_wrapper/tplink_tapo_connect_wrapper";
-import tplinkTapoConnectWrapperType  from "./tplink_tapo_connect_wrapper/type";
+import { tplinkTapoConnectWrapper, tplinkTapoConnectWrapperType } from "./tplink_tapo_connect_wrapper/tplink_tapo_connect_wrapper";
 
 const nodeInit: NodeInitializer = (RED): void => {
 
     /**
      * checkParameter
      *
-     * @param {tplinkTapoConnect.configBase} config
+     * @param {tplinkTapoConnectApiType.configBase} config
      * @returns {boolean}
      */
-    function checkParameter(config: tplinkTapoConnect.configBase ): boolean {
+    function checkParameter(config: tplinkTapoConnectApiType.configBase ): boolean {
         let _result: boolean = false;
         if(config.email.length > 0 && config.password.length > 0 && (config.deviceIp.length > 0 || config.deviceAlias.length > 0) ){
             _result = true;
@@ -26,15 +25,15 @@ const nodeInit: NodeInitializer = (RED): void => {
     /**
      * tplinkTapoConnectApiConstructor
      *
-     * @param {tplinkTapoConnect.appNode} this
-     * @param {tplinkTapoConnect.appNodeDef} config
+     * @param {tplinkTapoConnectApiType.appNode} this
+     * @param {tplinkTapoConnectApiType.appNodeDef} config
      */
     function tplinkTapoConnectApiConstructor(
-        this: tplinkTapoConnect.appNode,
-        config: tplinkTapoConnect.appNodeDef
+        this: tplinkTapoConnectApiType.appNode,
+        config: tplinkTapoConnectApiType.appNodeDef
     ): void {
         RED.nodes.createNode(this, config);
-        let node: tplinkTapoConnect.appNode = this;
+        let node: tplinkTapoConnectApiType.appNode = this;
 
         try {
             node.email = config?.email ?? "";
@@ -66,10 +65,10 @@ const nodeInit: NodeInitializer = (RED): void => {
         /**
          * setTapoTurnOff
          *
-         * @param {tplinkTapoConnect.configBase} config
+         * @param {tplinkTapoConnectApiType.configBase} config
          * @returns {Promise< tplinkTapoConnectWrapperType.tapoConnectResults >}
          */
-        async function setTapoTurnOff(config: tplinkTapoConnect.configBase): Promise< tplinkTapoConnectWrapperType.tapoConnectResults > {
+        async function setTapoTurnOff(config: tplinkTapoConnectApiType.configBase): Promise< tplinkTapoConnectWrapperType.tapoConnectResults > {
             let ret: tplinkTapoConnectWrapperType.tapoConnectResults;
             if( 0 < config.deviceIp.length ){
                 ret = await tplinkTapoConnectWrapper.getInstance().
@@ -84,10 +83,10 @@ const nodeInit: NodeInitializer = (RED): void => {
         /**
          * setTapoTurnOn
          *
-         * @param {tplinkTapoConnect.configBase} config
+         * @param {tplinkTapoConnectApiType.configBase} config
          * @returns {Promise< tplinkTapoConnectWrapperType.tapoConnectResults >}
          */
-        async function setTapoTurnOn(config: tplinkTapoConnect.configBase): Promise< tplinkTapoConnectWrapperType.tapoConnectResults > {
+        async function setTapoTurnOn(config: tplinkTapoConnectApiType.configBase): Promise< tplinkTapoConnectWrapperType.tapoConnectResults > {
             let ret: tplinkTapoConnectWrapperType.tapoConnectResults;
             if( 0 < config.deviceIp.length ){
                 ret = await tplinkTapoConnectWrapper.getInstance().
@@ -102,10 +101,10 @@ const nodeInit: NodeInitializer = (RED): void => {
         /**
          * getTapoDeviceInfo
          *
-         * @param {tplinkTapoConnect.configBase} config
+         * @param {tplinkTapoConnectApiType.configBase} config
          * @returns {Promise< tplinkTapoConnectWrapperType.tapoDeviceInfoResults >}
          */
-        async function getTapoDeviceInfo(config: tplinkTapoConnect.configBase): Promise< tplinkTapoConnectWrapperType.tapoConnectResults > {
+        async function getTapoDeviceInfo(config: tplinkTapoConnectApiType.configBase): Promise< tplinkTapoConnectWrapperType.tapoConnectResults > {
             let ret: tplinkTapoConnectWrapperType.tapoConnectResults;
             if( 0 < config.deviceIp.length ){
                 ret = await tplinkTapoConnectWrapper.getInstance().
@@ -124,7 +123,7 @@ const nodeInit: NodeInitializer = (RED): void => {
                 msg.payload = {};
 
                 // config
-                let config: tplinkTapoConnect.configBase = {
+                let config: tplinkTapoConnectApiType.configBase = {
                     email: msg?.email ?? node.email,
                     password: msg?.password ?? node.password,
                     deviceIp: msg?.deviceIp ?? node.deviceIp,

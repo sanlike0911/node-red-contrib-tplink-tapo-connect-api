@@ -1,6 +1,6 @@
-declare namespace tplinkTapoConnectWrapperType {
+export namespace tplinkTapoConnectWrapperType {
 
-    type devicesList = {
+    export type devicesList = {
 
         deviceType: string;     // "SMART.TAPOPLUG",
 
@@ -35,9 +35,7 @@ declare namespace tplinkTapoConnectWrapperType {
         status: number          // 0,
     }
 
-
-
-    type tapoDeviceInfo = {
+    export type tapoDeviceInfo = {
 
         device_id: string;  // "guidxxxxx"
 
@@ -99,7 +97,7 @@ declare namespace tplinkTapoConnectWrapperType {
 
     }
 
-    type tapoConnectResults = {
+    export type tapoConnectResults = {
 
         result: boolean;
       
@@ -110,5 +108,3 @@ declare namespace tplinkTapoConnectWrapperType {
     }
 
 }
-
-export default tplinkTapoConnectWrapperType; 

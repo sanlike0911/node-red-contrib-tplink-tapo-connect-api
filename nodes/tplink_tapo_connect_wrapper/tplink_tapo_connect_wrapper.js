@@ -248,6 +248,5 @@ class tplinkTapoConnectWrapper {
     }
 }
 exports.tplinkTapoConnectWrapper = tplinkTapoConnectWrapper;
-// export default tplinkTapoConnectWrapperType;
 /* E.O.F */ 
 //# sourceMappingURL=tplink_tapo_connect_wrapper.js.map

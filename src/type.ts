@@ -1,10 +1,10 @@
 import { Node, NodeDef } from "node-red";
 
-declare namespace tplinkTapoConnectApi {
+export namespace tplinkTapoConnectApiType {
 
-    type modeTypes = "command" | "toggle";
+    export type modeTypes = "command" | "toggle";
 
-    type configBase = {
+    export type configBase = {
 
         email: string;
 
@@ -19,28 +19,7 @@ declare namespace tplinkTapoConnectApi {
         mode : modeTypes;
     }
 
-    type tapoDeviceKey = {
-
-        key: Buffer;
-
-        iv: Buffer;
-
-        deviceIp: string;
-
-        sessionCookie: string;
-
-        token?: string;
-    }
-
-    type tapoConnectResults = {
-
-        result: boolean;
-      
-        errorInf?: Error;
-      
-    }
-
-    type nodeRedMsgBase = {
+    export type nodeRedMsgBase = {
 
         _msgid?: string;
 
@@ -49,9 +28,7 @@ declare namespace tplinkTapoConnectApi {
         topic?: string;
     }
 
-    // interface inputMessage extends nodeRedMsgBase, requestQueryParameters {}
-    interface appNodeDef extends NodeDef, configBase {}
-    interface appNode extends Node, configBase {}
-}
+    export interface appNodeDef extends NodeDef, configBase {}
+    export interface appNode extends Node, configBase {}
 
-export default tplinkTapoConnectApi;
+}

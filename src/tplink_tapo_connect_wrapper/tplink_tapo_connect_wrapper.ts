@@ -1,7 +1,7 @@
 import * as tapo from 'tp-link-tapo-connect';
 import find from 'local-devices'
 
-import tplinkTapoConnectWrapperType from './type'
+import { tplinkTapoConnectWrapperType } from './type'
 
 /**
  *
@@ -234,5 +234,8 @@ export class tplinkTapoConnectWrapper {
         }
     }
 }
-// export default tplinkTapoConnectWrapperType;
+
+// type.ts
+export { tplinkTapoConnectWrapperType } from './type'
+
 /* E.O.F */

@@ -5,7 +5,7 @@ const nodeInit = (RED) => {
     /**
      * checkParameter
      *
-     * @param {tplinkTapoConnect.configBase} config
+     * @param {tplinkTapoConnectApiType.configBase} config
      * @returns {boolean}
      */
     function checkParameter(config) {
@@ -18,8 +18,8 @@ const nodeInit = (RED) => {
     /**
      * tplinkTapoConnectApiConstructor
      *
-     * @param {tplinkTapoConnect.appNode} this
-     * @param {tplinkTapoConnect.appNodeDef} config
+     * @param {tplinkTapoConnectApiType.appNode} this
+     * @param {tplinkTapoConnectApiType.appNodeDef} config
      */
     function tplinkTapoConnectApiConstructor(config) {
         var _a, _b, _c, _d, _e, _f;
@@ -54,7 +54,7 @@ const nodeInit = (RED) => {
         /**
          * setTapoTurnOff
          *
-         * @param {tplinkTapoConnect.configBase} config
+         * @param {tplinkTapoConnectApiType.configBase} config
          * @returns {Promise< tplinkTapoConnectWrapperType.tapoConnectResults >}
          */
         async function setTapoTurnOff(config) {
@@ -72,7 +72,7 @@ const nodeInit = (RED) => {
         /**
          * setTapoTurnOn
          *
-         * @param {tplinkTapoConnect.configBase} config
+         * @param {tplinkTapoConnectApiType.configBase} config
          * @returns {Promise< tplinkTapoConnectWrapperType.tapoConnectResults >}
          */
         async function setTapoTurnOn(config) {
@@ -90,7 +90,7 @@ const nodeInit = (RED) => {
         /**
          * getTapoDeviceInfo
          *
-         * @param {tplinkTapoConnect.configBase} config
+         * @param {tplinkTapoConnectApiType.configBase} config
          * @returns {Promise< tplinkTapoConnectWrapperType.tapoDeviceInfoResults >}
          */
         async function getTapoDeviceInfo(config) {
