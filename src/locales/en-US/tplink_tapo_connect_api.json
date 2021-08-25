@@ -8,18 +8,24 @@
             "deviceIp": "Tapo ip",
             "deviceAlias": "Tapo alias",
             "deviceIpRange": "Find ip range",
-            "targetDeviceSettings": "Tapo device settings"
+            "targetDeviceSettings": "Tapo device settings",
+            "mode":{
+                "title": "mode select",
+                "command":"command",
+                "toggle":"toggle",
+                "description": "select \"command mode or toggle mode\""
+            }
         },
         "descriptions": {
             "targetDeviceSettings": "select \"Tapo ip or (Tapo alias and Ip Find ip range)\"",
             "targetDeviceSettingsPriority": "* Priority: (Tapo ip > Tapo alias)"
         },
         "message": {
-            "ready": "Ready",
-            "complete": "Send complete",
-            "configError": "Config error",
-            "error": "Error occurred",
-            "communicationError": "Transmission error"
+            "ready": "Ready,",
+            "complete": "Completed.",
+            "configError": "Config error.",
+            "error": "Error.",
+            "communicationError": "Communication error."
         }
     }
 }

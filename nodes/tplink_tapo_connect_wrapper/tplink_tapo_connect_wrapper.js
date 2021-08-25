@@ -172,18 +172,14 @@ class tplinkTapoConnectWrapper {
         try {
             let cloudToken = await tapo.cloudLogin(_email, _password);
             let devices = await tapo.listDevicesByType(cloudToken, 'SMART.TAPOPLUG');
-            let tapoDeviceInfo = {};
             for (const _items of devices) {
                 if (_items.alias === _alias) {
                     let _deviceToken = await tapo.loginDevice(_email, _password, _items);
-                    tapoDeviceInfo = await tapo.getDeviceInfo(_deviceToken);
-                    break;
+                    let tapoDeviceInfo = await tapo.getDeviceInfo(_deviceToken);
+                    return { result: true, tapoDeviceInfo: tapoDeviceInfo };
                 }
             }
-            if (this.isEmpty(tapoDeviceInfo)) {
-                throw "not found.";
-            }
-            return { return: true, tapoDeviceInfo: tapoDeviceInfo };
+            throw new Error("tapo device info not found.");
         }
         catch (error) {
             return { result: false, errorInf: error };
@@ -201,9 +197,9 @@ class tplinkTapoConnectWrapper {
             let cloudToken = await tapo.loginDeviceByIp(_email, _password, _ipaddr);
             let tapoDeviceInfo = await tapo.getDeviceInfo(cloudToken);
             if (this.isEmpty(tapoDeviceInfo)) {
-                throw "not found.";
+                throw new Error("tapo device info not found.");
             }
-            return { return: true, tapoDeviceInfo: tapoDeviceInfo };
+            return { result: true, tapoDeviceInfo: tapoDeviceInfo };
         }
         catch (error) {
             return { result: false, errorInf: error };
@@ -252,5 +248,6 @@ class tplinkTapoConnectWrapper {
     }
 }
 exports.tplinkTapoConnectWrapper = tplinkTapoConnectWrapper;
+// export default tplinkTapoConnectWrapperType;
 /* E.O.F */ 
 //# sourceMappingURL=tplink_tapo_connect_wrapper.js.map

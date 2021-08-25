@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <script type="text/x-red" data-help-name="tplink_tapo_connect_api" data-lang="en-US">
+
   <p>Unofficial node-RED node for connecting to TP-Link Tapo devices. Currently limited to the P105 smart plugs</p>
 
   <!-- property -->
@@ -9,16 +10,28 @@
     <!-- Name -->
     <dt class="optional">Name<span class="property-type">string</span></dt>
     <dd>set the node name displayed in the flow.</dd>
+
     <!-- Email -->
     <dt>Email<span class="property-type">string</span></dt>
     <dd>
       <p>set the email address registered with Tp Link.</p>
     </dd>
+
     <!-- Password -->
     <dt>Password<span class="property-type">string</span></dt>
     <dd>
       <p>set the password registered with Tp Link.</p>
     </dd>
+
+    <!-- mode -->
+    <dt>Mode select<span class="property-type">string</span></dt>
+    <dd>
+      <p>Select the mode of "tapo-connect-api".</p>
+      <p>[Usage]</p>
+      <p>- command: <a href="#inputs">Please see here</a></p>
+      <p>- toggle : tapo device power "on => off" or "off => on"</p>
+    </dd>
+
     <!-- Tapo ip -->
     <dt class="optional">Tapo ip<span class="property-type">string</span></dt>
     <dd>
@@ -26,9 +39,11 @@
       <p>*This setting sets either `Tapo ip` or `Tapo alias and Ip Find ip rang`.</p>
       <p>*Priority: `(Tapo ip > Tapo alias)`</p>
     </dd>
+
     <!-- Tapo alias -->
     <dt class="optional">Tapo alias<span class="property-type">string</span></dt>
     <p>set the tapo device alias registered with Tp Link.</p>
+
     <!-- Find ip range-->
     <dt class="optional">Find ip range<span class="property-type">string</span></dt>
     <dd></dd>
@@ -43,14 +58,16 @@
 
   <!-- inputs -->
   <hr style="margin-top: 30px; margin-bottom: 30px;" align="middle">
-  <h3>Inputs</h3>
+  <h3 id="inputs">Inputs</h3>
   <dl class="message-properties">
       <dt>payload<span class="property-type">number</span></dt>
       <dd>
-        <p>0: power off</p>
-        <p>1: power on</p>
-      </dd>  
-    </dl>
+        <p>  0: tapo device power off</p>
+        <p>  1: tapo device power on</p>
+        <p>255: tapo device info</p>
+      </dd>
+  </dl>
+  <p>*It works in "command" mode.</p>
 
   <!-- outputs -->
   <hr style="margin-top: 30px; margin-bottom: 30px;" align="middle">

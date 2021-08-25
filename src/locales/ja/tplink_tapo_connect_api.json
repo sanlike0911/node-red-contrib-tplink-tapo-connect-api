@@ -8,7 +8,13 @@
             "deviceIp": "Tapo ip",
             "deviceAlias": "Tapo alias",
             "deviceIpRange": "Find ip range",
-            "targetDeviceSettings": "Tapo device settings"
+            "targetDeviceSettings": "Tapo device settings",
+            "mode":{
+                "title": "mode select",
+                "command":"command",
+                "toggle":"toggle",
+                "description": "select \"command mode or toggle mode\""
+            }
         },
         "descriptions": {
             "targetDeviceSettings": "select \"Tapo ip or (Tapo alias and Ip Find ip range)\"",

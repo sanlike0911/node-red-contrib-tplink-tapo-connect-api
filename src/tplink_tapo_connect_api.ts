@@ -1,10 +1,20 @@
 import { NodeInitializer } from "node-red";
+
+// tplinkTapoConnectApi
 import tplinkTapoConnect from "./type";
 
+// tplinkTapoConnectWrapper
 import { tplinkTapoConnectWrapper } from "./tplink_tapo_connect_wrapper/tplink_tapo_connect_wrapper";
+import tplinkTapoConnectWrapperType  from "./tplink_tapo_connect_wrapper/type";
 
 const nodeInit: NodeInitializer = (RED): void => {
 
+    /**
+     * checkParameter
+     *
+     * @param {tplinkTapoConnect.configBase} config
+     * @returns {boolean}
+     */
     function checkParameter(config: tplinkTapoConnect.configBase ): boolean {
         let _result: boolean = false;
         if(config.email.length > 0 && config.password.length > 0 && (config.deviceIp.length > 0 || config.deviceAlias.length > 0) ){
@@ -13,6 +23,12 @@ const nodeInit: NodeInitializer = (RED): void => {
         return _result
     }
 
+    /**
+     * tplinkTapoConnectApiConstructor
+     *
+     * @param {tplinkTapoConnect.appNode} this
+     * @param {tplinkTapoConnect.appNodeDef} config
+     */
     function tplinkTapoConnectApiConstructor(
         this: tplinkTapoConnect.appNode,
         config: tplinkTapoConnect.appNodeDef
@@ -26,15 +42,79 @@ const nodeInit: NodeInitializer = (RED): void => {
             node.deviceIp = config?.deviceIp ?? "";
             node.deviceAlias = config?.deviceAlias ?? "";
             node.deviceIpRange = config?.deviceIpRange ?? "";
+            node.mode = config?.mode ?? "command";
 
             if(checkParameter(node)){
-                node.status({fill:"blue", shape:"dot", text:"resources.message.ready"});
+                switch(node.mode){
+                    case "command":
+                    case "toggle":
+                        node.status({fill:"blue", shape:"dot", text:RED._("resources.message.ready") + `(${node.mode})` });
+                        break;
+                    default:
+                        node.status({fill:"red", shape:"ring", text:"resources.message.configError"});
+                        break;
+                }
             } else {
                 node.status({fill:"red", shape:"ring", text:"resources.message.configError"});
             }
         } catch (error) {
             node.status({fill:"red", shape:"ring", text:"resources.message.error"});
             node.error(error);
+        }
+
+
+        /**
+         * setTapoTurnOff
+         *
+         * @param {tplinkTapoConnect.configBase} config
+         * @returns {Promise< tplinkTapoConnectWrapperType.tapoConnectResults >}
+         */
+        async function setTapoTurnOff(config: tplinkTapoConnect.configBase): Promise< tplinkTapoConnectWrapperType.tapoConnectResults > {
+            let ret: tplinkTapoConnectWrapperType.tapoConnectResults;
+            if( 0 < config.deviceIp.length ){
+                ret = await tplinkTapoConnectWrapper.getInstance().
+                            setTapoTurnOff(config.email, config.password, config.deviceIp);
+            } else {
+                ret = await tplinkTapoConnectWrapper.getInstance().
+                            setTapoTurnOffAlias(config.email, config.password, config.deviceAlias, config.deviceIpRange);
+            }
+            return ret;
+        }
+
+        /**
+         * setTapoTurnOn
+         *
+         * @param {tplinkTapoConnect.configBase} config
+         * @returns {Promise< tplinkTapoConnectWrapperType.tapoConnectResults >}
+         */
+        async function setTapoTurnOn(config: tplinkTapoConnect.configBase): Promise< tplinkTapoConnectWrapperType.tapoConnectResults > {
+            let ret: tplinkTapoConnectWrapperType.tapoConnectResults;
+            if( 0 < config.deviceIp.length ){
+                ret = await tplinkTapoConnectWrapper.getInstance().
+                            setTapoTurnOn(config.email, config.password, config.deviceIp);
+            } else {
+                ret = await tplinkTapoConnectWrapper.getInstance().
+                            setTapoTurnOnAlias(config.email, config.password, config.deviceAlias, config.deviceIpRange);
+            }
+            return ret;
+        }
+
+        /**
+         * getTapoDeviceInfo
+         *
+         * @param {tplinkTapoConnect.configBase} config
+         * @returns {Promise< tplinkTapoConnectWrapperType.tapoDeviceInfoResults >}
+         */
+        async function getTapoDeviceInfo(config: tplinkTapoConnect.configBase): Promise< tplinkTapoConnectWrapperType.tapoConnectResults > {
+            let ret: tplinkTapoConnectWrapperType.tapoConnectResults;
+            if( 0 < config.deviceIp.length ){
+                ret = await tplinkTapoConnectWrapper.getInstance().
+                            getTapoDeviceInfo(config.email, config.password, config.deviceIp);
+            } else {
+                ret = await tplinkTapoConnectWrapper.getInstance().
+                            getTapoDeviceInfoAlias(config.email, config.password, config.deviceAlias);
+            }
+            return ret;
         }
 
         node.on('input', async (msg: any) => {
@@ -49,47 +129,51 @@ const nodeInit: NodeInitializer = (RED): void => {
                     password: msg?.password ?? node.password,
                     deviceIp: msg?.deviceIp ?? node.deviceIp,
                     deviceAlias: msg?.deviceAlias ?? node.deviceAlias,
-                    deviceIpRange: msg?.deviceIpRange ?? node.deviceIpRange
+                    deviceIpRange: msg?.deviceIpRange ?? node.deviceIpRange,
+                    mode: msg?.mode ?? node.mode
                 };
 
-                let result: object = {};
+                let ret: tplinkTapoConnectWrapperType.tapoConnectResults = {
+                    result: false
+                };
 
                 if(checkParameter(config)){
-                    switch(power){
-                    case 0:
-                        if( 0 < config.deviceIp.length ){
-                            result = await tplinkTapoConnectWrapper.getInstance().setTapoTurnOff(config.email, config.password, config.deviceIp);
-                        } else {
-                            result = await tplinkTapoConnectWrapper.getInstance().setTapoTurnOffAlias(config.email, config.password, config.deviceAlias, config.deviceIpRange);
+                    // switch: mode
+                    switch(config.mode){
+                    case "command":
+                        // mode: command
+                        switch(power){
+                            case   0: ret = await setTapoTurnOff(config);       break;
+                            case   1: ret = await setTapoTurnOn(config);        break;
+                            case 255: ret = await getTapoDeviceInfo(config);    break;
+                            default: throw new Error("command not found.");
                         }
                         break;
-                    case 1:
-                        if( 0 < config.deviceIp.length ){
-                            result = await tplinkTapoConnectWrapper.getInstance().setTapoTurnOn(config.email, config.password, config.deviceIp);
+                    case "toggle":
+                        // mode: toggle
+                        ret = await getTapoDeviceInfo(config);
+                        if( ret.result ){
+                            switch(ret.tapoDeviceInfo?.device_on){
+                                case true:  ret = await setTapoTurnOff(config);             break;
+                                case false: ret = await setTapoTurnOn(config);              break;
+                                default:    throw new Error("tapoDeviceInfo.device_on not found.");
+                            }
                         } else {
-                            result = await tplinkTapoConnectWrapper.getInstance().setTapoTurnOnAlias(config.email, config.password, config.deviceAlias, config.deviceIpRange);
-                        }
-                        break;
-                    case 255:
-                        if( 0 < config.deviceIp.length ){
-                            result = await tplinkTapoConnectWrapper.getInstance().getTapoDeviceInfo(config.email, config.password, config.deviceIp);
-                        } else {
-                            result = await tplinkTapoConnectWrapper.getInstance().getTapoDeviceInfoAlias(config.email, config.password, config.deviceAlias);
+                            throw new Error("faild to get tapo device info.");
                         }
                         break;
                     default:
-                        result = { "result":"error" };
-                        break;
+                        throw new Error("config mode not found.");
                     }
                 } else {
-                    result = { "result":"error" };
+                    throw new Error("faild to get config.");
                 }
-                msg.payload = result;
+                msg.payload = ret;
                 node.status({fill:"green", shape:"dot", text:"resources.message.complete"});
             } catch (error) {
                 node.status({fill:"red", shape:"ring", text:"resources.message.communicationError"});
                 node.error(error);
-                msg.payload = error;
+                msg.payload = { result: false, errorInf: /*{ name: "Error", message: error}*/error };
             }
             node.send(msg);
         });

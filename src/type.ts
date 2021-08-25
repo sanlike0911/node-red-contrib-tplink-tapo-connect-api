@@ -2,6 +2,8 @@ import { Node, NodeDef } from "node-red";
 
 declare namespace tplinkTapoConnectApi {
 
+    type modeTypes = "command" | "toggle";
+
     type configBase = {
 
         email: string;
@@ -13,6 +15,8 @@ declare namespace tplinkTapoConnectApi {
         deviceAlias: string;
 
         deviceIpRange: string;
+
+        mode : modeTypes;
     }
 
     type tapoDeviceKey = {
