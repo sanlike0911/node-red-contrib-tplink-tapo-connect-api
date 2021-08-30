@@ -69,5 +69,11 @@ typings/
 .env
 .next
 
+# my node-red project
+data/
+!/data/settings.js
+
 # my project
-tapoSettings.json
+dist/
+nodes/*.map
+package-lock.json

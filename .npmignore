@@ -4,6 +4,7 @@
 *.log
 build.bat
 tsconfig.json
+build-exclude-filelist
 
 # Directories #
 ###############
