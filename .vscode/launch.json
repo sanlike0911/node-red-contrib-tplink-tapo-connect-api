@@ -23,6 +23,17 @@
             "localRoot": "${workspaceFolder}\\test\\data\\your-node\\nodes",
             "remoteRoot": "${workspaceFolder}",
             "protocol": "inspector"
-        }
+        },
+        {
+            "name": "launch nodejs",
+            "program": "${file}",
+            "request": "launch",
+            "type": "node",
+            "runtimeExecutable": "${env:APPDATA}/npm/mocha.cmd",
+            "runtimeArgs": [],
+            "cwd": "${workspaceFolder}",
+            "args": [
+            ]
+        }        
     ]
 }

@@ -11,7 +11,7 @@
   ],
   "main": "none",
   "scripts": {
-    "test": "mocha \"src/test/*_spec.js\"",
+    "test": "mocha \"src/nodes/test/*_spec.js\"",
     "dev": "ts-node src/tplink_tapo_connect_api.ts",
     "dev:watch": "ts-node-dev --respawn src/tplink_tapo_connect_api.ts",
     "clean": "rimraf dist/*",
