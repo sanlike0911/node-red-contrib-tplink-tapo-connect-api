@@ -75,5 +75,5 @@ data/
 
 # my project
 dist/
-nodes/*.map
+nodes/
 package-lock.json
