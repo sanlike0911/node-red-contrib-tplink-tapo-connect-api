@@ -4,7 +4,7 @@ const tagetNode = require("../../../dist/tplink_tapo_connect_api.js");
 const current = __dirname;
 const fs = require("fs");
 
-helper.init(require.resolve('node-red'), { 
+helper.init(require.resolve('node-red'), {
   // functionGlobalContext: { fs:require('fs') }
 });
 
@@ -12,7 +12,7 @@ describe("tplink_tapo_connect_api Node", function () {
 
   let tapoAccountSettings = {};
 
-  before(function(done) {
+  before(function (done) {
     // runs once before the first test in this block
     try {
       fs.readFile(`${current}/../../../data/tapoSettings.json`, "utf-8", (err, data) => {
@@ -27,10 +27,10 @@ describe("tplink_tapo_connect_api Node", function () {
     helper.startServer(done);
   });
 
-  after(function(done) {
+  after(function (done) {
     // runs once after the last test in this block
     helper.stopServer(done);
-  }); 
+  });
 
   beforeEach(function () {
     // runs before each test in this block
@@ -48,7 +48,7 @@ describe("tplink_tapo_connect_api Node", function () {
       try {
         n1.should.have.property('name', 'test name');
         done();
-      } catch(err) {
+      } catch (err) {
         done(err);
       }
     });
@@ -69,7 +69,7 @@ describe("tplink_tapo_connect_api Node", function () {
           deviceAlias: tapoAccountSettings.deviceAlias,
           deviceIpRange: tapoAccountSettings.deviceIpRange,
           mode: tapoAccountSettings.mode,
-          wires:[["n2"]] 
+          wires: [["n2"]]
         },
         { id: "n2", type: "helper" }
       ];
@@ -80,14 +80,14 @@ describe("tplink_tapo_connect_api Node", function () {
           try {
             msg.payload.result.should.have.true(); /* msg.payload.result === true */
             done();
-          } catch(err) {
+          } catch (err) {
             done(err);
           }
         });
         n1.receive({ payload: 1 });
       });
     });
-  
+
     it('should result true of command 0(power off) case:Search mode: device IP', function (done) {
       this.timeout(5000);
       const flow = [
@@ -101,7 +101,7 @@ describe("tplink_tapo_connect_api Node", function () {
           deviceAlias: tapoAccountSettings.deviceAlias,
           deviceIpRange: tapoAccountSettings.deviceIpRange,
           mode: tapoAccountSettings.mode,
-          wires:[["n2"]] 
+          wires: [["n2"]]
         },
         { id: "n2", type: "helper" }
       ];
@@ -112,11 +112,11 @@ describe("tplink_tapo_connect_api Node", function () {
           try {
             msg.payload.result.should.have.true(); /* msg.payload.result === true */
             done();
-          } catch(err) {
+          } catch (err) {
             done(err);
           }
         });
-        n1.receive({ payload: 0});
+        n1.receive({ payload: 0 });
       });
     });
 
@@ -133,7 +133,7 @@ describe("tplink_tapo_connect_api Node", function () {
           deviceAlias: tapoAccountSettings.deviceAlias,
           deviceIpRange: tapoAccountSettings.deviceIpRange,
           mode: "toggle",
-          wires:[["n2"]] 
+          wires: [["n2"]]
         },
         { id: "n2", type: "helper" }
       ];
@@ -144,11 +144,11 @@ describe("tplink_tapo_connect_api Node", function () {
           try {
             msg.payload.result.should.have.true(); /* msg.payload.result === true */
             done();
-          } catch(err) {
+          } catch (err) {
             done(err);
           }
         });
-        n1.receive({ payload: 1});
+        n1.receive({ payload: 1 });
       });
     });
 
@@ -165,7 +165,7 @@ describe("tplink_tapo_connect_api Node", function () {
           deviceAlias: tapoAccountSettings.deviceAlias,
           deviceIpRange: tapoAccountSettings.deviceIpRange,
           mode: "toggle",
-          wires:[["n2"]] 
+          wires: [["n2"]]
         },
         { id: "n2", type: "helper" }
       ];
@@ -176,11 +176,11 @@ describe("tplink_tapo_connect_api Node", function () {
           try {
             msg.payload.result.should.have.true(); /* msg.payload.result === true */
             done();
-          } catch(err) {
+          } catch (err) {
             done(err);
           }
         });
-        n1.receive({ payload: 1});
+        n1.receive({ payload: 1 });
       });
     });
 
@@ -197,7 +197,7 @@ describe("tplink_tapo_connect_api Node", function () {
           deviceAlias: tapoAccountSettings.deviceAlias,
           deviceIpRange: tapoAccountSettings.deviceIpRange,
           mode: tapoAccountSettings.mode,
-          wires:[["n2"]] 
+          wires: [["n2"]]
         },
         { id: "n2", type: "helper" }
       ];
@@ -209,7 +209,7 @@ describe("tplink_tapo_connect_api Node", function () {
             msg.payload.result.should.have.true(); /* msg.payload.result === true */
             msg.payload.should.have.ownProperty("tapoDeviceInfo");  /* msg.payload.hasOwnProperty('tapoDeviceInfo') */
             done();
-          } catch(err) {
+          } catch (err) {
             done(err);
           }
         });
@@ -240,10 +240,10 @@ describe("tplink_tapo_connect_api Node", function () {
           n1.on("input", (msg) => {
             try {
               msg.payload.result.should.have.not.true();  /* msg.payload.result !== true */
-              msg.payload.errorInf.message.should.have.equal('command not found.');            
+              msg.payload.errorInf.message.should.have.equal('command not found.');
               n1.error.should.be.calledWithExactly(msg.payload.errorInf);
               done();
-            } catch(err) {
+            } catch (err) {
               done(err);
             }
           });
@@ -265,7 +265,7 @@ describe("tplink_tapo_connect_api Node", function () {
             deviceAlias: tapoAccountSettings.deviceAlias,
             deviceIpRange: tapoAccountSettings.deviceIpRange,
             mode: tapoAccountSettings.mode,
-            wires:[["n2"]]
+            wires: [["n2"]]
           },
           { id: "n2", type: "helper" }
         ];
@@ -277,7 +277,7 @@ describe("tplink_tapo_connect_api Node", function () {
               msg.payload.result.should.have.not.true(); /* msg.payload.result !== true */
               msg.payload.errorInf.message.should.have.equal('getaddrinfo ENOTFOUND 192.168.0.999');
               done();
-            } catch(err) {
+            } catch (err) {
               done(err);
             }
           });
@@ -299,7 +299,7 @@ describe("tplink_tapo_connect_api Node", function () {
             deviceAlias: tapoAccountSettings.deviceAlias,
             deviceIpRange: tapoAccountSettings.deviceIpRange,
             mode: tapoAccountSettings.mode,
-            wires:[["n2"]]
+            wires: [["n2"]]
           },
           { id: "n2", type: "helper" }
         ];
@@ -311,7 +311,7 @@ describe("tplink_tapo_connect_api Node", function () {
               msg.payload.result.should.have.not.true(); /* msg.payload.result !== true */
               msg.payload.errorInf.message.should.have.equal('Invalid request or credentials');
               done();
-            } catch(err) {
+            } catch (err) {
               done(err);
             }
           });
@@ -333,7 +333,7 @@ describe("tplink_tapo_connect_api Node", function () {
             deviceAlias: tapoAccountSettings.deviceAlias,
             deviceIpRange: tapoAccountSettings.deviceIpRange,
             mode: tapoAccountSettings.mode,
-            wires:[["n2"]]
+            wires: [["n2"]]
           },
           { id: "n2", type: "helper" }
         ];
@@ -345,7 +345,7 @@ describe("tplink_tapo_connect_api Node", function () {
               msg.payload.result.should.have.not.true(); /* msg.payload.result !== true */
               msg.payload.errorInf.message.should.have.equal('Invalid request or credentials');
               done();
-            } catch(err) {
+            } catch (err) {
               done(err);
             }
           });
@@ -371,7 +371,7 @@ describe("tplink_tapo_connect_api Node", function () {
           deviceAlias: tapoAccountSettings.deviceAlias,
           deviceIpRange: tapoAccountSettings.deviceIpRange,
           mode: tapoAccountSettings.mode,
-          wires:[["n2"]] 
+          wires: [["n2"]]
         },
         { id: "n2", type: "helper" }
       ];
@@ -382,14 +382,14 @@ describe("tplink_tapo_connect_api Node", function () {
           try {
             msg.payload.result.should.have.true(); /* msg.payload.result === true */
             done();
-          } catch(err) {
+          } catch (err) {
             done(err);
           }
         });
-        n1.receive({ payload: 1});
+        n1.receive({ payload: 1 });
       });
     });
-  
+
     it('should result true of command 0(power off) *Search mode: device alias*', function (done) {
       this.timeout(10000);
       const flow = [
@@ -403,7 +403,7 @@ describe("tplink_tapo_connect_api Node", function () {
           deviceAlias: tapoAccountSettings.deviceAlias,
           deviceIpRange: tapoAccountSettings.deviceIpRange,
           mode: tapoAccountSettings.mode,
-          wires:[["n2"]] 
+          wires: [["n2"]]
         },
         { id: "n2", type: "helper" }
       ];
@@ -414,11 +414,11 @@ describe("tplink_tapo_connect_api Node", function () {
           try {
             msg.payload.result.should.have.true(); /* msg.payload.result === true */
             done();
-          } catch(err) {
+          } catch (err) {
             done(err);
           }
         });
-        n1.receive({ payload: 0});
+        n1.receive({ payload: 0 });
       });
     });
 
@@ -435,7 +435,7 @@ describe("tplink_tapo_connect_api Node", function () {
           deviceAlias: tapoAccountSettings.deviceAlias,
           deviceIpRange: tapoAccountSettings.deviceIpRange,
           mode: "toggle",
-          wires:[["n2"]] 
+          wires: [["n2"]]
         },
         { id: "n2", type: "helper" }
       ];
@@ -446,11 +446,11 @@ describe("tplink_tapo_connect_api Node", function () {
           try {
             msg.payload.result.should.have.true(); /* msg.payload.result === true */
             done();
-          } catch(err) {
+          } catch (err) {
             done(err);
           }
         });
-        n1.receive({ payload: 1});
+        n1.receive({ payload: 1 });
       });
     });
 
@@ -467,7 +467,7 @@ describe("tplink_tapo_connect_api Node", function () {
           deviceAlias: tapoAccountSettings.deviceAlias,
           deviceIpRange: tapoAccountSettings.deviceIpRange,
           mode: "toggle",
-          wires:[["n2"]] 
+          wires: [["n2"]]
         },
         { id: "n2", type: "helper" }
       ];
@@ -478,11 +478,11 @@ describe("tplink_tapo_connect_api Node", function () {
           try {
             msg.payload.result.should.have.true(); /* msg.payload.result === true */
             done();
-          } catch(err) {
+          } catch (err) {
             done(err);
           }
         });
-        n1.receive({ payload: 1});
+        n1.receive({ payload: 1 });
       });
     });
 
@@ -499,7 +499,7 @@ describe("tplink_tapo_connect_api Node", function () {
           deviceAlias: tapoAccountSettings.deviceAlias,
           deviceIpRange: tapoAccountSettings.deviceIpRange,
           mode: tapoAccountSettings.mode,
-          wires:[["n2"]] 
+          wires: [["n2"]]
         },
         { id: "n2", type: "helper" }
       ];
@@ -511,11 +511,11 @@ describe("tplink_tapo_connect_api Node", function () {
             msg.payload.result.should.have.true(); /* msg.payload.result === true */
             msg.payload.should.have.ownProperty("tapoDeviceInfo");  /* msg.payload.hasOwnProperty('tapoDeviceInfo') */
             done();
-          } catch(err) {
+          } catch (err) {
             done(err);
           }
         });
-        n1.receive({ payload: 255});
+        n1.receive({ payload: 255 });
       });
     });
 
@@ -542,17 +542,17 @@ describe("tplink_tapo_connect_api Node", function () {
           n1.on("input", (msg) => {
             try {
               msg.payload.result.should.have.not.true();  /* msg.payload.result !== true */
-              msg.payload.errorInf.message.should.have.equal('command not found.');            
+              msg.payload.errorInf.message.should.have.equal('command not found.');
               n1.error.should.be.calledWithExactly(msg.payload.errorInf);
               done();
-            } catch(err) {
+            } catch (err) {
               done(err);
             }
           });
           n1.receive({ payload: command });
         });
       });
-  
+
       it('should call `error` with "Error: command not found." case:Search mode: device alias, node.error, command:256', function (done) {
         this.timeout(5000);
         const command = 256;
@@ -574,17 +574,17 @@ describe("tplink_tapo_connect_api Node", function () {
           n1.on("input", (msg) => {
             try {
               msg.payload.result.should.have.not.true();  /* msg.payload.result !== true */
-              msg.payload.errorInf.message.should.have.equal('command not found.');            
+              msg.payload.errorInf.message.should.have.equal('command not found.');
               n1.error.should.be.calledWithExactly(msg.payload.errorInf);
               done();
-            } catch(err) {
+            } catch (err) {
               done(err);
             }
           });
           n1.receive({ payload: command });
         });
       });
-  
+
       it('should call `error` with "Error: Failed to get tapo ip address." case:Search mode: device alias, node.error, command:0(invalid device alias)', function (done) {
         this.timeout(5000);
         const command = 0;
@@ -599,7 +599,7 @@ describe("tplink_tapo_connect_api Node", function () {
             deviceAlias: "foo",
             deviceIpRange: tapoAccountSettings.deviceIpRange,
             mode: tapoAccountSettings.mode,
-            wires:[["n2"]]
+            wires: [["n2"]]
           },
           { id: "n2", type: "helper" }
         ];
@@ -611,14 +611,14 @@ describe("tplink_tapo_connect_api Node", function () {
               msg.payload.result.should.have.not.true(); /* msg.payload.result !== true */
               msg.payload.errorInf.message.should.have.equal('Failed to get tapo ip address.');
               done();
-            } catch(err) {
+            } catch (err) {
               done(err);
             }
           });
           n1.receive({ payload: command });
         });
       });
-  
+
       it('should call `error` with "Error: Failed to get tapo ip address." case:Search mode: device alias, node.error, command:0(out of device ip range)', function (done) {
         this.timeout(5000);
         const command = 0;
@@ -633,7 +633,7 @@ describe("tplink_tapo_connect_api Node", function () {
             deviceAlias: tapoAccountSettings.deviceAlias,
             deviceIpRange: "172.17.198.0/24",
             mode: tapoAccountSettings.mode,
-            wires:[["n2"]]
+            wires: [["n2"]]
           },
           { id: "n2", type: "helper" }
         ];
@@ -645,7 +645,7 @@ describe("tplink_tapo_connect_api Node", function () {
               msg.payload.result.should.have.not.true(); /* msg.payload.result !== true */
               msg.payload.errorInf.message.should.have.equal('Failed to get tapo ip address.');
               done();
-            } catch(err) {
+            } catch (err) {
               done(err);
             }
           });

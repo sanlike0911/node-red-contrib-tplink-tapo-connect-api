@@ -1,19 +1,19 @@
 {
   "name": "node-red-contrib-tplink-tapo-connect-api",
-  "version": "0.1.0",
-  "description": "Unofficial node-RED node for connecting to TP-Link Tapo devices. Currently limited to the P100 & P105 smart plugs.",
+  "version": "0.2.0",
+  "description": "Unofficial node-RED node for connecting to TP-Link Tapo devices. Currently limited to the P100 & P105 smart plugs and L510E smart bulbs.",
   "author": "sanlike",
   "license": "Apache",
   "keywords": [
     "node-red",
     "tplink",
-    "p105"
+    "p100",
+    "p105",
+    "L510E"
   ],
   "main": "none",
   "scripts": {
     "test": "mocha \"src/nodes/test/*_spec.js\"",
-    "dev": "ts-node src/nodes/tplink_tapo_connect_api.ts",
-    "dev:watch": "ts-node-dev --respawn src/nodes/tplink_tapo_connect_api.ts",
     "clean": "rimraf dist/*",
     "tsc": "tsc",
     "build": "npm-run-all clean tsc",
@@ -23,11 +23,18 @@
   "node-red": {
     "version": ">=1.0.0",
     "nodes": {
-      "tplink_tapo_connect_api": "nodes/tplink_tapo_connect_api.js"
+      "tplink_tapo_connect_api": "nodes/tplink_tapo_connect_api.js",
+      "tplink_command": "nodes/tplink_command.js",
+      "tplink_brightness": "nodes/tplink_brightness.js",
+      "tplink_colour": "nodes/tplink_colour.js",
+      "tplink_status": "nodes/tplink_status.js",
+      "tplink_toggle": "nodes/tplink_toggle.js",
+      "tplink_turn_off": "nodes/tplink_turn_off.js",
+      "tplink_turn_on": "nodes/tplink_turn_on.js"
     }
   },
   "dependencies": {
-    "tp-link-tapo-connect": "^1.0.3"
+    "tp-link-tapo-connect": "^1.0.4"
   },
   "devDependencies": {
     "@types/node-red": "^1.1.1",

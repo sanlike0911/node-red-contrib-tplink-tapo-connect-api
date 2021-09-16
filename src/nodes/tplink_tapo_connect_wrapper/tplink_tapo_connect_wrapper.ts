@@ -11,7 +11,7 @@ import { tplinkTapoConnectWrapperType } from './type'
  */
 export class tplinkTapoConnectWrapper {
 
-    readonly currentWorkingDirectory:string = process.cwd();
+    readonly currentWorkingDirectory: string = process.cwd();
     private static _instance: tplinkTapoConnectWrapper;
 
     /**
@@ -55,7 +55,7 @@ export class tplinkTapoConnectWrapper {
      * @returns {boolean}
      * @memberof tplinkTapoConnectWrapper
      */
-    private isEmpty(obj: object): boolean{
+    private isEmpty(obj: object): boolean {
         return !Object.keys(obj).length;
     }
 
@@ -63,25 +63,25 @@ export class tplinkTapoConnectWrapper {
      *
      *
      * @private
-     * @param {string} [_email=process.env.TAPO_USERNAME || ""]
-     * @param {string} [_password=process.env.TAPO_PASSWORD || ""]
-     * @param {string} [_alias=process.env.TAPO_TARGET_ALIAS || ""]
+     * @param {string} _email
+     * @param {string} _password
+     * @param {string} _alias
+     * @param {string} _rangeOfIp
      * @returns
      * @memberof tplinkTapoConnectWrapper
      */
-    private async getDeviceIpFromAlias(_email:string, _password:string, _alias: string, _rangeOfIp: string){
+    private async getDeviceIpFromAlias(_email: string, _password: string, _alias: string, _rangeOfIp: string) {
         let _deviceIp: string = "";
-        let _devices: tplinkTapoConnectWrapperType.devicesList[] | undefined = undefined;
-        _devices = await this.getTapoDevicesList(_email,_password);
-        if( _devices !== undefined ){
+        const _devices: tplinkTapoConnectWrapperType.devicesList[] | undefined = await this.getTapoDevicesList(_email, _password) || undefined;
+        if (_devices !== undefined) {
             for (const _items of _devices) {
-                if(_items.alias === _alias){
+                if (_items.alias === _alias) {
                     const _discover = await find(_rangeOfIp);
-                    _deviceIp = _discover?.find((_device) => 
+                    _deviceIp = _discover?.find((_device) =>
                         this.replaceMacAddress(_device.mac) === this.replaceMacAddress(_items.deviceMac))?.ip || "";
                     break;
                 }
-            }    
+            }
         } else {
             throw new Error("Failed to get tapo device list.");
         }
@@ -89,22 +89,39 @@ export class tplinkTapoConnectWrapper {
     }
 
     /**
+     * getDeviceIp
      *
-     *
+     * @private
      * @param {string} _email
      * @param {string} _password
-     * @returns {(Promise< tplinkTapoConnectWrapper.devicesList[] | undefined >)}
+     * @param {string} _alias
+     * @param {string} _rangeOfIp
+     * @returns
      * @memberof tplinkTapoConnectWrapper
      */
-    public async getTapoDevicesList(_email:string = process.env.TAPO_USERNAME || "", _password:string): Promise< tplinkTapoConnectWrapperType.devicesList[] | undefined > {
-        let cloudToken: string = "";
-        let devices: tplinkTapoConnectWrapperType.devicesList[] | undefined = undefined;
+    private async getDeviceIp(_email: string, _password: string, _alias: string, _rangeOfIp: string) {
+        const _targetIp: string = await this.getDeviceIpFromAlias(_email, _password, _alias, _rangeOfIp) || "";
+        if (_targetIp === "") {
+            throw new Error("Failed to get tapo ip address.");
+        }
+        return _targetIp;
+    }
 
-        cloudToken = await tapo.cloudLogin(_email, _password);
-        if( "" === cloudToken ) throw new Error("Failed to get tapo cloud token.");
+    /**
+     *
+     *
+     * @param {string} [_email=process.env.TAPO_USERNAME || ""]
+     * @param {string} _password
+     * @returns {(Promise< tplinkTapoConnectWrapperType.devicesList[] | undefined >)}
+     * @memberof tplinkTapoConnectWrapper
+     */
+    public async getTapoDevicesList(_email: string = process.env.TAPO_USERNAME || "", _password: string): Promise<tplinkTapoConnectWrapperType.devicesList[] | undefined> {
 
-        devices = await tapo.listDevicesByType(cloudToken, 'SMART.TAPOPLUG');
-        if( undefined === devices ) throw new Error("Failed to get tapo device list.");
+        const _cloudToken = await tapo.cloudLogin(_email, _password);
+        if ("" === _cloudToken) throw new Error("Failed to get tapo cloud token.");
+
+        const devices: tplinkTapoConnectWrapperType.devicesList[] | undefined = await tapo.listDevicesByType(_cloudToken, 'SMART.TAPOPLUG') || undefined;
+        if (undefined === devices) throw new Error("Failed to get tapo device list.");
 
         return devices;
     }
@@ -112,19 +129,20 @@ export class tplinkTapoConnectWrapper {
     /**
      *
      *
-     * @param {string} _ipaddr
-     * @returns {Promise< object >}
+     * @param {string} _email
+     * @param {string} _password
+     * @param {string} _alias
+     * @param {string} _rangeOfIp
+     * @returns {Promise< tplinkTapoConnectWrapperType.tapoConnectResults >}
      * @memberof tplinkTapoConnectWrapper
      */
-     public async setTapoTurnOnAlias(_email:string, _password:string, _alias: string, _rangeOfIp: string): Promise< tplinkTapoConnectWrapperType.tapoConnectResults > {
+    public async setTapoTurnOnAlias(_email: string, _password: string, _alias: string, _rangeOfIp: string): Promise<tplinkTapoConnectWrapperType.tapoConnectResults> {
         try {
-            let _targetIp: string = await this.getDeviceIpFromAlias(_email,_password,_alias,_rangeOfIp) || "";
-            if( _targetIp === "" ){
-                throw new Error("Failed to get tapo ip address.");
-            }
-            await tapo.turnOn(await tapo.loginDeviceByIp(_email, _password, _targetIp));
+            const _targetIp: string = await this.getDeviceIp(_email, _password, _alias, _rangeOfIp) || ""
+            const _deviceToken: string = await tapo.loginDeviceByIp(_email, _password, _targetIp);
+            await tapo.turnOn(_deviceToken);
             return { result: true };
-        } catch (error) {
+        } catch (error: any) {
             return { result: false, errorInf: error };
         }
     }
@@ -132,19 +150,20 @@ export class tplinkTapoConnectWrapper {
     /**
      *
      *
-     * @param {string} _ipaddr
-     * @returns {Promise< object >}
+     * @param {string} _email
+     * @param {string} _password
+     * @param {string} _alias
+     * @param {string} _rangeOfIp
+     * @returns {Promise< tplinkTapoConnectWrapperType.tapoConnectResults >}
      * @memberof tplinkTapoConnectWrapper
      */
-    public async setTapoTurnOffAlias(_email:string, _password:string, _alias: string, _rangeOfIp: string): Promise< tplinkTapoConnectWrapperType.tapoConnectResults > {
+    public async setTapoTurnOffAlias(_email: string, _password: string, _alias: string, _rangeOfIp: string): Promise<tplinkTapoConnectWrapperType.tapoConnectResults> {
         try {
-            let _targetIp: string = await this.getDeviceIpFromAlias(_email,_password,_alias,_rangeOfIp) || "";
-            if( _targetIp === "" ){
-                throw new Error("Failed to get tapo ip address.");
-            }
-            await tapo.turnOff(await tapo.loginDeviceByIp(_email, _password, _targetIp));
+            const _targetIp: string = await this.getDeviceIp(_email, _password, _alias, _rangeOfIp);
+            const _deviceToken: string = await tapo.loginDeviceByIp(_email, _password, _targetIp);
+            await tapo.turnOff(_deviceToken);
             return { result: true };
-        } catch (error) {
+        } catch (error: any) {
             return { result: false, errorInf: error };
         }
     }
@@ -152,68 +171,96 @@ export class tplinkTapoConnectWrapper {
     /**
      *
      *
-     * @private
-     * @returns {Promise< object >}
+     * @param {string} _email
+     * @param {string} _password
+     * @param {string} _alias
+     * @param {string} _rangeOfIp
+     * @param {number} _brightness
+     * @returns {Promise< tplinkTapoConnectWrapperType.tapoConnectResults >}
      * @memberof tplinkTapoConnectWrapper
      */
-    public async getTapoDeviceInfoAlias(_email:string, _password:string, _alias: string): Promise< tplinkTapoConnectWrapperType.tapoConnectResults > {
+    public async setTapoBrightnessAlias(_email: string, _password: string, _alias: string, _rangeOfIp: string, _brightness: number): Promise<tplinkTapoConnectWrapperType.tapoConnectResults> {
         try {
-            let cloudToken = await tapo.cloudLogin(_email, _password);
-            let devices = await tapo.listDevicesByType(cloudToken, 'SMART.TAPOPLUG');
-            for (const _items of devices) {
-                if(_items.alias === _alias){
-                    let _deviceToken = await tapo.loginDevice(_email, _password, _items); 
-                    let tapoDeviceInfo: tplinkTapoConnectWrapperType.tapoDeviceInfo = await tapo.getDeviceInfo(_deviceToken);
-                    return { result: true, tapoDeviceInfo: tapoDeviceInfo };
+            if (_brightness < 0 || _brightness > 100) {
+                throw "brightness out of range";
+            }
+            const _targetIp: string = await this.getDeviceIp(_email, _password, _alias, _rangeOfIp);
+            const _deviceToken: string = await tapo.loginDeviceByIp(_email, _password, _targetIp);
+            await tapo.setBrightness(_deviceToken, _brightness);
+            return { result: true };
+        } catch (error: any) {
+            return { result: false, errorInf: error };
+        }
+    }
+
+    /**
+     * 
+     *
+     * @param {string} _email
+     * @param {string} _password
+     * @param {string} _alias
+     * @param {string} _rangeOfIp
+     * @param {string} _colour
+     * @returns {Promise< tplinkTapoConnectWrapperType.tapoConnectResults >}
+     * @memberof tplinkTapoConnectWrapper
+     */
+    public async setTapoColourAlias(_email: string, _password: string, _alias: string, _rangeOfIp: string, _colour: string): Promise<tplinkTapoConnectWrapperType.tapoConnectResults> {
+        try {
+            if (_colour === "") {
+                throw "Incorrect colour value";
+            }
+            const _targetIp: string = await this.getDeviceIp(_email, _password, _alias, _rangeOfIp);
+            await this.setTapoColour(_email, _password, _targetIp, _colour);
+            return { result: true };
+        } catch (error: any) {
+            return { result: false, errorInf: error };
+        }
+    }
+
+    /**
+     *
+     *
+     * @param {string} _email
+     * @param {string} _password
+     * @param {string} _alias
+     * @returns {Promise< tplinkTapoConnectWrapperType.tapoConnectResults >}
+     * @memberof tplinkTapoConnectWrapper
+     */
+    public async getTapoDeviceInfoAlias(_email: string, _password: string, _alias: string): Promise<tplinkTapoConnectWrapperType.tapoConnectResults> {
+        try {
+            const _cloudToken = await tapo.cloudLogin(_email, _password);
+            const _devices = await tapo.listDevicesByType(_cloudToken, 'SMART.TAPOPLUG');
+            for (const _items of _devices) {
+                if (_items.alias === _alias) {
+                    let _deviceToken = await tapo.loginDevice(_email, _password, _items);
+                    let _tapoDeviceInfo: tplinkTapoConnectWrapperType.tapoDeviceInfo = await tapo.getDeviceInfo(_deviceToken);
+                    return { result: true, tapoDeviceInfo: _tapoDeviceInfo };
                 }
             }
             throw new Error("tapo device info not found.");
-        } catch (error) {
+        } catch (error: any) {
             return { result: false, errorInf: error };
         }
     }
 
     /**
-     * getTapoDeviceInfo
      *
-     * @private
-     * @returns {Promise< object >}
+     *
+     * @param {string} _email
+     * @param {string} _password
+     * @param {string} _targetIp
+     * @returns {Promise< tplinkTapoConnectWrapperType.tapoConnectResults >}
      * @memberof tplinkTapoConnectWrapper
      */
-     public async getTapoDeviceInfo(_email:string, _password:string, _ipaddr: string): Promise< tplinkTapoConnectWrapperType.tapoConnectResults > {
+    public async getTapoDeviceInfo(_email: string, _password: string, _targetIp: string): Promise<tplinkTapoConnectWrapperType.tapoConnectResults> {
         try {
-            let cloudToken = await tapo.loginDeviceByIp(_email, _password, _ipaddr);
-            let tapoDeviceInfo:tplinkTapoConnectWrapperType.tapoDeviceInfo = await tapo.getDeviceInfo(cloudToken);
-            if(this.isEmpty(tapoDeviceInfo)){
+            const _deviceToken = await tapo.loginDeviceByIp(_email, _password, _targetIp);
+            const _tapoDeviceInfo: tplinkTapoConnectWrapperType.tapoDeviceInfo = await tapo.getDeviceInfo(_deviceToken);
+            if (this.isEmpty(_tapoDeviceInfo)) {
                 throw new Error("tapo device info not found.");
             }
-            return { result: true, tapoDeviceInfo: tapoDeviceInfo };
-        } catch (error) {
-          return { result: false, errorInf: error };
-        }
-    }
-    
-    public async getDeviceInfo(_email:string, _password:string, _ipaddr: string){
-        try {
-            await tapo.turnOff(await tapo.loginDeviceByIp(_email, _password, _ipaddr));
-            return { result: true };
-        } catch (error) {
-          return { result: false, errorInf: error };
-        }
-    } 
-
-    /**
-     *
-     *
-     * @param {string} _ipaddr
-     * @returns {Promise< object >}
-     * @memberof tplinkTapoConnectWrapper
-     */
-     public async setTapoTurnOn(_email:string, _password:string, _ipaddr: string): Promise< tplinkTapoConnectWrapperType.tapoConnectResults > {
-        try {
-            await tapo.turnOn(await tapo.loginDeviceByIp(_email, _password, _ipaddr));
-            return { result: true };
-        } catch (error) {
+            return { result: true, tapoDeviceInfo: _tapoDeviceInfo };
+        } catch (error: any) {
             return { result: false, errorInf: error };
         }
     }
@@ -221,16 +268,82 @@ export class tplinkTapoConnectWrapper {
     /**
      *
      *
-     * @param {string} _ipaddr
+     * @param {string} _targetIp
      * @returns {Promise< object >}
      * @memberof tplinkTapoConnectWrapper
      */
-     public async setTapoTurnOff(_email:string, _password:string, _ipaddr: string): Promise< tplinkTapoConnectWrapperType.tapoConnectResults > {
+    public async setTapoTurnOn(_email: string, _password: string, _targetIp: string): Promise<tplinkTapoConnectWrapperType.tapoConnectResults> {
         try {
-            await tapo.turnOff(await tapo.loginDeviceByIp(_email, _password, _ipaddr));
+            const _deviceToken: string = await tapo.loginDeviceByIp(_email, _password, _targetIp);
+            await tapo.turnOn(_deviceToken);
             return { result: true };
-        } catch (error) {
-          return { result: false, errorInf: error };
+        } catch (error: any) {
+            return { result: false, errorInf: error };
+        }
+    }
+
+    /**
+     * set turn off
+     *
+     * @param {string} _email
+     * @param {string} _password
+     * @param {string} _targetIp
+     * @returns {Promise< tplinkTapoConnectWrapperType.tapoConnectResults >}
+     * @memberof tplinkTapoConnectWrapper
+     */
+    public async setTapoTurnOff(_email: string, _password: string, _targetIp: string): Promise<tplinkTapoConnectWrapperType.tapoConnectResults> {
+        try {
+            const _deviceToken: string = await tapo.loginDeviceByIp(_email, _password, _targetIp);
+            await tapo.turnOff(_deviceToken);
+            return { result: true };
+        } catch (error: any) {
+            return { result: false, errorInf: error };
+        }
+    }
+
+    /**
+     * set brightness
+     *
+     * @param {string} _email
+     * @param {string} _password
+     * @param {string} _targetIp
+     * @param {number} _brightness
+     * @returns {Promise< tplinkTapoConnectWrapperType.tapoConnectResults >}
+     * @memberof tplinkTapoConnectWrapper
+     */
+    public async setTapoBrightness(_email: string, _password: string, _targetIp: string, _brightness: number): Promise<tplinkTapoConnectWrapperType.tapoConnectResults> {
+        try {
+            if (_brightness < 0 || _brightness > 100) {
+                throw "brightness out of range";
+            }
+            const _deviceToken: string = await tapo.loginDeviceByIp(_email, _password, _targetIp);
+            await tapo.setBrightness(_deviceToken, _brightness);
+            return { result: true };
+        } catch (error: any) {
+            return { result: false, errorInf: error };
+        }
+    }
+
+    /**
+     * 
+     *
+     * @param {string} _email
+     * @param {string} _password
+     * @param {string} _targetIp
+     * @param {string} _colour
+     * @returns {Promise< tplinkTapoConnectWrapperType.tapoConnectResults >}
+     * @memberof tplinkTapoConnectWrapper
+     */
+    public async setTapoColour(_email: string, _password: string, _targetIp: string, _colour: string): Promise<tplinkTapoConnectWrapperType.tapoConnectResults> {
+        try {
+            if (_colour === "") {
+                throw "Incorrect colour value";
+            }
+            const _deviceToken: string = await tapo.loginDeviceByIp(_email, _password, _targetIp);
+            await tapo.setColour(_deviceToken, _colour);
+            return { result: true };
+        } catch (error: any) {
+            return { result: false, errorInf: error };
         }
     }
 }
