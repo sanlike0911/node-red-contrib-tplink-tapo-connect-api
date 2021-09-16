@@ -30,7 +30,7 @@ export namespace tplinkTapoConnectWrapperType {
 
         fwId: string;           // "xxxxxxxxxxxxxxxxxx",
 
-        isSameRegion:boolean    // false,
+        isSameRegion: boolean   // false,
 
         status: number          // 0,
     }
@@ -100,11 +100,11 @@ export namespace tplinkTapoConnectWrapperType {
     export type tapoConnectResults = {
 
         result: boolean;
-      
+
         tapoDeviceInfo?: tapoDeviceInfo;
 
         errorInf?: Error;
-      
+
     }
 
 }

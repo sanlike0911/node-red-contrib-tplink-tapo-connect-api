@@ -1,0 +1,31 @@
+{
+    "resources": {
+        "paletteLabel": "brightness",
+        "labels": {
+            "name": "Name",
+            "password": "Password",
+            "email": "Email",
+            "deviceIp": "Tapo ipaddress",
+            "deviceAlias": "Tapo alias",
+            "deviceIpRange": "Tapo find ip range",
+            "targetDeviceSettings": "Tapo device settings",
+            "brightness": "Brightness",
+            "searchMode":{
+                "title": "Seach mode",
+                "ip":"ip",
+                "alias":"alias"
+            }
+        },
+        "descriptions": {
+            "targetDeviceSettings": "select search mode \"Tapo ip or Tapo alias\"",
+            "brightness": "Set brightness to 0-100% for smart bulbs only"
+        },
+        "message": {
+            "ready": "準備完了",
+            "complete": "送信完了",
+            "configError": "設定異常",
+            "error": "エラー発生",
+            "communicationError": "送信異常"
+        }
+    }
+}

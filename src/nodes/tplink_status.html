@@ -23,58 +23,68 @@
             category: 'tplink connect APIs',
             color: 'rgb( 63, 173, 181)',
             defaults: {
-                name: {value:""},
-                email: {value:"", required: true },
+                name: { value: "" },
+                email: { value: "", required: true },
                 password: { type: "password", required: true },
-                deviceIp: {value:"", required: false },
-                deviceAlias: {value:"", required: false },
-                deviceIpRange: {value:"", required: false },
-                mode:{value:"command", required: true }
+                deviceIp: { value: "", required: false },
+                deviceAlias: { value: "", required: false },
+                deviceIpRange: { value: "", required: false },
+                searchMode: { value: "ip", required: true }
             },
-            inputs:1,
-            outputs:1,
+            inputs: 1,
+            outputs: 1,
             align: "left",
-            icon: "icon.png",
+            icon: "icon-status.png",
             paletteLabel: NAME,
-            label: function() {
+            label: function () {
                 return this.name || this._("resources.paletteLabel");
             },
             labelStyle: function () {
-                return this.name?"node_label_italic":"";
+                return this.name ? "node_label_italic" : "";
             },
-            paletteLabel: function() {
+            paletteLabel: function () {
                 return this._("resources.paletteLabel") || NAME;
             },
-            oneditprepare: function() {
+            oneditprepare: function () {
                 // use elementSizer to input common widget parameters
-                console.log("oneditprepare");
+                // console.log("oneditprepare");
 
-                // mode
-                console.log("mode: ", this.mode);
-                $("#select-mode").change(function() {
-                    const val = $("#select-mode").val();
-                    $("#node-input-mode").val(val);
+                // searchMode
+                $("#select-searchMode").change(function () {
+                    const searchMode = $("#select-searchMode").val();
+                    $("#node-input-searchMode").val(searchMode);
+                    if ("ip" === searchMode) {
+                        document.getElementById('node-input-deviceIp').disabled = false;
+                        document.getElementById('node-input-deviceAlias').disabled = true;
+                        document.getElementById('node-input-deviceIpRange').disabled = true;
+                    } else {
+                        document.getElementById('node-input-deviceIp').disabled = true;
+                        document.getElementById('node-input-deviceAlias').disabled = false;
+                        document.getElementById('node-input-deviceIpRange').disabled = false;
+                    }
                 });
-                $("#select-mode").val(this.mode);
-                $("#select-mode").change();
-
+                $("#select-searchMode").val(this.searchMode);
+                $("#select-searchMode").change();
             },
-            oneditsave: function() {
+            oneditsave: function () {
                 var that = this;
             },
         };
         return conf;
     }
-    RED.nodes.registerType('tplink_tapo_connect_api', mk_conf('tplink_tapo_connect_api'));
+    RED.nodes.registerType('tplink_status', mk_conf('tplink_status'));
 </script>
 
-<script type="text/html" data-template-name="tplink_tapo_connect_api">
+<script type="text/html" data-template-name="tplink_status">
     <div id="list-property">
         <!-- ノード名 -->
         <div class="form-row">
             <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="resources.labels.name"></span></label>
             <input type="text" id="node-input-name">
         </div>
+        <!---------------------------------------------------------------------------->
+        <hr>
+        <!---------------------------------------------------------------------------->
         <!-- email -->
         <div class="form-row">
             <label for="node-input-email"><i class="fa fa-shield"></i><span data-i18n="resources.labels.email"></span></label>
@@ -88,31 +98,24 @@
         <!---------------------------------------------------------------------------->
         <hr>
         <!---------------------------------------------------------------------------->
-        <!-- mode -->
-        <div class="form-row">
-            <label for="select-mode"><i class="fa fa fa-adjust"></i> <span data-i18n="resources.labels.mode.title"></span></label>
-            <select id="select-mode">
-                <option value="command" data-i18n="resources.labels.mode.command"></option>
-                <option value="toggle" data-i18n="resources.labels.mode.toggle"></option>
-            </select>
-            <input type="hidden" id="node-input-mode">
-        </div>
-        <p><b><span data-i18n="resources.labels.mode.description"></span></b></p>
-        <!---------------------------------------------------------------------------->
-        <hr>
-        <!---------------------------------------------------------------------------->
         <!-- Tapo device settings -->
         <p><b><span data-i18n="resources.labels.targetDeviceSettings"></span></b></p>
         <p><span data-i18n="resources.descriptions.targetDeviceSettings"></span></p>
-        <div style="margin-bottom: 15px;" class="form-tips">
-            <span data-i18n="resources.descriptions.targetDeviceSettingsPriority"></span>
+        <!-- searchMode -->
+        <div class="form-row">
+            <label for="select-searchMode"><i class="fa fa fa-adjust"></i> <span data-i18n="resources.labels.searchMode.title"></span></label>
+            <select id="select-searchMode">
+                <option value="ip" data-i18n="resources.labels.searchMode.ip"></option>
+                <option value="alias" data-i18n="resources.labels.searchMode.alias"></option>
+            </select>
+            <input type="hidden" id="node-input-searchMode">
         </div>
+        <p><b><span data-i18n="resources.labels.searchMode.description"></span></b></p>
         <!-- deviceIp -->
         <div class="form-row">
             <label for="node-input-deviceIp"><i class="fa fa-map-marker"></i><span data-i18n="resources.labels.deviceIp"></span></label>
             <input type="text" id="node-input-deviceIp" placeholder="your tapo deviceIp(e.g: 192.168.0.100)">
         </div>
-        <hr>
         <!-- deviceAlias -->
         <div class="form-row">
             <label for="node-input-deviceAlias"><i class="fa fa-tag"></i><span data-i18n="resources.labels.deviceAlias"></span></label>
@@ -122,6 +125,9 @@
             <label for="node-input-deviceIpRange"><i class="fa fa-map-marker"></i><span data-i18n="resources.labels.deviceIpRange"></span></label>
             <input type="text" id="node-input-deviceIpRange" placeholder="your tapo deviceIpRange(e.g: 192.168.0.0/24)">
         </div>
+        <!---------------------------------------------------------------------------->
+        <hr>
+        <!---------------------------------------------------------------------------->
     </div>
 </script>
 

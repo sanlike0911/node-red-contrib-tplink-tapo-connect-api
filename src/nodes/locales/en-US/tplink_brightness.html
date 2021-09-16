@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<script type="text/x-red" data-help-name="tplink_brightness" data-lang="en-US">
+
+<p>Unofficial node-RED node for connecting to TP-Link Tapo devices. Currently limited to the P100 & P105 smart plugs and L510E smart bulbs</p>
+
+<!-- property -->
+<hr style="margin-top: 30px; margin-bottom: 30px;" align="middle">
+<h3 id="property">Property</h3>
+<dl class="message-properties">
+  <!-- Name -->
+  <dt class="optional">Name<span class="property-type">string</span></dt>
+  <dd>set the node name displayed in the flow.</dd>
+
+  <!-- Email -->
+  <dt id="email">Email<span class="property-type">string</span></dt>
+  <dd>
+    <p>set the email address registered with Tp Link.</p>
+  </dd>
+
+  <!-- Password -->
+  <dt id="password">Password<span class="property-type">string</span></dt>
+  <dd>
+    <p>set the password registered with Tp Link.</p>
+  </dd>
+
+  <!-- search mode -->
+  <dt id="searchMode">Search mode<span class="property-type">string</span></dt>
+  <dd>
+    <p>select a search mode for the tapo device.</p>
+
+    <p>[Usage]</p>
+    <ul>
+      <li>ip : search by ip. (It's fast.)</li>
+      <dl class="message-properties">
+        <!-- Tapo ipaddress -->
+        <dt class="optional" id="tapoIpAddress">Tapo ipaddress<span class="property-type">string</span></dt>
+        <dd>
+          <p>set the IP address to the Tapo device.</p>
+        </dd>
+      </dl>
+
+      <li>alias: search by alias and ip range.</li>
+      <dl class="message-properties">
+        <!-- Tapo alias -->
+        <dt class="optional" id="tapoAlias">Tapo alias<span class="property-type">string</span></dt>
+        <dd>
+          <p>set the tapo device alias registered with Tp Link.</p>
+        </dd>
+
+        <!-- Find ip range-->
+        <dt class="optional" id="tapoFindIPRange">Tapo find ip range<span class="property-type">string</span></dt>
+        <dd>
+          <p>set the IP range to search for Tapo device.</p>
+          <p>[Usage]</p>
+          <ul>
+            <li>case1: "192.168.0.1 to 192.168.0.25"</li>
+            <li>case2: "192.168.0.0/24"</li>
+          </ul>
+        </dd>
+      </dl>
+    </ul>
+  </dd>
+
+  <!-- brightness -->
+  <dt id="brightness">Brightness<span class="property-type">number</span></dt>
+  <dd>
+    <p>set brightness to 0-100% for smart bulbs only.</p>
+  </dd>
+</dl>
+
+<!-- inputs -->
+<hr style="margin-top: 30px; margin-bottom: 30px;" align="middle">
+<h3 id="inputs">Inputs</h3>
+<dl class="message-properties">
+  <dt>msg.payload.email<span class="property-type">string</span></dt>
+  <dd>
+    <p><a href="#email">Click here for details</a></p>
+  </dd>
+
+  <dt>msg.payload.password<span class="property-type">string</span></dt>
+  <dd>
+    <p><a href="#password">Click here for details</a></p>
+  </dd>
+
+  <dt>msg.payload.deviceIp<span class="property-type">string</span></dt>
+  <dd>
+    <p><a href="#tapoIpAddress">Click here for details</a></p>
+  </dd>
+
+  <dt>msg.payload.deviceAlias<span class="property-type">string</span></dt>
+  <dd>
+    <p><a href="#tapoAlias">Click here for details</a></p>
+  </dd>
+
+  <dt>msg.payload.deviceIpRange<span class="property-type">string</span></dt>
+  <dd>
+    <p><a href="#tapoFindIPRange">Click here for details</a></p>
+  </dd>
+
+  <dt>msg.payload.searchMode<span class="property-type">string</span></dt>
+  <dd>
+    <p><a href="#searchMode">Click here for details</a></p>
+  </dd>
+
+  <dd>
+    <p>[e.g]</p>
+    <pre>
+          <code>
+msg.payload = {
+  "email": "your@gmail.com",
+  "password": "password",
+  "deviceIp": "192.168.0.xxx"
+}
+          </code>
+        </pre>
+  </dd>
+
+  <dt>msg.payload.brightness<span class="property-type">number</span></dt>
+  <dd>
+    <p><a href="#brightness">Click here for details</a></p>
+  </dd>
+</dl>
+
+<!-- outputs -->
+<hr style="margin-top: 30px; margin-bottom: 30px;" align="middle">
+<h3>Outputs</h3>
+<dl class="message-properties">
+  <dt>payload.result<span class="property-type">boolean</span></dt>
+  <dd>
+    <p>true: success</p>
+    <p>false: failure</p>
+  </dd>
+  <dt>payload.errorInf<span class="property-type">string</span></dt>
+  <dd>error object</dd>
+</dl>
+
+<!-- details -->
+<hr style="margin-top: 30px; margin-bottom: 30px;" align="middle">
+<h3>Details</h3>
+<p>This node module provides the ability to set the brightness of tapo smart bulbs.</p>
+
+<!-- details -->
+<hr style="margin-top: 30px; margin-bottom: 30px;" align="middle">
+<h3>References</h3>
+<p>This API uses <a href="https://github.com/dickydoouk/tp-link-tapo-connect"><b>"dickydoouk/tp-link-tapo-connect"</b></a>.</p>
+
+</script>
