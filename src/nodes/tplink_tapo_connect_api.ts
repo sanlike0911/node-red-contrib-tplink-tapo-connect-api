@@ -8,6 +8,8 @@ import { tplinkTapoConnectWrapper, tplinkTapoConnectWrapperType } from "./tplink
 
 const nodeInit: NodeInitializer = (RED): void => {
 
+    const REGISTER_TYPE: string = 'tplink_tapo_connect_api';
+
     /**
      * checkParameter
      *
@@ -25,19 +27,19 @@ const nodeInit: NodeInitializer = (RED): void => {
     /**
      * tplinkTapoConnectApiConstructor
      *
-     * @param {tplinkTapoConnectApiType.appNode} this
+     * @param {any} this
      * @param {tplinkTapoConnectApiType.appNodeDef} config
      */
     function tplinkTapoConnectApiConstructor(
-        this: tplinkTapoConnectApiType.appNode,
+        this: any,
         config: tplinkTapoConnectApiType.appNodeDef
     ): void {
         RED.nodes.createNode(this, config);
         let node: tplinkTapoConnectApiType.appNode = this;
 
         try {
-            node.email = config?.email ?? "";
-            node.password = config?.password ?? "";
+            node.email = this?.credentials?.email ?? "";
+            node.password = this?.credentials?.password ?? "";
             node.deviceIp = config?.deviceIp ?? "";
             node.deviceAlias = config?.deviceAlias ?? "";
             node.deviceIpRange = config?.deviceIpRange ?? "";
@@ -177,7 +179,12 @@ const nodeInit: NodeInitializer = (RED): void => {
             node.send(msg);
         });
     }
-    RED.nodes.registerType('tplink_tapo_connect_api', tplinkTapoConnectApiConstructor);
+    RED.nodes.registerType(REGISTER_TYPE, tplinkTapoConnectApiConstructor, {
+        credentials: {
+            email: { type:"text" },
+            password: { type:"password" }
+        }
+    });
 };
 
 export = nodeInit;

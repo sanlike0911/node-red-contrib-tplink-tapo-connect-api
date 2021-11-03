@@ -30,19 +30,19 @@ const nodeInit: NodeInitializer = (RED): void => {
     /**
      * tplinkTapoConnectApiConstructor
      *
-     * @param {turnOnType.appNode} this
+     * @param {any} this
      * @param {turnOnType.appNodeDef} config
      */
     function tplinkTapoConnectApiConstructor(
-        this: turnOnType.appNode,
+        this: any,
         config: turnOnType.appNodeDef
     ): void {
         RED.nodes.createNode(this, config);
         let node: turnOnType.appNode = this;
 
         try {
-            node.email = config?.email ?? "";
-            node.password = config?.password ?? "";
+            node.email = this?.credentials?.email ?? "";
+            node.password = this?.credentials?.password ?? "";
             node.deviceIp = config?.deviceIp ?? "";
             node.deviceAlias = config?.deviceAlias ?? "";
             node.deviceIpRange = config?.deviceIpRange ?? "";
@@ -109,7 +109,12 @@ const nodeInit: NodeInitializer = (RED): void => {
             node.send(msg);
         });
     }
-    RED.nodes.registerType(REGISTER_TYPE, tplinkTapoConnectApiConstructor);
+    RED.nodes.registerType(REGISTER_TYPE, tplinkTapoConnectApiConstructor, {
+        credentials: {
+            email: { type:"text" },
+            password: { type:"password" }
+        }
+    });
 };
 
 export = nodeInit;

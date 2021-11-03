@@ -24,12 +24,15 @@
             color: 'rgb( 63, 173, 181)',
             defaults: {
                 name: { value: "" },
-                email: { value: "", required: true },
-                password: { type: "password", required: true },
                 deviceIp: { value: "", required: false },
                 deviceAlias: { value: "", required: false },
                 deviceIpRange: { value: "", required: false },
-                searchMode: { value: "ip", required: true }
+                searchMode: { value: "ip", required: true },
+                brightness: { value: "", required: false }
+            },
+            credentials: {
+                email: { type:"text" },
+                password: { type:"password" }
             },
             inputs: 1,
             outputs: 1,
