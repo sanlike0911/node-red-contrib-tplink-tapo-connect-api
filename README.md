@@ -153,7 +153,7 @@ type payload {
 
 [example1]
 
-```json
+```javascript
 msg = {
   "email": "your@gmail.com",
   "password": "password",
@@ -167,7 +167,7 @@ msg = {
 
 [example2]
 
-```json
+```javascript
 msg = {
   "email": "your@gmail.com",
   "password": "password",
@@ -244,7 +244,7 @@ There are some npm-scripts to help developments.
 
 ## file list
 
-  ```json
+  ```text
   [root]
   │  package.json
   │  README.md
