@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-tplink-tapo-connect-api",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Unofficial node-RED node for connecting to TP-Link Tapo devices. Currently limited to the P100 & P105 smart plugs and L510E smart bulbs.",
   "author": "sanlike",
   "license": "Apache",
@@ -16,9 +16,13 @@
     "test": "mocha \"src/nodes/test/*_spec.js\"",
     "clean": "rimraf dist/*",
     "tsc": "tsc",
-    "build": "npm-run-all clean tsc",
-    "start": "node ./node_modules/node-red/red.js --userDir ./data --settings ./data/settings.js",
-    "start:debug": "node --inspect-brk=0.0.0.0:9229 ./node_modules/node-red/red.js --userDir ./data --settings ./data/settings.js"
+    "build": "npm-run-all clean tsc && npm run build:copy-nodes && npm run build:copy-dist && npm run build:copy-package && npm run build:install-node",
+    "build:copy-nodes": "cpx \"./src/nodes/**/*\" \"./data/my-node/nodes\"",
+    "build:copy-dist": "cpx \"./dist/*\" \"./data/my-node/nodes\"",
+    "build:copy-package": "cpx \"./package.json\" \"./data/my-node\"",
+    "build:install-node": "npm install ./data/my-node --prefix ./data",
+    "start": "node ./node_modules/node-red/red.js --userDir ./data",
+    "start:debug": "node --inspect-brk=0.0.0.0:9229 ./node_modules/node-red/red.js --userDir ./data"
   },
   "node-red": {
     "version": ">=1.0.0",
@@ -38,6 +42,7 @@
   },
   "devDependencies": {
     "@types/node-red": "^1.2.0",
+    "cpx": "^1.5.0",
     "node-red": "^2.1.4",
     "node-red-node-test-helper": "^0.2.7",
     "npm-run-all": "^4.1.5",
