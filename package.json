@@ -18,7 +18,7 @@
     "tsc": "tsc",
     "build": "npm-run-all clean tsc && npm run build:copy-nodes && npm run build:copy-dist && npm run build:copy-package && npm run build:install-node",
     "build:copy-nodes": "cpx \"./src/nodes/**/*\" \"./data/my-node/nodes\"",
-    "build:copy-dist": "cpx \"./dist/*\" \"./data/my-node/nodes\"",
+    "build:copy-dist": "cpx \"./dist/**/*\" \"./data/my-node/nodes\"",
     "build:copy-package": "cpx \"./package.json\" \"./data/my-node\"",
     "build:install-node": "npm install ./data/my-node --prefix ./data",
     "start": "node ./node_modules/node-red/red.js --userDir ./data",
