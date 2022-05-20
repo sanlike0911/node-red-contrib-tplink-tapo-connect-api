@@ -270,7 +270,7 @@ export class tplinkTapoConnectWrapper {
             const _deviceToken: tplinkTapoConnectWrapperType.tapoDeviceKey = await tapo.loginDeviceByIp(_email, _password, _targetIp);
             const _tapoEnergyUsage: tplinkTapoConnectWrapperType.tapoDeviceInfo = await tapo.getEnergyUsage(_deviceToken);
             if (this.isEmpty(_tapoEnergyUsage)) {
-                throw new Error("tapo device info not found.");
+                throw new Error("tapo device energy not found.");
             }
             return { result: true, tapoDeviceInfo: _tapoEnergyUsage };
         } catch (error: any) {

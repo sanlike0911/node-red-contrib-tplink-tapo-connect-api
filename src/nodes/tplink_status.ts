@@ -109,12 +109,16 @@ const nodeInit: NodeInitializer = (RED): void => {
                 if (checkParameter(config)) {
                     // node: status
                     ret = await getTapoDeviceInfo(config);
-                    retEnergy = await getTapoEnergyUsage(config);
+                    if (ret.tapoDeviceInfo?.model === "P110") {
+                        retEnergy = await getTapoEnergyUsage(config);
+                    }
                 } else {
                     throw new Error("faild to get config.");
                 }
                 msg.payload = ret;
-                msg.payload.energy = retEnergy;
+                if (retEnergy?.result) {
+                    msg.payload.energy = retEnergy.tapoDeviceInfo;
+                }
                 node.status({ fill: "green", shape: "dot", text: "resources.message.complete" });
             } catch (error) {
                 node.status({ fill: "red", shape: "ring", text: "resources.message.communicationError" });
