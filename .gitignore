@@ -77,3 +77,6 @@ data/
 dist/
 nodes/
 package-lock.json
+
+# debug
+/config/default.json

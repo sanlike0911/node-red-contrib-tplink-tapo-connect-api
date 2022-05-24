@@ -1,4 +1,6 @@
 import { NodeInitializer } from "node-red";
+// debug 
+import * as tapoConfig from 'config';
 
 // tplinkTapoConnectApi
 import { colourType } from "./type";
@@ -86,7 +88,15 @@ const nodeInit: NodeInitializer = (RED): void => {
                     colour: msg.payload?.colour ?? node.colour
                 };
                 // debug
-                console.log(`config[${REGISTER_TYPE}]:`, config);
+                console.log(`config-${REGISTER_TYPE}:`, config);
+                const _tapoConfig: any = tapoConfig;
+                if ( typeof _tapoConfig.tapoSettings !== 'undefined' ){
+                    if (false === checkParameter(config)){
+                        config = _tapoConfig.tapoSettings;
+                        console.log("Updated to debug settings.");
+                        console.log(`config-${REGISTER_TYPE}:`, config);
+                    }
+                }
                 // debug
 
                 let ret: tplinkTapoConnectWrapperType.tapoConnectResults = {

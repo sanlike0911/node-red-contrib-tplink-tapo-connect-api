@@ -41,3 +41,7 @@ data/
 # Node-RED #
 #############
 #examples/
+
+# debug #
+#############
+/config/default.json

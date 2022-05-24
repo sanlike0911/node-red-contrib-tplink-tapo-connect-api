@@ -38,10 +38,12 @@
     }
   },
   "dependencies": {
-    "tp-link-tapo-connect": "^1.0.6"
+    "tp-link-tapo-connect": "^1.0.8"
   },
   "devDependencies": {
+    "@types/config": "^0.0.41",
     "@types/node-red": "^1.2.0",
+    "config": "^3.3.7",
     "cpx": "^1.5.0",
     "node-red": "^2.1.4",
     "node-red-node-test-helper": "^0.2.7",
