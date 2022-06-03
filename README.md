@@ -67,7 +67,9 @@ Unofficial node-RED node for connecting to TP-Link Tapo devices. Currently limit
 
     This node module provides the ability to get the device infomation of tapo smart plugs.
 
-    Get the device information from `"output: msg.payload.tapoDeviceInfo"`.
+    Models that can monitor energy acquire energy information.
+
+    Get the device information from `"output: msg.payload.tapoDeviceInfo, msg.payload?.tapoEnergyUsage(P110 only)"`.
 
 - tplink_tapo_connect_api(`deprecated`)
 
@@ -201,35 +203,38 @@ false: smart plug power off
 {
     result: true,
     tapoDeviceInfo: {
-    device_id: "*************"
-    fw_ver: "1.2.10 Build 20200609 Rel. 33394"
-    hw_ver: "1.0.0"
-    type: "SMART.TAPOPLUG"
-    model: "P105"
-    mac: "XX-XX-XX-XX-XX-XX"
-    hw_id: "*************"
-    fw_id: "*************"
-    oem_id: "*************"
-    specs: "JP"
-    device_on: false
-    on_time: 0
-    overheated: false
-    nickname: "3d printer power supply"
-    location: "XXXXXXXXXXXXXXXX"
-    avatar: "plug"
-    time_usage_today: 0
-    time_usage_past7: 0
-    time_usage_past30: 0
-    longitude: 0
-    latitude: 0
-    has_set_location_info: true
-    ip: "192.168.0.XXX"
-    ssid: "SSID"
-    signal_level: 0
-    rssi: 0
-    region: "Asia/Tokyo"
-    time_diff: 0
-    lang: "ja_JP"
+      device_id: "*************"
+      fw_ver: "1.2.10 Build 20200609 Rel. 33394"
+      hw_ver: "1.0.0"
+      type: "SMART.TAPOPLUG"
+      model: "P105"
+      mac: "XX-XX-XX-XX-XX-XX"
+      hw_id: "*************"
+      fw_id: "*************"
+      oem_id: "*************"
+      specs: "JP"
+      device_on: false
+      on_time: 0
+      overheated: false
+      nickname: "3d printer power supply"
+      location: "XXXXXXXXXXXXXXXX"
+      avatar: "plug"
+      time_usage_today: 0
+      time_usage_past7: 0
+      time_usage_past30: 0
+      longitude: 0
+      latitude: 0
+      has_set_location_info: true
+      ip: "192.168.0.XXX"
+      ssid: "SSID"
+      signal_level: 0
+      rssi: 0
+      region: "Asia/Tokyo"
+      time_diff: 0
+      lang: "ja_JP"
+    },
+    tapoEnergyUsage: {
+      ????
     }
 }
 ```

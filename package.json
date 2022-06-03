@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-tplink-tapo-connect-api",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Unofficial node-RED node for connecting to TP-Link Tapo devices. Currently limited to the P100 & P105 smart plugs and L510E smart bulbs.",
   "author": "sanlike",
   "license": "Apache",
@@ -9,6 +9,7 @@
     "tplink",
     "p100",
     "p105",
+    "p110",
     "L510E"
   ],
   "main": "none",
