@@ -254,25 +254,24 @@ export class tplinkTapoConnectWrapper {
      */
     public async getTapoDeviceInfo(_email: string, _password: string, _targetIp: string): Promise<tplinkTapoConnectWrapperType.tapoConnectResults> {
         try {
+            let _tapoConnectResults: tplinkTapoConnectWrapperType.tapoConnectResults = { result: false };
             const _deviceToken: tplinkTapoConnectWrapperType.tapoDeviceKey = await tapo.loginDeviceByIp(_email, _password, _targetIp);
+            // get DeviceInfo
             const _tapoDeviceInfo: tplinkTapoConnectWrapperType.tapoDeviceInfo = await tapo.getDeviceInfo(_deviceToken);
             if (this.isEmpty(_tapoDeviceInfo)) {
                 throw new Error("tapo device info not found.");
             }
-            return { result: true, tapoDeviceInfo: _tapoDeviceInfo };
-        } catch (error: any) {
-            return { result: false, errorInf: error };
-        }
-    }
-
-    public async getTapoEnergyUsage(_email: string, _password: string, _targetIp: string): Promise<tplinkTapoConnectWrapperType.tapoConnectResults> {
-        try {
-            const _deviceToken: tplinkTapoConnectWrapperType.tapoDeviceKey = await tapo.loginDeviceByIp(_email, _password, _targetIp);
-            const _tapoEnergyUsage: tplinkTapoConnectWrapperType.tapoDeviceInfo = await tapo.getEnergyUsage(_deviceToken);
-            if (this.isEmpty(_tapoEnergyUsage)) {
-                throw new Error("tapo device energy not found.");
+            _tapoConnectResults.tapoDeviceInfo = _tapoDeviceInfo;
+            // get EnergyUsage
+            if (_tapoDeviceInfo?.model === "P110") {
+                const _tapoEnergyUsage: tplinkTapoConnectWrapperType.tapoEnergyUsage = await tapo.getEnergyUsage(_deviceToken);
+                if (this.isEmpty(_tapoEnergyUsage)) {
+                    throw new Error("tapo device energy not found.");
+                }
+                _tapoConnectResults.tapoEnergyUsage = _tapoEnergyUsage;
             }
-            return { result: true, tapoDeviceInfo: _tapoEnergyUsage };
+            _tapoConnectResults.result = true;
+            return _tapoConnectResults;
         } catch (error: any) {
             return { result: false, errorInf: error };
         }

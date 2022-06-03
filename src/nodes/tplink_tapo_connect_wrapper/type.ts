@@ -5,6 +5,8 @@ export namespace tplinkTapoConnectWrapperType {
 
     export type tapoDeviceInfo = tapo.TapoDeviceInfo;
 
+    export type tapoEnergyUsage = tapo.TapoDeviceInfo;
+
     export type tapoDeviceKey = tapo.TapoDeviceKey;
 
     export type tapoConnectResults = {
@@ -12,6 +14,8 @@ export namespace tplinkTapoConnectWrapperType {
         result: boolean;
 
         tapoDeviceInfo?: tapo.TapoDeviceInfo;
+
+        tapoEnergyUsage?: tapo.TapoDeviceInfo | undefined;
 
         errorInf?: Error;
 
