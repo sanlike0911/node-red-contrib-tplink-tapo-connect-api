@@ -70,6 +70,18 @@ const nodeInit: NodeInitializer = (RED): void => {
             return ret;
         }
 
+        async function getTapoEnergyUsage(config: statusType.configBase): Promise<tplinkTapoConnectWrapperType.tapoConnectResults> {
+            let ret: tplinkTapoConnectWrapperType.tapoConnectResults;
+            if ("ip" === config.searchMode) {
+                ret = await tplinkTapoConnectWrapper.getInstance().
+                    getTapoEnergyUsage(config.email, config.password, config.deviceIp);
+            } else {
+                ret = await tplinkTapoConnectWrapper.getInstance().
+                    getTapoDeviceInfoAlias(config.email, config.password, config.deviceAlias);
+            }
+            return ret;
+        }
+
         node.on('input', async (msg: any) => {
             try {
 
@@ -90,13 +102,23 @@ const nodeInit: NodeInitializer = (RED): void => {
                     result: false
                 };
 
+                let retEnergy: tplinkTapoConnectWrapperType.tapoConnectResults = {
+                    result: false
+                };
+
                 if (checkParameter(config)) {
                     // node: status
                     ret = await getTapoDeviceInfo(config);
+                    if (ret.tapoDeviceInfo?.model === "P110") {
+                        retEnergy = await getTapoEnergyUsage(config);
+                    }
                 } else {
                     throw new Error("faild to get config.");
                 }
                 msg.payload = ret;
+                if (retEnergy?.result) {
+                    msg.payload.energy = retEnergy.tapoDeviceInfo;
+                }
                 node.status({ fill: "green", shape: "dot", text: "resources.message.complete" });
             } catch (error) {
                 node.status({ fill: "red", shape: "ring", text: "resources.message.communicationError" });
