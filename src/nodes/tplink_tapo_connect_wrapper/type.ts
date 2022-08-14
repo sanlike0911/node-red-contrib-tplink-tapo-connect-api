@@ -1,4 +1,5 @@
-import * as tapo from 'tp-link-tapo-connect';
+// import * as tapo from 'tp-link-tapo-connect';
+import * as tapo from './tp-link-tapo-connect/api';
 export namespace tplinkTapoConnectWrapperType {
 
     export type tapoDevice = tapo.TapoDevice;

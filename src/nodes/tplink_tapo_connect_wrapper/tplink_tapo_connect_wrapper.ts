@@ -1,4 +1,5 @@
-import * as tapo from 'tp-link-tapo-connect';
+// import * as tapo from 'tp-link-tapo-connect';
+import * as tapo from './tp-link-tapo-connect/api'
 import find from 'local-devices'
 
 import { tplinkTapoConnectWrapperType } from './type'
@@ -272,6 +273,28 @@ export class tplinkTapoConnectWrapper {
             }
             _tapoConnectResults.result = true;
             return _tapoConnectResults;
+        } catch (error: any) {
+            return { result: false, errorInf: error };
+        }
+    }
+
+    /**
+     *
+     *
+     * @param {string} _email
+     * @param {string} _password
+     * @param {string} _targetIp
+     * @return {*}  {Promise<tplinkTapoConnectWrapperType.tapoConnectResults>}
+     * @memberof tplinkTapoConnectWrapper
+     */
+    public async getTapoEnergyUsage(_email: string, _password: string, _targetIp: string): Promise<tplinkTapoConnectWrapperType.tapoConnectResults> {
+        try {
+            	const _deviceToken: tplinkTapoConnectWrapperType.tapoDeviceKey = await tapo.loginDeviceByIp(_email, _password, _targetIp);
+            	const _tapoEnergyUsage: tplinkTapoConnectWrapperType.tapoDeviceInfo = await tapo.getEnergyUsage(_deviceToken);
+            if (this.isEmpty(_tapoEnergyUsage)) {
+                throw new Error("tapo device energy not found.");
+            }
+            return { result: true, tapoDeviceInfo: _tapoEnergyUsage };
         } catch (error: any) {
             return { result: false, errorInf: error };
         }
