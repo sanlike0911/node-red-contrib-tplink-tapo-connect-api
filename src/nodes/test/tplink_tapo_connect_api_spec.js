@@ -1,8 +1,19 @@
 const helper = require("node-red-node-test-helper");
+const { ExitStatus } = require("typescript");
 const tagetNode = require("../../../dist/tplink_tapo_connect_api.js");
 
-const current = __dirname;
-const fs = require("fs");
+require('dotenv').config();
+
+// tapo settings
+const tapoSettings = {
+  email: string = process.env.TAPO_USERNAME              || "email@gmail.com",
+  password: string = process.env.TAPO_PASSWORD           || "password",
+  deviceIp: string = process.env.TAPO_IPADDRESS          || "192.168.0.100",
+  deviceAlias: string = process.env.TAPO_TARGET_ALIAS    || "alias",
+  deviceRangeOfIp: string = process.env.TAPO_RANGE_OF_IP || "192.168.0.0/24",
+  mode: string = process.env.TAPO_MODE                   || "command",
+  searchMode: string = process.env.TAPO_SEARCH_MODE      || "ip" 
+}
 
 helper.init(require.resolve('node-red'), {
   // functionGlobalContext: { fs:require('fs') }
@@ -10,20 +21,8 @@ helper.init(require.resolve('node-red'), {
 
 describe("tplink_tapo_connect_api Node", function () {
 
-  let tapoAccountSettings = {};
-
   before(function (done) {
     // runs once before the first test in this block
-    try {
-      fs.readFile(`${current}/../../../data/tapoSettings.json`, "utf-8", (err, data) => {
-        if (err) throw err;
-        tapoAccountSettings = JSON.parse(data);
-        // console.log("tapoAccountSettings: ", tapoAccountSettings);
-      });
-    } catch (error) {
-      console.log(error);
-      done(error);
-    }
     helper.startServer(done);
   });
 
@@ -63,12 +62,12 @@ describe("tplink_tapo_connect_api Node", function () {
           id: "n1",
           type: "tplink_tapo_connect_api",
           name: "test name",
-          email: tapoAccountSettings.email,
-          password: tapoAccountSettings.password,
-          deviceIp: tapoAccountSettings.deviceIp,
-          deviceAlias: tapoAccountSettings.deviceAlias,
-          deviceIpRange: tapoAccountSettings.deviceIpRange,
-          mode: tapoAccountSettings.mode,
+          email: tapoSettings.email,
+          password: tapoSettings.password,
+          deviceIp: tapoSettings.deviceIp,
+          deviceAlias: tapoSettings.deviceAlias,
+          deviceRangeOfIp: tapoSettings.deviceRangeOfIp,
+          mode: tapoSettings.mode,
           wires: [["n2"]]
         },
         { id: "n2", type: "helper" }
@@ -95,12 +94,12 @@ describe("tplink_tapo_connect_api Node", function () {
           id: "n1",
           type: "tplink_tapo_connect_api",
           name: "test name",
-          email: tapoAccountSettings.email,
-          password: tapoAccountSettings.password,
-          deviceIp: tapoAccountSettings.deviceIp,
-          deviceAlias: tapoAccountSettings.deviceAlias,
-          deviceIpRange: tapoAccountSettings.deviceIpRange,
-          mode: tapoAccountSettings.mode,
+          email: tapoSettings.email,
+          password: tapoSettings.password,
+          deviceIp: tapoSettings.deviceIp,
+          deviceAlias: tapoSettings.deviceAlias,
+          deviceRangeOfIp: tapoSettings.deviceRangeOfIp,
+          mode: tapoSettings.mode,
           wires: [["n2"]]
         },
         { id: "n2", type: "helper" }
@@ -127,11 +126,11 @@ describe("tplink_tapo_connect_api Node", function () {
           id: "n1",
           type: "tplink_tapo_connect_api",
           name: "test name",
-          email: tapoAccountSettings.email,
-          password: tapoAccountSettings.password,
-          deviceIp: tapoAccountSettings.deviceIp,
-          deviceAlias: tapoAccountSettings.deviceAlias,
-          deviceIpRange: tapoAccountSettings.deviceIpRange,
+          email: tapoSettings.email,
+          password: tapoSettings.password,
+          deviceIp: tapoSettings.deviceIp,
+          deviceAlias: tapoSettings.deviceAlias,
+          deviceRangeOfIp: tapoSettings.deviceRangeOfIp,
           mode: "toggle",
           wires: [["n2"]]
         },
@@ -159,11 +158,11 @@ describe("tplink_tapo_connect_api Node", function () {
           id: "n1",
           type: "tplink_tapo_connect_api",
           name: "test name",
-          email: tapoAccountSettings.email,
-          password: tapoAccountSettings.password,
-          deviceIp: tapoAccountSettings.deviceIp,
-          deviceAlias: tapoAccountSettings.deviceAlias,
-          deviceIpRange: tapoAccountSettings.deviceIpRange,
+          email: tapoSettings.email,
+          password: tapoSettings.password,
+          deviceIp: tapoSettings.deviceIp,
+          deviceAlias: tapoSettings.deviceAlias,
+          deviceRangeOfIp: tapoSettings.deviceRangeOfIp,
           mode: "toggle",
           wires: [["n2"]]
         },
@@ -191,12 +190,12 @@ describe("tplink_tapo_connect_api Node", function () {
           id: "n1",
           type: "tplink_tapo_connect_api",
           name: "test name",
-          email: tapoAccountSettings.email,
-          password: tapoAccountSettings.password,
-          deviceIp: tapoAccountSettings.deviceIp,
-          deviceAlias: tapoAccountSettings.deviceAlias,
-          deviceIpRange: tapoAccountSettings.deviceIpRange,
-          mode: tapoAccountSettings.mode,
+          email: tapoSettings.email,
+          password: tapoSettings.password,
+          deviceIp: tapoSettings.deviceIp,
+          deviceAlias: tapoSettings.deviceAlias,
+          deviceRangeOfIp: tapoSettings.deviceRangeOfIp,
+          mode: tapoSettings.mode,
           wires: [["n2"]]
         },
         { id: "n2", type: "helper" }
@@ -227,12 +226,12 @@ describe("tplink_tapo_connect_api Node", function () {
             id: "n1",
             type: "tplink_tapo_connect_api",
             name: "test name",
-            email: tapoAccountSettings.email,
-            password: tapoAccountSettings.password,
-            deviceIp: tapoAccountSettings.deviceIp,
-            deviceAlias: tapoAccountSettings.deviceAlias,
-            deviceIpRange: tapoAccountSettings.deviceIpRange,
-            mode: tapoAccountSettings.mode
+            email: tapoSettings.email,
+            password: tapoSettings.password,
+            deviceIp: tapoSettings.deviceIp,
+            deviceAlias: tapoSettings.deviceAlias,
+            deviceRangeOfIp: tapoSettings.deviceRangeOfIp,
+            mode: tapoSettings.mode
           }
         ];
         helper.load(tagetNode, flow, function () {
@@ -259,12 +258,12 @@ describe("tplink_tapo_connect_api Node", function () {
             id: "n1",
             type: "tplink_tapo_connect_api",
             name: "test name",
-            email: tapoAccountSettings.email,
-            password: tapoAccountSettings.password,
+            email: tapoSettings.email,
+            password: tapoSettings.password,
             deviceIp: "192.168.0.999",
-            deviceAlias: tapoAccountSettings.deviceAlias,
-            deviceIpRange: tapoAccountSettings.deviceIpRange,
-            mode: tapoAccountSettings.mode,
+            deviceAlias: tapoSettings.deviceAlias,
+            deviceRangeOfIp: tapoSettings.deviceRangeOfIp,
+            mode: tapoSettings.mode,
             wires: [["n2"]]
           },
           { id: "n2", type: "helper" }
@@ -294,11 +293,11 @@ describe("tplink_tapo_connect_api Node", function () {
             type: "tplink_tapo_connect_api",
             name: "test name",
             email: "foo",
-            password: tapoAccountSettings.password,
-            deviceIp: tapoAccountSettings.deviceIp,
-            deviceAlias: tapoAccountSettings.deviceAlias,
-            deviceIpRange: tapoAccountSettings.deviceIpRange,
-            mode: tapoAccountSettings.mode,
+            password: tapoSettings.password,
+            deviceIp: tapoSettings.deviceIp,
+            deviceAlias: tapoSettings.deviceAlias,
+            deviceRangeOfIp: tapoSettings.deviceRangeOfIp,
+            mode: tapoSettings.mode,
             wires: [["n2"]]
           },
           { id: "n2", type: "helper" }
@@ -327,12 +326,12 @@ describe("tplink_tapo_connect_api Node", function () {
             id: "n1",
             type: "tplink_tapo_connect_api",
             name: "test name",
-            email: tapoAccountSettings.email,
+            email: tapoSettings.email,
             password: "foo",
-            deviceIp: tapoAccountSettings.deviceIp,
-            deviceAlias: tapoAccountSettings.deviceAlias,
-            deviceIpRange: tapoAccountSettings.deviceIpRange,
-            mode: tapoAccountSettings.mode,
+            deviceIp: tapoSettings.deviceIp,
+            deviceAlias: tapoSettings.deviceAlias,
+            deviceRangeOfIp: tapoSettings.deviceRangeOfIp,
+            mode: tapoSettings.mode,
             wires: [["n2"]]
           },
           { id: "n2", type: "helper" }
@@ -365,12 +364,12 @@ describe("tplink_tapo_connect_api Node", function () {
           id: "n1",
           type: "tplink_tapo_connect_api",
           name: "test name",
-          email: tapoAccountSettings.email,
-          password: tapoAccountSettings.password,
+          email: tapoSettings.email,
+          password: tapoSettings.password,
           deviceIp: "",
-          deviceAlias: tapoAccountSettings.deviceAlias,
-          deviceIpRange: tapoAccountSettings.deviceIpRange,
-          mode: tapoAccountSettings.mode,
+          deviceAlias: tapoSettings.deviceAlias,
+          deviceRangeOfIp: tapoSettings.deviceRangeOfIp,
+          mode: tapoSettings.mode,
           wires: [["n2"]]
         },
         { id: "n2", type: "helper" }
@@ -397,12 +396,12 @@ describe("tplink_tapo_connect_api Node", function () {
           id: "n1",
           type: "tplink_tapo_connect_api",
           name: "test name",
-          email: tapoAccountSettings.email,
-          password: tapoAccountSettings.password,
+          email: tapoSettings.email,
+          password: tapoSettings.password,
           deviceIp: "",
-          deviceAlias: tapoAccountSettings.deviceAlias,
-          deviceIpRange: tapoAccountSettings.deviceIpRange,
-          mode: tapoAccountSettings.mode,
+          deviceAlias: tapoSettings.deviceAlias,
+          deviceRangeOfIp: tapoSettings.deviceRangeOfIp,
+          mode: tapoSettings.mode,
           wires: [["n2"]]
         },
         { id: "n2", type: "helper" }
@@ -429,11 +428,11 @@ describe("tplink_tapo_connect_api Node", function () {
           id: "n1",
           type: "tplink_tapo_connect_api",
           name: "test name",
-          email: tapoAccountSettings.email,
-          password: tapoAccountSettings.password,
+          email: tapoSettings.email,
+          password: tapoSettings.password,
           deviceIp: "",
-          deviceAlias: tapoAccountSettings.deviceAlias,
-          deviceIpRange: tapoAccountSettings.deviceIpRange,
+          deviceAlias: tapoSettings.deviceAlias,
+          deviceRangeOfIp: tapoSettings.deviceRangeOfIp,
           mode: "toggle",
           wires: [["n2"]]
         },
@@ -461,11 +460,11 @@ describe("tplink_tapo_connect_api Node", function () {
           id: "n1",
           type: "tplink_tapo_connect_api",
           name: "test name",
-          email: tapoAccountSettings.email,
-          password: tapoAccountSettings.password,
+          email: tapoSettings.email,
+          password: tapoSettings.password,
           deviceIp: "",
-          deviceAlias: tapoAccountSettings.deviceAlias,
-          deviceIpRange: tapoAccountSettings.deviceIpRange,
+          deviceAlias: tapoSettings.deviceAlias,
+          deviceRangeOfIp: tapoSettings.deviceRangeOfIp,
           mode: "toggle",
           wires: [["n2"]]
         },
@@ -493,12 +492,12 @@ describe("tplink_tapo_connect_api Node", function () {
           id: "n1",
           type: "tplink_tapo_connect_api",
           name: "test name",
-          email: tapoAccountSettings.email,
-          password: tapoAccountSettings.password,
+          email: tapoSettings.email,
+          password: tapoSettings.password,
           deviceIp: "",
-          deviceAlias: tapoAccountSettings.deviceAlias,
-          deviceIpRange: tapoAccountSettings.deviceIpRange,
-          mode: tapoAccountSettings.mode,
+          deviceAlias: tapoSettings.deviceAlias,
+          deviceRangeOfIp: tapoSettings.deviceRangeOfIp,
+          mode: tapoSettings.mode,
           wires: [["n2"]]
         },
         { id: "n2", type: "helper" }
@@ -529,12 +528,12 @@ describe("tplink_tapo_connect_api Node", function () {
             id: "n1",
             type: "tplink_tapo_connect_api",
             name: "test name",
-            email: tapoAccountSettings.email,
-            password: tapoAccountSettings.password,
+            email: tapoSettings.email,
+            password: tapoSettings.password,
             deviceIp: "",
-            deviceAlias: tapoAccountSettings.deviceAlias,
-            deviceIpRange: tapoAccountSettings.deviceIpRange,
-            mode: tapoAccountSettings.mode
+            deviceAlias: tapoSettings.deviceAlias,
+            deviceRangeOfIp: tapoSettings.deviceRangeOfIp,
+            mode: tapoSettings.mode
           }
         ];
         helper.load(tagetNode, flow, function () {
@@ -561,12 +560,12 @@ describe("tplink_tapo_connect_api Node", function () {
             id: "n1",
             type: "tplink_tapo_connect_api",
             name: "test name",
-            email: tapoAccountSettings.email,
-            password: tapoAccountSettings.password,
+            email: tapoSettings.email,
+            password: tapoSettings.password,
             deviceIp: "",
-            deviceAlias: tapoAccountSettings.deviceAlias,
-            deviceIpRange: tapoAccountSettings.deviceIpRange,
-            mode: tapoAccountSettings.mode
+            deviceAlias: tapoSettings.deviceAlias,
+            deviceRangeOfIp: tapoSettings.deviceRangeOfIp,
+            mode: tapoSettings.mode
           }
         ];
         helper.load(tagetNode, flow, function () {
@@ -593,12 +592,12 @@ describe("tplink_tapo_connect_api Node", function () {
             id: "n1",
             type: "tplink_tapo_connect_api",
             name: "test name",
-            email: tapoAccountSettings.email,
-            password: tapoAccountSettings.password,
+            email: tapoSettings.email,
+            password: tapoSettings.password,
             deviceIp: "",
             deviceAlias: "foo",
-            deviceIpRange: tapoAccountSettings.deviceIpRange,
-            mode: tapoAccountSettings.mode,
+            deviceRangeOfIp: tapoSettings.deviceRangeOfIp,
+            mode: tapoSettings.mode,
             wires: [["n2"]]
           },
           { id: "n2", type: "helper" }
@@ -627,12 +626,12 @@ describe("tplink_tapo_connect_api Node", function () {
             id: "n1",
             type: "tplink_tapo_connect_api",
             name: "test name",
-            email: tapoAccountSettings.email,
-            password: tapoAccountSettings.password,
+            email: tapoSettings.email,
+            password: tapoSettings.password,
             deviceIp: "",
-            deviceAlias: tapoAccountSettings.deviceAlias,
-            deviceIpRange: "172.17.198.0/24",
-            mode: tapoAccountSettings.mode,
+            deviceAlias: tapoSettings.deviceAlias,
+            deviceRangeOfIp: "172.17.198.0/24",
+            mode: tapoSettings.mode,
             wires: [["n2"]]
           },
           { id: "n2", type: "helper" }
