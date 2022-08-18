@@ -1,5 +1,6 @@
 # Files #
 #########
+.env
 *.bak
 *.log
 build.bat
