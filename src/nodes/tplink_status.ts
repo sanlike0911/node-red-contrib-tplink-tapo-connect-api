@@ -12,7 +12,7 @@ const nodeInit: NodeInitializer = (RED): void => {
 
     /**
      * checkParameter
-     * 
+     *
      * @param {toggleType.configBase} config
      * @returns {boolean}
      */
