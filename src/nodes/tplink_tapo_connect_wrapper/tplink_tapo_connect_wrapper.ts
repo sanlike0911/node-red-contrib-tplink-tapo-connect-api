@@ -264,7 +264,7 @@ export class tplinkTapoConnectWrapper {
             }
             _tapoConnectResults.tapoDeviceInfo = _tapoDeviceInfo;
             // get EnergyUsage
-            if (_tapoDeviceInfo?.model === "P110") {
+            if (_tapoDeviceInfo?.model === "P110" || _tapoDeviceInfo?.model === "P115") {
                 const _tapoEnergyUsage: tplinkTapoConnectWrapperType.tapoEnergyUsage = await tapo.getEnergyUsage(_deviceToken);
                 if (this.isEmpty(_tapoEnergyUsage)) {
                     throw new Error("tapo device energy not found.");
