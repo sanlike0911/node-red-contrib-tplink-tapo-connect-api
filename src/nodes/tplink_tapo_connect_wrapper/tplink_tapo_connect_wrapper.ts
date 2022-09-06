@@ -4,6 +4,12 @@ import find from 'local-devices'
 
 import { tplinkTapoConnectWrapperType } from './type'
 
+/* Device list that supports energy usage */
+const supportEnergyUsage = [
+     "P110"
+    ,"P115"
+];
+
 /**
  *
  *
@@ -264,7 +270,7 @@ export class tplinkTapoConnectWrapper {
             }
             _tapoConnectResults.tapoDeviceInfo = _tapoDeviceInfo;
             // get EnergyUsage
-            if (_tapoDeviceInfo?.model === "P110") {
+            if ( supportEnergyUsage.includes(_tapoDeviceInfo.model )) {
                 const _tapoEnergyUsage: tplinkTapoConnectWrapperType.tapoEnergyUsage = await tapo.getEnergyUsage(_deviceToken);
                 if (this.isEmpty(_tapoEnergyUsage)) {
                     throw new Error("tapo device energy not found.");
