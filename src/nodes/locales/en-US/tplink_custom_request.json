@@ -1,0 +1,40 @@
+{
+    "resources": {
+        "paletteLabel": "custom request",
+        "labels": {
+            "name": "Name",
+            "password": "Password",
+            "email": "Email",
+            "deviceIp": "Tapo ipaddress",
+            "deviceAlias": "Tapo alias",
+            "deviceIpRange": "Tapo find ip range",
+            "targetDeviceSettings": "Tapo device settings",
+            "searchMode":{
+                "title": "Seach mode",
+                "ip":"ip",
+                "alias":"alias"
+            },
+            "method":{
+                "title": "Method",
+                "setDeviceInfo": "Set Device-Info",
+                "getDeviceInfo": "Get Device-Info",
+                "getEnergyUsage": "Get Energy-Usage",
+                "custom": "Use Custom-Method",
+                "custom-title":"Custom-Method"
+            },
+            "securePassthrough": "Sent data encrypted (default)",
+            "params": "Params sent as JSON"
+        },
+        "descriptions": {
+            "targetDeviceSettings": "select search mode \"Tapo ip or Tapo alias\"",
+            "customQuery": "select custom query options"
+        },
+        "message": {
+            "ready": "Ready,",
+            "complete": "Completed.",
+            "configError": "Config error.",
+            "error": "Error.",
+            "communicationError": "Communication error."
+        }
+    }
+}

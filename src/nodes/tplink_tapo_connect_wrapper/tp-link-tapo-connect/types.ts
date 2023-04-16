@@ -50,6 +50,16 @@ export type TapoDevice = {
     time_diff: number;
     lang: string; 
   }
+
+  export type TapoCustomRequest ={
+    success: boolean,
+    isEncrypted?: boolean;
+    requestData?: string;
+    sentRequest?: string;
+    receivedResponse?: string;
+    result?: string;
+    errorCode?: number;
+  }
   
   export type TapoDeviceKey = {
     key: Buffer;
