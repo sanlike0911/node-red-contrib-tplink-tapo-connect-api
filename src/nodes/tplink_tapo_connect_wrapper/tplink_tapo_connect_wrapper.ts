@@ -8,6 +8,7 @@ import { tplinkTapoConnectWrapperType } from './type'
 const supportEnergyUsage = [
      "P110"
     ,"P115"
+    ,"KP125M"
 ];
 
 /**
