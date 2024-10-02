@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { encrypt, decrypt, generateKeyPair, readDeviceKey, base64Encode, base64Decode, shaDigest } from "./tplinkCipher";
-import { TapoDevice, TapoDeviceKey, TapoDeviceInfo, TapoVideoImage, TapoVideoPageItem, TapoVideoList, TapoVideo } from "./types";
+import { TapoDevice, TapoCustomRequest, TapoDeviceKey, TapoDeviceInfo, TapoVideoImage, TapoVideoPageItem, TapoVideoList, TapoVideo } from "./types";
 import { resolveMacToIp } from './network-tools';
 import { getColour } from './colour-helper';
 import tplinkCaCert from "./tplink-ca-cert";
@@ -25,6 +25,7 @@ export {
     TapoDevice,
     TapoDeviceKey,
     TapoDeviceInfo,
+    TapoCustomRequest,
     TapoVideoImage,
     TapoVideoPageItem,
     TapoVideoList,
@@ -162,6 +163,72 @@ export const setColour = async (deviceKey: TapoDeviceKey, colour: string = 'whit
   await securePassthrough(setColourRequest, deviceKey)
 }
 
+export const setDeviceInfo = async (deviceKey: TapoDeviceKey, params: string ='{}'): Promise<TapoDeviceInfo> => {
+  const setDeviceInfoRequest = {
+    "method": "set_device_info",
+    "params": params,
+    "requestTimeMils": (new Date()).getTime(),
+    "terminalUUID": "00-00-00-00-00-00"
+  }
+  return augmentTapoDeviceInfo(await securePassthrough(setDeviceInfoRequest, deviceKey))
+}
+
+export const sendCustomRequest = async (deviceKey: TapoDeviceKey, method: string, params: string, secureRequest :boolean):Promise<TapoCustomRequest> => {
+  let requestData: any = {
+    "method": method,
+    "params": JSON.parse(params),
+    "requestTimeMils": (new Date()).getTime(),
+    "terminalUUID": "00-00-00-00-00-00"
+  }
+
+  const ret: TapoCustomRequest = {
+    success: false,
+    isEncrypted: secureRequest,
+    requestData: JSON.stringify(requestData)
+  }
+  console.log(`requestData:`, requestData);
+  /* secure request */
+  if(secureRequest){
+    requestData = encryptRequest(requestData, deviceKey);
+  } 
+  console.log(`sentData:`, requestData);
+  ret.sentRequest= JSON.stringify(requestData);
+  
+  /* sent request */
+  const response = await axios({
+    method: 'post',
+    url: `http://${deviceKey.deviceIp}/app?token=${deviceKey.token}`,
+    data: requestData,
+    headers: {
+      "Cookie": deviceKey.sessionCookie
+    }
+  })
+  console.log(`response:`, response.data);
+  ret.receivedResponse = response.data;
+  ret.errorCode = response.data["error_code"];
+  
+  /* decrypt secured response */
+  //if (secureRequest){
+    const decryptedResponse = decrypt(response.data.result.response, deviceKey);
+    console.log(`decryptedResponse:`, decryptedResponse);
+    ret.errorCode = decryptedResponse.error_code;
+    if(ret.errorCode == 0 ){
+      ret.result = "true";
+      if (decryptedResponse.result){
+        ret.result = decryptedResponse.result;
+      }
+    } else {
+      ret.result = getError(ret.errorCode);
+    }
+  //} else {
+  //  ret.result = response.data;
+  //}
+  console.log(`result:`, ret.result);
+  ret.success = ret.errorCode == 0;
+  return ret;
+  
+}
+
 export const getDeviceInfo = async (deviceKey: TapoDeviceKey): Promise<TapoDeviceInfo> => {
   const statusRequest = {
     "method": "get_device_info",
@@ -178,7 +245,7 @@ export const getEnergyUsage = async (deviceKey: TapoDeviceKey): Promise<TapoDevi
   return securePassthrough(statusRequest, deviceKey)
 }
 
-export const securePassthrough = async (deviceRequest: any, deviceKey: TapoDeviceKey):Promise<any> => {
+export const encryptRequest = (deviceRequest: any, deviceKey: TapoDeviceKey): any =>{
   const encryptedRequest = encrypt(deviceRequest, deviceKey)
   const securePassthroughRequest = {
     "method": "securePassthrough",
@@ -186,6 +253,11 @@ export const securePassthrough = async (deviceRequest: any, deviceKey: TapoDevic
         "request": encryptedRequest,
     }
   }
+  return securePassthroughRequest;
+}
+
+export const securePassthrough = async (deviceRequest: any, deviceKey: TapoDeviceKey):Promise<any> => {
+  const securePassthroughRequest = encryptRequest(deviceRequest, deviceKey);
 
   const response = await axios({
     method: 'post',
@@ -195,7 +267,6 @@ export const securePassthrough = async (deviceRequest: any, deviceKey: TapoDevic
       "Cookie": deviceKey.sessionCookie
     }
   })
-
   checkError(response.data);
 
   const decryptedResponse = decrypt(response.data.result.response, deviceKey);
@@ -268,21 +339,26 @@ export const isTapoDevice = (deviceType: string) => {
   }
 }
 
+export const getError = (errorCode: number): string => {
+  switch (errorCode) {
+    case 0: return;
+    case 1002: return ("Invalid request or command");
+    case -1008: return ("Invalid or missing parameter");
+    case -1010: return ("Invalid public key length");
+    case -1501: return ("Invalid request or credentials");
+    case -1002: return ("Incorrect request");
+    case -1003: return ("JSON format error");
+    case -20601: return ("Incorrect email or password");
+    case -20675: return ("Cloud token expired or invalid");
+    case 9999: return ("Device token expired or invalid");
+    default: return (`Unexpected Error Code: ${errorCode}`);
+  }
+}
+
 export const checkError = (responseData: any) => {
   const errorCode = responseData["error_code"];
-  if (errorCode) {
-    switch (errorCode) {
-      case 0: return;
-      case -1010: throw new Error("Invalid public key length");
-      case -1501: throw new Error("Invalid request or credentials");
-      case -1002: throw new Error("Incorrect request");
-      case -1003: throw new Error("JSON format error");
-      case -20601: throw new Error("Incorrect email or password");
-      case -20675: throw new Error("Cloud token expired or invalid");
-      case 9999: throw new Error("Device token expired or invalid");
-      default: throw new Error(`Unexpected Error Code: ${errorCode} (${responseData["msg"]})`);
-    }
-
+  if (errorCode && errorCode != 0) {
+    throw new Error(getError(errorCode));
   }
 }
 

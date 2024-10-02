@@ -225,6 +225,28 @@ export class tplinkTapoConnectWrapper {
         }
     }
 
+     /**
+     * send custom request
+     *
+     * @param {string} _email
+     * @param {string} _password
+     * @param {string} _targetIp
+     * @param {string} _method
+     * @param {string} _params
+     * @param {boolean} _securePasstrough
+     * @returns {Promise< tplinkTapoConnectWrapperType.tapoCustomRequest >}
+     * @memberof tplinkTapoConnectWrapper
+     */
+     public async sendCustomRequestAlias(_email: string, _password: string, _alias: string, _rangeOfIp: string, _method: string, _params: string, _securePasstrough: string): Promise<tplinkTapoConnectWrapperType.tapoCustomRequest> {
+        try {
+            const _targetIp: string = await this.getDeviceIp(_email, _password, _alias, _rangeOfIp);
+            let _tapoCustomRequest: tplinkTapoConnectWrapperType.tapoCustomRequest = await this.sendCustomRequest(_targetIp, _email, _password, _method, _params, _securePasstrough);
+            return _tapoCustomRequest;
+        } catch (error: any) {
+            return { success: false, result: error };
+        }
+    }
+
     /**
      *
      *
@@ -386,6 +408,50 @@ export class tplinkTapoConnectWrapper {
             return { result: true };
         } catch (error: any) {
             return { result: false, errorInf: error };
+        }
+    }
+
+    /**
+     * set device info
+     *
+     * @param {string} _email
+     * @param {string} _password
+     * @param {string} _targetIp
+     * @param {string} _params
+     * @returns {Promise< tplinkTapoConnectWrapperType.TapoCustomRequest >}
+     * @memberof tplinkTapoConnectWrapper
+     */
+    public async setDeviceInfo(_email: string, _password: string, _targetIp: string, _params: string): Promise<tplinkTapoConnectWrapperType.tapoConnectResults> {
+        try {
+            const _deviceToken: tplinkTapoConnectWrapperType.tapoDeviceKey = await tapo.loginDeviceByIp(_email, _password, _targetIp);
+            await tapo.setDeviceInfo(_deviceToken, _params);
+            return { result: true };
+        } catch (error: any) {
+            return { result: false, errorInf: error };
+        }
+    }
+
+
+    /**
+     * send custom request
+     *
+     * @param {string} _email
+     * @param {string} _password
+     * @param {string} _targetIp
+     * @param {string} _method
+     * @param {string} _params
+     * @param {boolean} _securePasstrough
+     * @returns {Promise< tplinkTapoConnectWrapperType.tapoCustomRequest >}
+     * @memberof tplinkTapoConnectWrapper
+     */
+    public async sendCustomRequest(_email: string, _password: string, _targetIp: string, _method: string, _params: string, _securePasstrough: string): Promise<tplinkTapoConnectWrapperType.tapoCustomRequest> {
+        try {
+            const _deviceToken: tplinkTapoConnectWrapperType.tapoDeviceKey = await tapo.loginDeviceByIp(_email, _password, _targetIp);
+            let _secure: boolean = _securePasstrough === "true";
+            let _tapoCustomRequest: tplinkTapoConnectWrapperType.tapoCustomRequest = await tapo.sendCustomRequest(_deviceToken, _method, _params, _secure);
+            return _tapoCustomRequest;
+        } catch (error: any) {
+            return { success: false, result: error };
         }
     }
 }

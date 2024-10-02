@@ -10,6 +10,8 @@ export namespace tplinkTapoConnectWrapperType {
 
     export type tapoDeviceKey = tapo.TapoDeviceKey;
 
+    export type tapoCustomRequest = tapo.TapoCustomRequest;
+
     export type tapoConnectResults = {
 
         result: boolean;

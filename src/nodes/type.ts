@@ -112,6 +112,36 @@ export namespace commandType {
 
 }
 
+export namespace customRequstType {
+
+    export type searchModeTypes = "ip" | "alias";
+
+    export type configBase = {
+
+        email: string;
+
+        password: string;
+
+        deviceIp: string;
+
+        deviceAlias: string;
+
+        deviceIpRange: string;
+
+        searchMode : searchModeTypes;
+
+        method: string;
+        
+        securePassthrough: string;
+        
+        params: string;
+    }
+
+    export interface appNodeDef extends NodeDef, configBase {}
+    export interface appNode extends Node, configBase {}
+
+}
+
 export namespace statusType {
 
     export type searchModeTypes = "ip" | "alias";
