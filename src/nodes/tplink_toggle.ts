@@ -4,7 +4,7 @@ import { NodeInitializer } from "node-red";
 import { toggleType } from "./type";
 
 // tplinkTapoConnectWrapper
-import { tplinkTapoConnectWrapper, tplinkTapoConnectWrapperType } from "./tplink_tapo_connect_wrapper/tplink_tapo_connect_wrapper";
+import { tplinkTapoConnectWrapper, tplinkTapoConnectWrapperType } from "./tplink_tapo_connect_wrapper/tplink-tapo-conect/wrapper/tplink_tapo_connect_wrapper";
 
 const nodeInit: NodeInitializer = (RED): void => {
 
@@ -133,10 +133,10 @@ const nodeInit: NodeInitializer = (RED): void => {
                     if (ret.result) {
                         // update
                         config.searchMode = 'ip';
-                        config.deviceIp = ret.tapoDeviceInfo?.ip ?? config.deviceIp;
+                        config.deviceIp = ret.tapoDeviceInfo?.deviceId ?? config.deviceIp;
                         config.deviceAlias = ret.tapoDeviceInfo?.nickname ?? config.deviceAlias;
                         // device on/off?
-                        switch (ret.tapoDeviceInfo?.device_on) {
+                        switch (ret.tapoDeviceInfo?.deviceOn) {
                             case true: ret = await setTapoTurnOff(config); break;
                             case false: ret = await setTapoTurnOn(config); break;
                             default: throw new Error("tapoDeviceInfo.device_on not found.");

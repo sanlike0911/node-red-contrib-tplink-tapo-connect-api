@@ -18,14 +18,14 @@
     "test": "mocha \"src/nodes/test/*_spec.js\"",
     "clean": "rimraf dist/*",
     "tsc": "tsc",
-    "build": "npm-run-all clean tsc && npm run copy && npm run install:my-node",
+    "build": "npm-run-all2 clean tsc && npm run copy && npm run install:my-node",
     "copy": "npm run copy:html && npm run copy:icons && npm run copy:locales && npm run copy:dist && npm run copy:nodes && npm run copy:package",
-    "copy:html": "cpx \"./src/nodes/*.html\" \"./dist\"",
-    "copy:icons": "cpx \"./src/nodes/icons/**/*\" \"./dist/icons\"",
-    "copy:locales": "cpx \"./src/nodes/locales/**/*\" \"./dist/locales\"",
-    "copy:dist": "cpx \"./dist/**/*\" \"./data/my-node/nodes\"",
-    "copy:nodes": "cpx \"./dist/**/*\" \"./nodes\"",
-    "copy:package": "cpx \"./package.json\" \"./data/my-node\"",
+    "copy:html": "npx cpx2 \"./src/nodes/*.html\" \"./dist\"",
+    "copy:icons": "npx cpx2 \"./src/nodes/icons/**/*\" \"./dist/icons\"",
+    "copy:locales": "npx cpx2 \"./src/nodes/locales/**/*\" \"./dist/locales\"",
+    "copy:dist": "npx cpx2 \"./dist/**/*\" \"./data/my-node/nodes\"",
+    "copy:nodes": "npx cpx2 \"./dist/**/*\" \"./nodes\"",
+    "copy:package": "npx cpx2 \"./package.json\" \"./data/my-node\"",
     "install:my-node": "npm install ./data/my-node --prefix ./data",
     "start": "node ./node_modules/node-red/red.js --port 1880 --userDir ./data",
     "start:debug": "node --inspect-brk=0.0.0.0:9229 ./node_modules/node-red/red.js --userDir ./data"
@@ -45,27 +45,29 @@
     }
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=18.0.0"
   },
   "dependencies": {
-    "ansi-styles": "^6.1.0",
+    "ansi-styles": "^6.2.1",
     "arpping": "^4.0.0",
     "local-devices": "^3.2.0",
-    "axios": "^0.27.2",
-    "uuid": "^8.3.2"
+    "axios": "^1.7.7",
+    "uuid": "^10.0.0",
+    "crypto-js": "^4.2.0"
   },
   "devDependencies": {
-    "@types/node-red": "^1.2.1",
-    "cpx": "^1.5.0",
-    "node-red": "^3.0.2",
-    "node-red-node-test-helper": "^0.3.0",
-    "npm-run-all": "^4.1.5",
-    "rimraf": "^3.0.2",
-    "ts-node": "^10.9.1",
+    "@types/node-red": "^1.3.5",
+    "@types/crypto-js": "^4.2.2",
+    "cpx2": "^7.0.1",
+    "node-red": "^4.0.8",
+    "node-red-node-test-helper": "^0.3.4",
+    "npm-run-all2": "^6.2.6",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^4.7.4",
-    "mocha": "^10.0.0",
-    "dotenv": "^16.0.1"
+    "typescript": "^5.7.2",
+    "mocha": "^10.8.2",
+    "dotenv": "^16.4.7"
   },
   "repository": {
     "type": "git",
