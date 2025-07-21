@@ -74,6 +74,6 @@ data/
 !/data/settings.js
 
 # my project
-dist/
-nodes/
-package-lock.json
+/dist/
+/nodes/
+!/src/nodes/*
