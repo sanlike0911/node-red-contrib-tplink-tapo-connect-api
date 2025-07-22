@@ -16,7 +16,7 @@
   "main": "none",
   "scripts": {
     "test": "mocha \"src/nodes/test/*_spec.js\"",
-    "clean": "rimraf dist/*",
+    "clean": "rimraf dist",
     "tsc": "tsc",
     "build": "npm-run-all2 clean tsc && npm run copy && npm run install:my-node",
     "copy": "npm run copy:html && npm run copy:icons && npm run copy:locales && npm run copy:dist && npm run copy:nodes && npm run copy:package",
