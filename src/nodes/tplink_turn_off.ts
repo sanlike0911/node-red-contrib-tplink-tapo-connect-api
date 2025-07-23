@@ -92,6 +92,7 @@ const nodeInit: NodeInitializer = (RED): void => {
 
                 if (checkParameter(config)) {
                     // node: turn_off
+                    node.status({ fill: "yellow", shape: "dot", text: "resources.message.processing" });
                     ret = await setTapoTurnOff(config);
                 } else {
                     throw new Error("faild to get config.");

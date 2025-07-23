@@ -94,6 +94,7 @@ const nodeInit: NodeInitializer = (RED): void => {
 
                 if (checkParameter(config)) {
                     // node: brightness
+                    node.status({ fill: "yellow", shape: "dot", text: "resources.message.processing" });
                     ret = await setTapoBrightness(config);
                 } else {
                     throw new Error("faild to get config.");

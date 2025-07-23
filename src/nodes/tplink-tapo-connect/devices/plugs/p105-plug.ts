@@ -441,6 +441,34 @@ export class P105Plug extends BaseTapoDevice {
         primaryError = error as Error;
         console.log(`Primary API failed (${this.useKlap ? 'KLAP' : 'Secure Passthrough'}):`, error);
         
+        // Check if this is a device busy error (KLAP -1012) and retry with delay
+        if (this.isDeviceBusyError(error as Error)) {
+          console.log('Device busy error detected, implementing retry with delay...');
+          for (let retryAttempt = 1; retryAttempt <= 3; retryAttempt++) {
+            const delay = 2000 * retryAttempt; // Increasing delay: 2s, 4s, 6s
+            console.log(`Device busy retry ${retryAttempt}/3, waiting ${delay}ms...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            
+            try {
+              if (this.useKlap) {
+                const result = await this.klapAuth.secureRequest<T>(request);
+                console.log(`Device busy retry ${retryAttempt} successful`);
+                return { error_code: 0, result };
+              } else {
+                const result = await this.auth.secureRequest<T>(request);
+                console.log(`Device busy retry ${retryAttempt} successful`);
+                return { error_code: 0, result };
+              }
+            } catch (retryError) {
+              console.log(`Device busy retry ${retryAttempt} failed:`, retryError);
+              if (retryAttempt === 3) {
+                // Last retry failed, continue to session error handling
+                break;
+              }
+            }
+          }
+        }
+        
         // Check if this is a session error that requires re-authentication
         if (this.isSessionError(error as Error)) {
           console.log('Session error detected, attempting to re-authenticate...');
@@ -614,5 +642,12 @@ export class P105Plug extends BaseTapoDevice {
            errorMessage.includes('session expired') || 
            errorMessage.includes('session needs to be re-established') ||
            errorMessage.includes('klap -1001');
+  }
+
+  private isDeviceBusyError(error: Error): boolean {
+    const errorMessage = error.message.toLowerCase();
+    return errorMessage.includes('klap -1012') || 
+           errorMessage.includes('device busy') || 
+           errorMessage.includes('command timing issue');
   }
 }

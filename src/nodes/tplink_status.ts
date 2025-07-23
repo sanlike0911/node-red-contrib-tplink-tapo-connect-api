@@ -92,6 +92,7 @@ const nodeInit: NodeInitializer = (RED): void => {
 
                 if (checkParameter(config)) {
                     // node: status
+                    node.status({ fill: "yellow", shape: "dot", text: "resources.message.processing" });
                     ret = await getTapoDeviceInfo(config);
                 } else {
                     throw new Error("faild to get config.");

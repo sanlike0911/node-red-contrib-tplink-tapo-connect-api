@@ -133,12 +133,17 @@ const nodeInit: NodeInitializer = (RED): void => {
                     if (ret.result) {
                         // update
                         config.searchMode = 'ip';
-                        config.deviceIp = ret.tapoDeviceInfo?.deviceId ?? config.deviceIp;
+                        // Keep the original deviceIp since deviceId is not an IP address
                         config.deviceAlias = ret.tapoDeviceInfo?.nickname ?? config.deviceAlias;
+                        node.status({ fill: "yellow", shape: "dot", text: "resources.message.processing" });
                         // device on/off?
                         switch (ret.tapoDeviceInfo?.deviceOn) {
-                            case true: ret = await setTapoTurnOff(config); break;
-                            case false: ret = await setTapoTurnOn(config); break;
+                            case true:
+                                ret = await setTapoTurnOff(config);
+                                break;
+                            case false:
+                                ret = await setTapoTurnOn(config);
+                                break;
                             default: throw new Error("tapoDeviceInfo.device_on not found.");
                         }
                     } else {

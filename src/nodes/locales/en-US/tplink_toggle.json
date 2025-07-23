@@ -21,6 +21,7 @@
         "message": {
             "ready": "Ready,",
             "complete": "Completed.",
+            "processing": "processing.",
             "configError": "Config error.",
             "error": "Error.",
             "communicationError": "Communication error."

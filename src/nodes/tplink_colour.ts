@@ -95,6 +95,7 @@ const nodeInit: NodeInitializer = (RED): void => {
 
                 if (checkParameter(config)) {
                     // node: color
+                    node.status({ fill: "yellow", shape: "dot", text: "resources.message.processing" });
                     ret = await setTapoColour(config);
                 } else {
                     throw new Error("faild to get config.");

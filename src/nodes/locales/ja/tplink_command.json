@@ -21,6 +21,7 @@
         "message": {
             "ready": "準備完了",
             "complete": "送信完了",
+            "processing": "送信中",
             "configError": "設定異常",
             "error": "エラー発生",
             "communicationError": "送信異常"

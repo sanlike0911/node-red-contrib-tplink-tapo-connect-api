@@ -145,6 +145,7 @@ const nodeInit: NodeInitializer = (RED): void => {
                 };
 
                 if (checkParameter(config)) {
+                    node.status({ fill: "yellow", shape: "dot", text: "resources.message.processing" });
                     switch (config.command) {
                         case "power":
                             switch (config?.option?.power) {
