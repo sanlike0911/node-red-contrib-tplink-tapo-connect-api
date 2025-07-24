@@ -1,6 +1,9 @@
 import { TapoDeviceInfo } from './base';
 
-export interface P105DeviceInfo extends TapoDeviceInfo {
+export const energyMonitoringModels = ['P110', 'P115', 'KP115', 'KP125'];
+export const nonEnergyMonitoringModels = ['P100', 'P105', 'KP105'];
+
+export interface PlugDeviceInfo extends TapoDeviceInfo {
   auto_off_remain_time: number;
   auto_off_status: 'on' | 'off';
   avatar: string;
@@ -26,7 +29,7 @@ export interface P105DeviceInfo extends TapoDeviceInfo {
   oem_id: string;
   on_time?: number;
   overheated?: boolean;
-  
+
   // Computed properties for backward compatibility
   deviceId: string;
   deviceOn: boolean;
@@ -35,7 +38,7 @@ export interface P105DeviceInfo extends TapoDeviceInfo {
   hwVer: string;
 }
 
-export interface P105UsageInfo {
+export interface PlugUsageInfo {
   todayRuntime: number;
   monthRuntime: number;
   todayEnergy: number;
