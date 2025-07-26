@@ -9,7 +9,8 @@
       "Bash(npm outdated)",
       "Bash(npm update)",
       "Bash(npm run test:*)",
-      "Bash(npm run install:my-node:*)"
+      "Bash(npm run install:my-node:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }
