@@ -27,8 +27,8 @@ export interface PlugDeviceInfo extends TapoDeviceInfo {
   model: string;
   nickname: string;
   oem_id: string;
-  on_time?: number;
-  overheated?: boolean;
+  on_time: number;
+  overheated: boolean;
 
   // Computed properties for backward compatibility
   deviceId: string;
@@ -46,6 +46,10 @@ export interface PlugUsageInfo {
   currentPower: number;
   onTime?: number;
 }
+
+// Type aliases for specific plug models
+export type P105DeviceInfo = PlugDeviceInfo;
+export type P105UsageInfo = PlugUsageInfo;
 
 export interface HubDeviceInfo extends TapoDeviceInfo {
   deviceType: 'SMART.TAPOHUB';

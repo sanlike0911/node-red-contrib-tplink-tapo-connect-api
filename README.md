@@ -2,7 +2,7 @@
 
 Unofficial node-RED node for connecting to TP-Link Tapo devices. Currently limited to the:
 - P100, P105, P110, P115 smart plugs
-- L510E, L530E smart bulbs
+- L510, L520, L530 smart bulbs
 - L900-10 smart strip
 
 ![node](./figs/sample00.png)

@@ -3,7 +3,7 @@ export type { TapoDeviceInfo } from './wrapper/tplink-tapo-connect-wrapper';
 export * from './core';
 export * from './devices';
 
-import { P100Plug, P110Plug } from './devices';
+import { P100Plug, P105Plug, P110Plug } from './devices';
 import { L510Bulb, L520Bulb, L530Bulb } from './devices/bulbs';
 import { TapoCredentials } from './types';
 
@@ -20,8 +20,8 @@ export class TapoConnect {
    * Create a P105 Smart Plug instance  
    * P105 is a basic smart plug without energy monitoring
    */
-  public static createP105Plug(ip: string, credentials: TapoCredentials): P100Plug {
-    return new P100Plug(ip, credentials);
+  public static createP105Plug(ip: string, credentials: TapoCredentials): P105Plug {
+    return new P105Plug(ip, credentials);
   }
 
   /**

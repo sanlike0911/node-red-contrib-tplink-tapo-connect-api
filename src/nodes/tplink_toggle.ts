@@ -137,7 +137,7 @@ const nodeInit: NodeInitializer = (RED): void => {
                         config.deviceAlias = ret.tapoDeviceInfo?.nickname ?? config.deviceAlias;
                         node.status({ fill: "yellow", shape: "dot", text: "resources.message.processing" });
                         // device on/off?
-                        switch (ret.tapoDeviceInfo?.deviceOn) {
+                        switch (ret.tapoDeviceInfo?.device_on) {
                             case true:
                                 ret = await setTapoTurnOff(config);
                                 break;

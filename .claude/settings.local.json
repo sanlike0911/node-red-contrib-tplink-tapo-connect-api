@@ -5,7 +5,11 @@
       "Bash(npm audit:*)",
       "Bash(npm run build:*)",
       "Bash(rm:*)",
-      "Bash(git check-ignore:*)"
+      "Bash(git check-ignore:*)",
+      "Bash(npm outdated)",
+      "Bash(npm update)",
+      "Bash(npm run test:*)",
+      "Bash(npm run install:my-node:*)"
     ],
     "deny": []
   }

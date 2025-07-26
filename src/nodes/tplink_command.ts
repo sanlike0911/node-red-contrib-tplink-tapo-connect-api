@@ -160,10 +160,10 @@ const nodeInit: NodeInitializer = (RED): void => {
                         case "toggle":
                             ret = await getTapoDeviceInfo(config);
                             if (ret.result) {
-                                switch (ret.tapoDeviceInfo?.deviceOn) {
+                                switch (ret.tapoDeviceInfo?.device_on) {
                                     case true: ret = await setTapoTurnOff(config); break;
                                     case false: ret = await setTapoTurnOn(config); break;
-                                    default: throw new Error("tapoDeviceInfo.deviceOn not found.");
+                                    default: throw new Error("tapoDeviceInfo.device_on not found.");
                                 }
                             } else {
                                 if (ret?.errorInf) {

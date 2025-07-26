@@ -1,6 +1,6 @@
 const helper = require("node-red-node-test-helper");
 const { ExitStatus } = require("typescript");
-const tagetNode = require("../../../dist/tplink_tapo_connect_api.js");
+const tagetNode = require("../../../dist/type.js");
 
 require('dotenv').config();
 
