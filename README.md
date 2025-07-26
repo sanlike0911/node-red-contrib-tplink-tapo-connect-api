@@ -1,11 +1,34 @@
 # node-red-contrib-tplink-tapo-connect-api
 
-Unofficial node-RED node for connecting to TP-Link Tapo devices. Currently limited to the:
-- P100, P105, P110, P115 smart plugs
-- L510E, L530E smart bulbs
-- L900-10 smart strip
+Unofficial node-RED node for connecting to TP-Link Tapo devices. This project was enhanced with the assistance of AI. Currently limited to the:
 
 ![node](./figs/sample00.png)
+
+## Supported Devices
+
+| Device Model | Type | Energy Monitoring | Status |
+|--------------|------|------------------|--------|
+| P100 | Smart Plug | ❌ | ✅ Supported |
+| P105 | Smart Plug | ❌ | ✅ Supported |
+| P110 | Smart Plug with Energy Monitoring | ✅ | ✅ Supported |
+| P115 | Smart Plug with Energy Monitoring | ✅ | ✅ Supported |
+| L510 | Smart Bulb (Dimmable) | ❌ | ✅ Supported |
+| L520 | Smart Bulb (Dimmable) | ❌ | ✅ Supported |
+| L530 | Smart Bulb (Color) | ❌ | ✅ Supported |
+
+### Supported Features by Device
+
+| Feature | P100/P105 | P110/P115 | L510/L520 | L530 |
+|---------|-----------|-----------|-----------|------|
+| Device Info | ✅ | ✅ | ✅ | ✅ |
+| Power On/Off | ✅ | ✅ | ✅ | ✅ |
+| Device Usage | ✅ | ✅ | ✅ | ✅ |
+| Current Power | ❌ | ✅ | ❌ | ❌ |
+| Energy Data | ❌ | ✅ | ❌ | ❌ |
+| Energy Usage | ❌ | ✅ | ❌ | ❌ |
+| Brightness Control | ❌ | ❌ | ✅ | ✅ |
+| Color Control | ❌ | ❌ | ❌ | ✅ |
+| Color Temperature | ❌ | ❌ | ❌ | ✅ |
 
 ## nodes
 
