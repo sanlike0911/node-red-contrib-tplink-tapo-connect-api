@@ -1,10 +1,7 @@
-import { BaseTapoDevice, TapoCredentials, TapoApiRequest, TapoApiResponse, PlugDeviceInfo, PlugUsageInfo, FeatureNotSupportedError, DeviceCapabilityError, Result, DeviceMethodOptions } from '../../types';
+import { BaseTapoDevice, TapoCredentials, TapoApiRequest, TapoApiResponse, P105DeviceInfo, P105UsageInfo, FeatureNotSupportedError, DeviceCapabilityError, Result, DeviceMethodOptions } from '../../types';
 import { UnifiedTapoProtocol } from '../../core/unified-protocol';
 
-/**
- * P100 Smart Plug - Basic plug without energy monitoring
- */
-export class P100Plug extends BaseTapoDevice {
+export class P105Plug extends BaseTapoDevice {
   private unifiedProtocol: UnifiedTapoProtocol;
   private featureCache: Map<string, boolean> = new Map();
   private deviceModel?: string;
@@ -29,8 +26,8 @@ export class P100Plug extends BaseTapoDevice {
   }
 
   public async connect(): Promise<void> {
-    console.log('P100Plug.connect() called - using unified protocol');
-
+    console.log('P105Plug.connect() called - using unified protocol');
+    
     // Check basic device connectivity first
     console.log('Checking device connectivity...');
     const isReachable = await this.checkDeviceConnectivity();
@@ -38,7 +35,7 @@ export class P100Plug extends BaseTapoDevice {
       throw new Error(`Device at ${this.ip} is not reachable. Check IP address and network connectivity.`);
     }
     console.log('Device is reachable, proceeding with unified protocol connection...');
-
+    
     try {
       await this.unifiedProtocol.connect();
       console.log(`Connected successfully using ${this.unifiedProtocol.getActiveProtocol()} protocol`);
@@ -47,6 +44,7 @@ export class P100Plug extends BaseTapoDevice {
       throw error;
     }
   }
+
 
   public async disconnect(): Promise<void> {
     try {
@@ -63,23 +61,23 @@ export class P100Plug extends BaseTapoDevice {
     return this.unifiedProtocol.isConnected();
   }
 
-  public override async getDeviceInfo(): Promise<PlugDeviceInfo> {
+  public override async getDeviceInfo(): Promise<P105DeviceInfo> {
     const request: TapoApiRequest = {
       method: 'get_device_info'
     };
 
     const response = await this.sendRequest<any>(request);
     const rawData = response.result;
-
+    
     // Transform raw data to match interface expectations
-    const deviceInfo: PlugDeviceInfo = {
+    const deviceInfo: P105DeviceInfo = {
       ...rawData,
       // Ensure required fields are properly set
       on_time: rawData.on_time || 0,
       overheated: rawData.overheated || false,
       // Computed properties for backward compatibility
       deviceId: rawData.device_id,
-      deviceOn: rawData.device_on,
+      device_on: rawData.device_on,
       onTime: rawData.on_time || 0,
       fwVer: rawData.fw_ver,
       hwVer: rawData.hw_ver,
@@ -91,27 +89,69 @@ export class P100Plug extends BaseTapoDevice {
       rssi: 0,
       signalLevel: 0
     };
-
+    
     // Cache device model for feature detection
     this.deviceModel = deviceInfo.model;
-
+    
     return deviceInfo;
   }
 
   /**
    * Check if the device supports energy monitoring features
-   * P100 does not support energy monitoring
    */
   public async hasEnergyMonitoring(): Promise<boolean> {
     const cacheKey = 'energy_monitoring';
-
+    
     if (this.featureCache.has(cacheKey)) {
       return this.featureCache.get(cacheKey)!;
     }
 
-    // P100 does not support energy monitoring
-    this.featureCache.set(cacheKey, false);
-    return false;
+    try {
+      // Get device info to determine model if not cached
+      if (!this.deviceModel) {
+        const deviceInfo = await this.getDeviceInfo();
+        this.deviceModel = deviceInfo.model;
+      }
+
+      // Check if model supports energy monitoring
+      const energyMonitoringModels = ['P110', 'P115', 'KP115', 'KP125'];
+      const nonEnergyMonitoringModels = ['P100', 'P105', 'KP105'];
+      
+      // Check if device model is known to support energy monitoring
+      if (this.deviceModel && energyMonitoringModels.includes(this.deviceModel)) {
+        this.featureCache.set(cacheKey, true);
+        return true;
+      }
+      
+      // Check if device model is known to NOT support energy monitoring
+      if (this.deviceModel && nonEnergyMonitoringModels.includes(this.deviceModel)) {
+        this.featureCache.set(cacheKey, false);
+        return false;
+      }
+      
+      // For unknown models, try to make a request to determine support
+      if (this.deviceModel && !energyMonitoringModels.includes(this.deviceModel) && !nonEnergyMonitoringModels.includes(this.deviceModel)) {
+        try {
+          const request: TapoApiRequest = {
+            method: 'get_energy_usage'
+          };
+          await this.sendRequest(request);
+          this.featureCache.set(cacheKey, true);
+          return true;
+        } catch (error) {
+          this.featureCache.set(cacheKey, false);
+          return false;
+        }
+      }
+      
+      // If we reach here, model was not in any list - shouldn't happen but handle gracefully
+      this.featureCache.set(cacheKey, false);
+      return false;
+    } catch (error) {
+      // If we can't determine support, assume it's not supported
+      this.featureCache.set(cacheKey, false);
+      return false;
+    }
   }
 
   /**
@@ -175,31 +215,65 @@ export class P100Plug extends BaseTapoDevice {
     return deviceInfo.device_on;
   }
 
-  public async getUsageInfo(options: DeviceMethodOptions = {}): Promise<PlugUsageInfo> {
+  public async getUsageInfo(options: DeviceMethodOptions = {}): Promise<P105UsageInfo> {
     const { throwOnUnsupported = true } = options;
+    
+    const hasEnergyMonitoring = await this.hasEnergyMonitoring();
+    
+    if (!hasEnergyMonitoring) {
+      if (throwOnUnsupported) {
+        throw new FeatureNotSupportedError(
+          'energy_monitoring',
+          this.deviceModel || 'unknown',
+          'This device does not support energy monitoring features'
+        );
+      } else {
+        // Return empty/default usage info when not throwing
+        return {
+          todayRuntime: 0,
+          monthRuntime: 0,
+          todayEnergy: 0,
+          monthEnergy: 0,
+          currentPower: 0
+        };
+      }
+    }
 
-    if (throwOnUnsupported) {
-      throw new FeatureNotSupportedError(
-        'energy_monitoring',
-        this.deviceModel || 'P100',
-        'P100 devices do not support energy monitoring features'
-      );
-    } else {
-      // Return empty/default usage info when not throwing
-      return {
-        todayRuntime: 0,
-        monthRuntime: 0,
-        todayEnergy: 0,
-        monthEnergy: 0,
-        currentPower: 0
+    try {
+      const request: TapoApiRequest = {
+        method: 'get_energy_usage'
       };
+
+      const response = await this.sendRequest<P105UsageInfo>(request);
+      return response.result;
+    } catch (error) {
+      if (error instanceof FeatureNotSupportedError) {
+        throw error;
+      }
+      
+      if (!throwOnUnsupported) {
+        return {
+          todayRuntime: 0,
+          monthRuntime: 0,
+          todayEnergy: 0,
+          monthEnergy: 0,
+          currentPower: 0
+        };
+      }
+      
+      // If the API call fails, it might indicate lack of support
+      throw new DeviceCapabilityError(
+        'energy_monitoring',
+        'API request failed',
+        `Failed to get energy usage information: ${error instanceof Error ? error.message : error}`
+      );
     }
   }
 
   /**
    * Get usage info using Result pattern for better error handling
    */
-  public async getUsageInfoResult(): Promise<Result<PlugUsageInfo, FeatureNotSupportedError | DeviceCapabilityError>> {
+  public async getUsageInfoResult(): Promise<Result<P105UsageInfo, FeatureNotSupportedError | DeviceCapabilityError>> {
     try {
       const data = await this.getUsageInfo({ throwOnUnsupported: true });
       return { success: true, data };
@@ -213,68 +287,28 @@ export class P100Plug extends BaseTapoDevice {
   }
 
   public async getCurrentPower(options: DeviceMethodOptions = {}): Promise<number> {
-    const { throwOnUnsupported = true } = options;
-
-    if (throwOnUnsupported) {
-      throw new FeatureNotSupportedError(
-        'energy_monitoring',
-        this.deviceModel || 'P100',
-        'P100 devices do not support current power monitoring'
-      );
-    }
-    return 0;
+    const usageInfo = await this.getUsageInfo(options);
+    return usageInfo.currentPower;
   }
 
   public async getTodayEnergy(options: DeviceMethodOptions = {}): Promise<number> {
-    const { throwOnUnsupported = true } = options;
-
-    if (throwOnUnsupported) {
-      throw new FeatureNotSupportedError(
-        'energy_monitoring',
-        this.deviceModel || 'P100',
-        'P100 devices do not support energy monitoring'
-      );
-    }
-    return 0;
+    const usageInfo = await this.getUsageInfo(options);
+    return usageInfo.todayEnergy;
   }
 
   public async getMonthEnergy(options: DeviceMethodOptions = {}): Promise<number> {
-    const { throwOnUnsupported = true } = options;
-
-    if (throwOnUnsupported) {
-      throw new FeatureNotSupportedError(
-        'energy_monitoring',
-        this.deviceModel || 'P100',
-        'P100 devices do not support energy monitoring'
-      );
-    }
-    return 0;
+    const usageInfo = await this.getUsageInfo(options);
+    return usageInfo.monthEnergy;
   }
 
   public async getTodayRuntime(options: DeviceMethodOptions = {}): Promise<number> {
-    const { throwOnUnsupported = true } = options;
-
-    if (throwOnUnsupported) {
-      throw new FeatureNotSupportedError(
-        'energy_monitoring',
-        this.deviceModel || 'P100',
-        'P100 devices do not support runtime monitoring'
-      );
-    }
-    return 0;
+    const usageInfo = await this.getUsageInfo(options);
+    return usageInfo.todayRuntime;
   }
 
   public async getMonthRuntime(options: DeviceMethodOptions = {}): Promise<number> {
-    const { throwOnUnsupported = true } = options;
-
-    if (throwOnUnsupported) {
-      throw new FeatureNotSupportedError(
-        'energy_monitoring',
-        this.deviceModel || 'P100',
-        'P100 devices do not support runtime monitoring'
-      );
-    }
-    return 0;
+    const usageInfo = await this.getUsageInfo(options);
+    return usageInfo.monthRuntime;
   }
 
   public async isOverheated(): Promise<boolean> {
@@ -312,4 +346,9 @@ export class P100Plug extends BaseTapoDevice {
       }
     });
   }
+
+
+
+
+
 }

@@ -4,23 +4,63 @@ export interface TapoCredentials {
 }
 
 export interface TapoDeviceInfo {
-  deviceId: string;
-  nickname: string;
-  model: string;
-  deviceType: string;
-  fwVer: string;
-  hwVer: string;
-  mac: string;
+  device_id: string;
+  fw_ver: string;
+  hw_ver: string;
   type: string;
-  region: string;
+  model: string;
+  mac: string;
+  hw_id: string;
+  fw_id: string;
+  oem_id: string;
   specs: string;
-  lang: string;
-  deviceOn: boolean;
-  onTime: number;
+  device_on: boolean;
+  on_time: number;
+  overheated: boolean;
+  nickname: string;
+  location: string;
+  avatar: string;
+  longitude: number;
+  latitude: number;
+  has_set_location_info: boolean;
+  ip: string;
+  ssid?: string;  // Optional as not all devices may have WiFi info
+  signal_level: number;
   rssi: number;
-  signalLevel: number;
-  latitude?: number;
-  longitude?: number;
+  region: string;
+  time_diff: number;
+  lang: string;
+  default_states: {
+    type: string;
+    state: Record<string, unknown>;
+  };
+  auto_off_status: string;
+  auto_off_remain_time: number;
+}
+
+// Helper functions for backward compatibility
+export function getDeviceId(deviceInfo: TapoDeviceInfo): string {
+  return deviceInfo.device_id;
+}
+
+export function getDeviceType(deviceInfo: TapoDeviceInfo): string {
+  return deviceInfo.type;
+}
+
+export function getFwVer(deviceInfo: TapoDeviceInfo): string {
+  return deviceInfo.fw_ver;
+}
+
+export function getHwVer(deviceInfo: TapoDeviceInfo): string {
+  return deviceInfo.hw_ver;
+}
+
+export function getOnTime(deviceInfo: TapoDeviceInfo): number {
+  return deviceInfo.on_time;
+}
+
+export function getSignalLevel(deviceInfo: TapoDeviceInfo): number {
+  return deviceInfo.signal_level;
 }
 
 export interface TapoApiRequest {
@@ -48,7 +88,7 @@ export class FeatureNotSupportedError extends Error {
   override readonly name = 'FeatureNotSupportedError';
   readonly feature: string;
   readonly deviceModel: string;
-  
+
   constructor(feature: string, deviceModel: string, message?: string) {
     super(message || `Feature '${feature}' is not supported on device model '${deviceModel}'`);
     this.feature = feature;
@@ -60,7 +100,7 @@ export class DeviceCapabilityError extends Error {
   override readonly name = 'DeviceCapabilityError';
   readonly capability: string;
   readonly reason: string;
-  
+
   constructor(capability: string, reason: string, message?: string) {
     super(message || `Device capability '${capability}' unavailable: ${reason}`);
     this.capability = capability;
@@ -69,7 +109,7 @@ export class DeviceCapabilityError extends Error {
 }
 
 // Result type for better error handling
-export type Result<T, E = Error> = 
+export type Result<T, E = Error> =
   | { success: true; data: T }
   | { success: false; error: E };
 
