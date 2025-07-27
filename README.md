@@ -87,41 +87,6 @@ Unofficial node-RED node for connecting to TP-Link Tapo devices. This project wa
 
         get tapo device info
 
-- custom-request
-
-    ![node-custom-request](figs/node-custom.png)
-
-    This node can send custom requests to Tapo-Device
-
-    This node module provides several features by input `"msg.payload.method"`, `"msg.payload.securePassthrough"` and `"msg.payload.params"`.
-
-    1. method
-
-        use custom method to send requests
-
-        default:
-        ```method
-        0: get_device_info
-        1: set_device_info
-        2: get_energy_data
-        ```
-    2. securePassthrough
-
-        boolean `true` if request should be encrypted (normally true)
-    
-    3. params
-
-        params sent to the device as json. (multiple params possible)
-
-        examples:
-        ```params
-        0: {"device_on": 'true'}
-        1: {"brightness": 50}
-        2: {"device_on": 'true', "brightness": 50}
-        ```
-
-
-
 - status
 
     ![node-command](figs/node-status.png)
@@ -131,12 +96,6 @@ Unofficial node-RED node for connecting to TP-Link Tapo devices. This project wa
     Models that can monitor energy acquire energy information.
 
     Get the device information from `"output: msg.payload.tapoDeviceInfo, msg.payload?.tapoEnergyUsage(P110 only)"`.
-
-- tplink_tapo_connect_api(`deprecated`)
-
-    ![node-command](figs/tplink_tapo_connect_api.png)
-
-    This "node module: tplink_tapo_connect_api" has been left for compatibility, this module may be deleted without notice.
 
 ## Pre-requisites
 
