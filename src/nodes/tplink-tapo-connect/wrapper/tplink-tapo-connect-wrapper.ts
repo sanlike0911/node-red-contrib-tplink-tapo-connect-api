@@ -749,7 +749,7 @@ export namespace tplinkTapoConnectWrapperType {
         result: boolean;
         tapoDeviceInfo?: TapoDeviceInfo;
         tapoDevice?: TapoDevice[];
-        tapoEnergyUsage?: TapoDeviceInfo | undefined;
+        tapoEnergyUsage?: any | undefined;
         errorInf?: Error;
     }
 }
@@ -1140,15 +1140,15 @@ export class tplinkTapoConnectWrapper {
     }
 
     /**
-     * Get device information without needing to specify device type
-     * The method will automatically detect the device type and retrieve basic device information only
-     * For energy usage information, use getTapoEnergyUsage() separately
+     * Get device information including energy usage data for supported devices
+     * The method will automatically detect the device type and retrieve basic device information
+     * Energy usage data is included automatically for supported devices (P110, P115, etc.)
      *
      * @param {string} _email - Tapo account email
      * @param {string} _password - Tapo account password
      * @param {string} _targetIp - Device IP address
      * @param {RetryOptions} _retryOptions - Optional retry configuration
-     * @returns {Promise< tplinkTapoConnectWrapperType.tapoConnectResults >} - Contains only basic device information
+     * @returns {Promise< tplinkTapoConnectWrapperType.tapoConnectResults >} - Contains device information and energy usage (if supported)
      * @memberof tplinkTapoConnectWrapper
      */
     public async getTapoDeviceInfo(_email: string, _password: string, _targetIp: string, _retryOptions?: RetryOptions): Promise<tplinkTapoConnectWrapperType.tapoConnectResults> {
@@ -1163,9 +1163,23 @@ export class tplinkTapoConnectWrapper {
                 // Use lightweight generic method to get device info directly
                 const _tapoDeviceInfo = await DeviceFactory.getDeviceInfo(_targetIp, credentials);
 
+                // Check if device supports energy monitoring and add energy usage data
+                let _tapoEnergyUsage: any = undefined;
+                if (energyMonitoringModels.includes(_tapoDeviceInfo.model)) {
+                    try {
+                        const client = this.getApiClient(_email, _password);
+                        const device = await client.createDevice(_targetIp, 'getEnergyUsage', true);
+                        _tapoEnergyUsage = await device.getEnergyUsage();
+                    } catch (energyError) {
+                        // Energy usage retrieval failed, but don't fail the entire operation
+                        console.log(`Warning: Could not retrieve energy usage for ${_tapoDeviceInfo.model}: ${energyError}`);
+                    }
+                }
+
                 return {
                     result: true,
-                    tapoDeviceInfo: _tapoDeviceInfo
+                    tapoDeviceInfo: _tapoDeviceInfo,
+                    tapoEnergyUsage: _tapoEnergyUsage
                 };
             } catch (error: any) {
                 throw error;
@@ -1195,6 +1209,7 @@ export class tplinkTapoConnectWrapper {
      * Get energy usage information for devices that support energy monitoring
      * First checks if the device supports energy monitoring, then retrieves energy data
      *
+     * @deprecated Use getTapoDeviceInfo() instead, which now includes energy usage data for supported devices
      * @param {string} _email - Tapo account email
      * @param {string} _password - Tapo account password
      * @param {string} _targetIp - Device IP address
