@@ -1,7 +1,7 @@
 import { TapoDeviceInfo } from './base';
 
-export const energyMonitoringModels = ['P110', 'P115', 'KP115', 'KP125'];
-export const nonEnergyMonitoringModels = ['P100', 'P105', 'KP105'];
+export const energyMonitoringModels = ['P110', 'P110M', 'P115'];
+export const nonEnergyMonitoringModels = ['P100', 'P105'];
 
 export interface PlugDeviceInfo extends TapoDeviceInfo {
   auto_off_remain_time: number;
@@ -45,6 +45,16 @@ export interface PlugUsageInfo {
   monthEnergy: number;
   currentPower: number;
   onTime?: number;
+}
+
+export interface TapoEnergyUsage {
+  today_runtime: number;
+  month_runtime: number;
+  today_energy: number;
+  month_energy: number;
+  local_time: string;
+  electricity_charge: number[];
+  current_power: number;
 }
 
 // Type aliases for specific plug models

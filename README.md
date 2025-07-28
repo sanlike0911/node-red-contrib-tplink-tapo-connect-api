@@ -1,6 +1,7 @@
 # node-red-contrib-tplink-tapo-connect-api
 
-Unofficial node-RED node for connecting to TP-Link Tapo devices. This project was enhanced with the assistance of AI. Currently limited to the:
+This unofficial node-RED node allows connection to TP-Link Tapo devices. This project has been enhanced with AI support to enable new features.
+Starting with v0.50, we have added support for the KLAP protocol. To prioritize the operation of this node, we have simplified its functionality.
 
 ![node](./figs/sample00.png)
 
@@ -99,7 +100,7 @@ Unofficial node-RED node for connecting to TP-Link Tapo devices. This project wa
 
 ## Pre-requisites
 
-The node-red-contrib-tplink-tapo-connect-api requires `Node-RED 1.00` to be installed.
+The node-red-contrib-tplink-tapo-connect-api requires `Node-RED` to be installed.
 
 ## Quick Start
 
@@ -133,51 +134,27 @@ npm install node-red-contrib-tplink-tapo-connect-api
 
     Set the password registered with Tp Link.
 
-  - Search mode
+  - Tapo IP Address
 
-    Select a search mode for the tapo device.
-
-    [Usage]
-    - ip : search by ip. (It's fast.)
-    - alias: search by alias and ip range.
-
-  - Tapo ipaddress(`selected: ip`)
-
-    Set the IP address to the Tapo device.
-
-  - Tapo alias(`selected: alias`)
-
-    set the tapo device alias registered with Tp Link.
-
-  - Tapo find ip range(`selected: alias`)
-
-    set the IP range to search for Tapo device.
-
-    [Usage]
-    - case1: "192.168.0.1 to 192.168.0.25"
-    - case2: "192.168.0.0/24"
+    Set the IP address of the Tapo device on your local network.
 
 ### Inputs
 
 `msg.payload`
 
 ```typescript
-type searchModeTypes = "ip" | "alias";
 type commandTypes = "" | "power" | "toggle" | "status";
 
 type payload {
     email: string;
     password: string;
     deviceIp: string;
-    deviceAlias: string;
-    deviceIpRange: string;
-    searchMode : searchModeTypes;
     command: commandTypes;          /* "node-command" only */
     option: {                       /* "node-command" only */
         power?: number;
     };
     colour: string;                 /* "node-colour" only */
-    brightness: numbar;             /* "node-brightness" only */
+    brightness: number;             /* "node-brightness" only */
 }
 ```
 
@@ -229,41 +206,56 @@ false: smart plug power off
 
 ```javascript
 {
-    result: true,
-    tapoDeviceInfo: {
-      device_id: "*************"
-      fw_ver: "1.2.10 Build 20200609 Rel. 33394"
-      hw_ver: "1.0.0"
-      type: "SMART.TAPOPLUG"
-      model: "P105"
-      mac: "XX-XX-XX-XX-XX-XX"
-      hw_id: "*************"
-      fw_id: "*************"
-      oem_id: "*************"
-      specs: "JP"
-      device_on: false
-      on_time: 0
-      overheated: false
-      nickname: "3d printer power supply"
-      location: "XXXXXXXXXXXXXXXX"
-      avatar: "plug"
-      time_usage_today: 0
-      time_usage_past7: 0
-      time_usage_past30: 0
-      longitude: 0
-      latitude: 0
-      has_set_location_info: true
-      ip: "192.168.0.XXX"
-      ssid: "SSID"
-      signal_level: 0
-      rssi: 0
-      region: "Asia/Tokyo"
-      time_diff: 0
-      lang: "ja_JP"
+  "result": true,
+  "tapoDeviceInfo": {
+    "device_id": "*************",
+    "fw_ver": "1.2.3 Build 240617 Rel.153525",
+    "hw_ver": "1.0",
+    "type": "SMART.TAPOPLUG",
+    "model": "P110M",
+    "mac": "XX-XX-XX-XX-XX-XX",
+    "hw_id": "*************",
+    "fw_id": "*************",
+    "oem_id": "*************",
+    "ip": "192.168.0.100",
+    "time_diff": 540,
+    "ssid": "U0FOTElLRV9Jb1Q=",
+    "rssi": -41,
+    "signal_level": 3,
+    "auto_off_status": "off",
+    "auto_off_remain_time": 0,
+    "longitude": 1370345,
+    "latitude": 352543,
+    "lang": "ja_JP",
+    "avatar": "plug",
+    "region": "Asia/Tokyo",
+    "specs": "JP",
+    "nickname": "44Ko44Ki44Kz44Oz",
+    "has_set_location_info": true,
+    "device_on": true,
+    "on_time": 1965,
+    "default_states": {
+      "type": "last_states",
+      "state": {}
     },
-    tapoEnergyUsage: {
-      ????
-    }
+    "overheat_status": "normal",
+    "power_protection_status": "normal",
+    "overcurrent_status": "normal",
+    "charging_status": "normal"
+  },
+  "tapoEnergyUsage": {
+    "today_runtime": 515,
+    "month_runtime": 681,
+    "today_energy": 215,
+    "month_energy": 1224,
+    "local_time": "2025-07-28 23:38:34",
+    "electricity_charge": [
+      0,
+      0,
+      0
+    ],
+    "current_power": 405681
+  }
 }
 ```
 

@@ -6,17 +6,7 @@
             "password": "Password",
             "email": "Email",
             "deviceIp": "Tapo ipaddress",
-            "deviceAlias": "Tapo alias",
-            "deviceIpRange": "Tapo find ip range",
-            "targetDeviceSettings": "Tapo device settings",
-            "searchMode":{
-                "title": "Seach mode",
-                "ip":"ip",
-                "alias":"alias"
-            }
-        },
-        "descriptions": {
-            "targetDeviceSettings": "select search mode \"Tapo ip or Tapo alias\""
+            "targetDeviceSettings": "Tapo device settings"
         },
         "message": {
             "ready": "Ready,",

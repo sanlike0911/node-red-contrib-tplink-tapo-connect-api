@@ -13,10 +13,6 @@ export namespace tplinkTapoConnectApiType {
 
         deviceIp: string;
 
-        deviceAlias: string;
-
-        deviceIpRange: string;
-
         mode : modeTypes;
 
     }
@@ -28,8 +24,6 @@ export namespace tplinkTapoConnectApiType {
 
 export namespace brightnessType {
 
-    export type searchModeTypes = "ip" | "alias";
-
     export type configBase = {
 
         email: string;
@@ -38,13 +32,7 @@ export namespace brightnessType {
 
         deviceIp: string;
 
-        deviceAlias: string;
-
-        deviceIpRange: string;
-
         brightness: number;
-
-        searchMode : searchModeTypes;
     }
 
     export interface appNodeDef extends NodeDef, configBase {}
@@ -53,8 +41,6 @@ export namespace brightnessType {
 }
 
 export namespace colourType {
-
-    export type searchModeTypes = "ip" | "alias";
     
     export type configBase = {
 
@@ -64,13 +50,7 @@ export namespace colourType {
 
         deviceIp: string;
 
-        deviceAlias: string;
-
-        deviceIpRange: string;
-
         colour: string;
-
-        searchMode : searchModeTypes;
     }
 
     export interface appNodeDef extends NodeDef, configBase {}
@@ -79,8 +59,6 @@ export namespace colourType {
 }
 
 export namespace commandType {
-
-    export type searchModeTypes = "ip" | "alias";
 
     export type commandTypes = "" | "power" | "toggle" | "status";
 
@@ -92,10 +70,6 @@ export namespace commandType {
 
         deviceIp: string;
 
-        deviceAlias: string;
-
-        deviceIpRange: string;
-
         command: commandTypes;
 
         option: {
@@ -103,8 +77,6 @@ export namespace commandType {
             power?: number;
 
         };
-
-        searchMode : searchModeTypes;
     }
 
     export interface appNodeDef extends NodeDef, configBase {}
@@ -114,8 +86,6 @@ export namespace commandType {
 
 export namespace customRequstType {
 
-    export type searchModeTypes = "ip" | "alias";
-
     export type configBase = {
 
         email: string;
@@ -123,12 +93,6 @@ export namespace customRequstType {
         password: string;
 
         deviceIp: string;
-
-        deviceAlias: string;
-
-        deviceIpRange: string;
-
-        searchMode : searchModeTypes;
 
         method: string;
         
@@ -144,8 +108,6 @@ export namespace customRequstType {
 
 export namespace statusType {
 
-    export type searchModeTypes = "ip" | "alias";
-
     export type configBase = {
 
         email: string;
@@ -153,12 +115,6 @@ export namespace statusType {
         password: string;
 
         deviceIp: string;
-
-        deviceAlias: string;
-
-        deviceIpRange: string;
-
-        searchMode : searchModeTypes;
     }
 
     export interface appNodeDef extends NodeDef, configBase {}
@@ -168,8 +124,6 @@ export namespace statusType {
 
 export namespace toggleType {
 
-    export type searchModeTypes = "ip" | "alias";
-
     export type configBase = {
 
         email: string;
@@ -177,12 +131,6 @@ export namespace toggleType {
         password: string;
 
         deviceIp: string;
-
-        deviceAlias: string;
-
-        deviceIpRange: string;
-
-        searchMode : searchModeTypes;
     }
 
     export interface appNodeDef extends NodeDef, configBase {}
@@ -192,8 +140,6 @@ export namespace toggleType {
 
 export namespace turnOffType {
 
-    export type searchModeTypes = "ip" | "alias";
-
     export type configBase = {
 
         email: string;
@@ -201,12 +147,6 @@ export namespace turnOffType {
         password: string;
 
         deviceIp: string;
-
-        deviceAlias: string;
-
-        deviceIpRange: string;
-
-        searchMode : searchModeTypes;
     }
 
     export interface appNodeDef extends NodeDef, configBase {}
@@ -216,8 +156,6 @@ export namespace turnOffType {
 
 export namespace turnOnType {
 
-    export type searchModeTypes = "ip" | "alias";
-
     export type configBase = {
 
         email: string;
@@ -225,12 +163,6 @@ export namespace turnOnType {
         password: string;
 
         deviceIp: string;
-
-        deviceAlias: string;
-
-        deviceIpRange: string;
-
-        searchMode : searchModeTypes;
     }
 
     export interface appNodeDef extends NodeDef, configBase {}

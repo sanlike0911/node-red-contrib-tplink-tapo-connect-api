@@ -23,42 +23,10 @@
     <p>set the password registered with Tp Link.</p>
   </dd>
 
-  <!-- search mode -->
-  <dt id="searchMode">Search mode<span class="property-type">string</span></dt>
+  <!-- Tapo ipaddress -->
+  <dt class="optional" id="tapoIpAddress">Tapo ipaddress<span class="property-type">string</span></dt>
   <dd>
-    <p>select a search mode for the tapo device.</p>
-
-    <p>[Usage]</p>
-    <ul>
-      <li>ip : search by ip. (It's fast.)</li>
-      <dl class="message-properties">
-        <!-- Tapo ipaddress -->
-        <dt class="optional" id="tapoIpAddress">Tapo ipaddress<span class="property-type">string</span></dt>
-        <dd>
-          <p>set the IP address to the Tapo device.</p>
-        </dd>
-      </dl>
-
-      <li>alias: search by alias and ip range.</li>
-      <dl class="message-properties">
-        <!-- Tapo alias -->
-        <dt class="optional" id="tapoAlias">Tapo alias<span class="property-type">string</span></dt>
-        <dd>
-          <p>set the tapo device alias registered with Tp Link.</p>
-        </dd>
-
-        <!-- Find ip range-->
-        <dt class="optional" id="tapoFindIPRange">Tapo find ip range<span class="property-type">string</span></dt>
-        <dd>
-          <p>set the IP range to search for Tapo device.</p>
-          <p>[Usage]</p>
-          <ul>
-            <li>case1: "192.168.0.1 to 192.168.0.25"</li>
-            <li>case2: "192.168.0.0/24"</li>
-          </ul>
-        </dd>
-      </dl>
-    </ul>
+    <p>set the IP address to the Tapo device.</p>
   </dd>
 
   <!-- colour -->
@@ -87,20 +55,6 @@
     <p><a href="#tapoIpAddress">Click here for details</a></p>
   </dd>
 
-  <dt>msg.payload.deviceAlias<span class="property-type">string</span></dt>
-  <dd>
-    <p><a href="#tapoAlias">Click here for details</a></p>
-  </dd>
-
-  <dt>msg.payload.deviceIpRange<span class="property-type">string</span></dt>
-  <dd>
-    <p><a href="#tapoFindIPRange">Click here for details</a></p>
-  </dd>
-
-  <dt>msg.payload.searchMode<span class="property-type">string</span></dt>
-  <dd>
-    <p><a href="#searchMode">Click here for details</a></p>
-  </dd>
 
   <dd>
     <p>[e.g]</p>

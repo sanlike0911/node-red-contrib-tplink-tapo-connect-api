@@ -18,11 +18,8 @@ const nodeInit: NodeInitializer = (RED): void => {
      */
     function checkParameter(config: toggleType.configBase): boolean {
         let _result: boolean = false;
-        if (config?.email.length > 0 && config?.password.length > 0) {
-            if (('ip' === config?.searchMode && config?.deviceIp.length > 0) ||
-                ('alias' === config?.searchMode && config?.deviceAlias.length > 0 && config?.deviceIpRange.length > 0)) {
-                _result = true;
-            }
+        if (config?.email.length > 0 && config?.password.length > 0 && config?.deviceIp.length > 0) {
+            _result = true;
         }
         return _result
     }
@@ -44,9 +41,6 @@ const nodeInit: NodeInitializer = (RED): void => {
             node.email = this?.credentials?.email ?? "";
             node.password = this?.credentials?.password ?? "";
             node.deviceIp = config?.deviceIp ?? "";
-            node.deviceAlias = config?.deviceAlias ?? "";
-            node.deviceIpRange = config?.deviceIpRange ?? "";
-            node.searchMode = config?.searchMode ?? "ip";
         } catch (error) {
             node.status({ fill: "red", shape: "ring", text: "resources.message.error" });
             node.error(error);
@@ -60,15 +54,8 @@ const nodeInit: NodeInitializer = (RED): void => {
          * @returns {Promise< tplinkTapoConnectWrapperType.tapoConnectResults >}
          */
         async function setTapoTurnOff(config: toggleType.configBase): Promise<tplinkTapoConnectWrapperType.tapoConnectResults> {
-            let ret: tplinkTapoConnectWrapperType.tapoConnectResults;
-            if ("ip" === config.searchMode) {
-                ret = await tplinkTapoConnectWrapper.getInstance().
-                    setTapoTurnOff(config.email, config.password, config.deviceIp);
-            } else {
-                ret = await tplinkTapoConnectWrapper.getInstance().
-                    setTapoTurnOffAlias(config.email, config.password, config.deviceAlias, config.deviceIpRange);
-            }
-            return ret;
+            return await tplinkTapoConnectWrapper.getInstance().
+                setTapoTurnOff(config.email, config.password, config.deviceIp);
         }
 
         /**
@@ -78,15 +65,8 @@ const nodeInit: NodeInitializer = (RED): void => {
          * @returns {Promise< tplinkTapoConnectWrapperType.tapoConnectResults >}
          */
         async function setTapoTurnOn(config: toggleType.configBase): Promise<tplinkTapoConnectWrapperType.tapoConnectResults> {
-            let ret: tplinkTapoConnectWrapperType.tapoConnectResults;
-            if ("ip" === config.searchMode) {
-                ret = await tplinkTapoConnectWrapper.getInstance().
-                    setTapoTurnOn(config.email, config.password, config.deviceIp);
-            } else {
-                ret = await tplinkTapoConnectWrapper.getInstance().
-                    setTapoTurnOnAlias(config.email, config.password, config.deviceAlias, config.deviceIpRange);
-            }
-            return ret;
+            return await tplinkTapoConnectWrapper.getInstance().
+                setTapoTurnOn(config.email, config.password, config.deviceIp);
         }
 
         /**
@@ -96,15 +76,8 @@ const nodeInit: NodeInitializer = (RED): void => {
          * @returns {Promise< tplinkTapoConnectWrapperType.tapoDeviceInfoResults >}
          */
         async function getTapoDeviceInfo(config: toggleType.configBase): Promise<tplinkTapoConnectWrapperType.tapoConnectResults> {
-            let ret: tplinkTapoConnectWrapperType.tapoConnectResults;
-            if ("ip" === config.searchMode) {
-                ret = await tplinkTapoConnectWrapper.getInstance().
-                    getTapoDeviceInfo(config.email, config.password, config.deviceIp);
-            } else {
-                ret = await tplinkTapoConnectWrapper.getInstance().
-                    getTapoDeviceInfoAlias(config.email, config.password, config.deviceAlias);
-            }
-            return ret;
+            return await tplinkTapoConnectWrapper.getInstance().
+                getTapoDeviceInfo(config.email, config.password, config.deviceIp);
         }
 
         node.on('input', async (msg: any) => {
@@ -114,10 +87,7 @@ const nodeInit: NodeInitializer = (RED): void => {
                 let config: toggleType.configBase = {
                     email: msg.payload?.email ?? node.email,
                     password: msg.payload?.password ?? node.password,
-                    deviceIp: msg.payload?.deviceIp ?? node.deviceIp,
-                    deviceAlias: msg.payload?.deviceAlias ?? node.deviceAlias,
-                    deviceIpRange: msg.payload?.deviceIpRange ?? node.deviceIpRange,
-                    searchMode: msg.payload?.searchMode ?? node.searchMode
+                    deviceIp: msg.payload?.deviceIp ?? node.deviceIp
                 };
                 // debug
                 console.log(`config[${REGISTER_TYPE}]:`, config);
@@ -131,10 +101,7 @@ const nodeInit: NodeInitializer = (RED): void => {
                     // node: toggle
                     ret = await getTapoDeviceInfo(config);
                     if (ret.result) {
-                        // update
-                        config.searchMode = 'ip';
                         // Keep the original deviceIp since deviceId is not an IP address
-                        config.deviceAlias = ret.tapoDeviceInfo?.nickname ?? config.deviceAlias;
                         node.status({ fill: "yellow", shape: "dot", text: "resources.message.processing" });
                         // device on/off?
                         switch (ret.tapoDeviceInfo?.device_on) {

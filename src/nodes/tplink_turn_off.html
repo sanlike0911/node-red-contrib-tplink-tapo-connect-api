@@ -24,10 +24,7 @@
             color: 'rgb( 63, 173, 181)',
             defaults: {
                 name: { value: "" },
-                deviceIp: { value: "", required: false },
-                deviceAlias: { value: "", required: false },
-                deviceIpRange: { value: "", required: false },
-                searchMode: { value: "ip", required: true }
+                deviceIp: { value: "", required: true }
             },
             credentials: {
                 email: { type:"text" },
@@ -46,27 +43,6 @@
             },
             paletteLabel: function () {
                 return this._("resources.paletteLabel") || NAME;
-            },
-            oneditprepare: function () {
-                // use elementSizer to input common widget parameters
-                // console.log("oneditprepare");
-
-                // searchMode
-                $("#select-searchMode").change(function () {
-                    const searchMode = $("#select-searchMode").val();
-                    $("#node-input-searchMode").val(searchMode);
-                    if ("ip" === searchMode) {
-                        document.getElementById('node-input-deviceIp').disabled = false;
-                        document.getElementById('node-input-deviceAlias').disabled = true;
-                        document.getElementById('node-input-deviceIpRange').disabled = true;
-                    } else {
-                        document.getElementById('node-input-deviceIp').disabled = true;
-                        document.getElementById('node-input-deviceAlias').disabled = false;
-                        document.getElementById('node-input-deviceIpRange').disabled = false;
-                    }
-                });
-                $("#select-searchMode").val(this.searchMode);
-                $("#select-searchMode").change();
             },
             oneditsave: function () {
                 var that = this;
@@ -103,29 +79,10 @@
         <!-- Tapo device settings -->
         <p><b><span data-i18n="resources.labels.targetDeviceSettings"></span></b></p>
         <p><span data-i18n="resources.descriptions.targetDeviceSettings"></span></p>
-        <!-- searchMode -->
-        <div class="form-row">
-            <label for="select-searchMode"><i class="fa fa fa-adjust"></i> <span data-i18n="resources.labels.searchMode.title"></span></label>
-            <select id="select-searchMode">
-                <option value="ip" data-i18n="resources.labels.searchMode.ip"></option>
-                <option value="alias" data-i18n="resources.labels.searchMode.alias"></option>
-            </select>
-            <input type="hidden" id="node-input-searchMode">
-        </div>
-        <p><b><span data-i18n="resources.labels.searchMode.description"></span></b></p>
         <!-- deviceIp -->
         <div class="form-row">
             <label for="node-input-deviceIp"><i class="fa fa-map-marker"></i><span data-i18n="resources.labels.deviceIp"></span></label>
             <input type="text" id="node-input-deviceIp" placeholder="your tapo deviceIp(e.g: 192.168.0.100)">
-        </div>
-        <!-- deviceAlias -->
-        <div class="form-row">
-            <label for="node-input-deviceAlias"><i class="fa fa-tag"></i><span data-i18n="resources.labels.deviceAlias"></span></label>
-            <input type="text" id="node-input-deviceAlias" placeholder="your tapo deviceAlias">
-        </div>
-        <div class="form-row">
-            <label for="node-input-deviceIpRange"><i class="fa fa-map-marker"></i><span data-i18n="resources.labels.deviceIpRange"></span></label>
-            <input type="text" id="node-input-deviceIpRange" placeholder="your tapo deviceIpRange(e.g: 192.168.0.0/24)">
         </div>
         <!---------------------------------------------------------------------------->
         <hr>

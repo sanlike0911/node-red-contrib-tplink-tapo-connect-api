@@ -18,11 +18,8 @@ const nodeInit: NodeInitializer = (RED): void => {
      */
     function checkParameter(config: brightnessType.configBase): boolean {
         let _result: boolean = false;
-        if (config?.email.length > 0 && config?.password.length > 0) {
-            if (('ip' === config?.searchMode && config?.deviceIp.length > 0) ||
-                ('alias' === config?.searchMode && config?.deviceAlias.length > 0 && config?.deviceIpRange.length > 0)) {
-                _result = true;
-            }
+        if (config?.email.length > 0 && config?.password.length > 0 && config?.deviceIp.length > 0) {
+            _result = true;
         }
         return _result
     }
@@ -44,10 +41,7 @@ const nodeInit: NodeInitializer = (RED): void => {
             node.email = this?.credentials?.email ?? "";
             node.password = this?.credentials?.password ?? "";
             node.deviceIp = config?.deviceIp ?? "";
-            node.deviceAlias = config?.deviceAlias ?? "";
-            node.deviceIpRange = config?.deviceIpRange ?? "";
             node.brightness = config?.brightness ?? 0;
-            node.searchMode = config?.searchMode ?? "ip";
         } catch (error) {
             node.status({ fill: "red", shape: "ring", text: "resources.message.error" });
             node.error(error);
@@ -60,15 +54,8 @@ const nodeInit: NodeInitializer = (RED): void => {
          * @returns {Promise< tplinkTapoConnectWrapperType.tapoConnectResults >}
          */
         async function setTapoBrightness(config: brightnessType.configBase): Promise<tplinkTapoConnectWrapperType.tapoConnectResults> {
-            let ret: tplinkTapoConnectWrapperType.tapoConnectResults;
-            if ("ip" === config.searchMode) {
-                ret = await tplinkTapoConnectWrapper.getInstance().
-                    setTapoBrightness(config.email, config.password, config.deviceIp, config.brightness);
-            } else {
-                ret = await tplinkTapoConnectWrapper.getInstance().
-                    setTapoBrightnessAlias(config.email, config.password, config.deviceAlias, config.deviceIpRange, config.brightness);
-            }
-            return ret;
+            return await tplinkTapoConnectWrapper.getInstance().
+                setTapoBrightness(config.email, config.password, config.deviceIp, config.brightness);
         }
 
         node.on('input', async (msg: any) => {
@@ -79,9 +66,6 @@ const nodeInit: NodeInitializer = (RED): void => {
                     email: msg.payload?.email ?? node.email,
                     password: msg.payload?.password ?? node.password,
                     deviceIp: msg.payload?.deviceIp ?? node.deviceIp,
-                    deviceAlias: msg.payload?.deviceAlias ?? node.deviceAlias,
-                    deviceIpRange: msg.payload?.deviceIpRange ?? node.deviceIpRange,
-                    searchMode: msg.payload?.searchMode ?? node.searchMode,
                     brightness: msg.payload?.brightness ?? node.brightness
                 };
                 // debug

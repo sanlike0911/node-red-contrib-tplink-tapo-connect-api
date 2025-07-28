@@ -6,18 +6,10 @@
             "password": "Password",
             "email": "Email",
             "deviceIp": "Tapo ipaddress",
-            "deviceAlias": "Tapo alias",
-            "deviceIpRange": "Tapo find ip range",
             "targetDeviceSettings": "Tapo device settings",
-            "colour": "Colour",
-            "searchMode":{
-                "title": "Seach mode",
-                "ip":"ip",
-                "alias":"alias"
-            }            
+            "colour": "Colour"
         },
         "descriptions": {
-            "targetDeviceSettings": "select search mode \"Tapo ip or Tapo alias\"",
             "colour": "Set the colour for colour smart bulbs only"
         },
         "message": {
