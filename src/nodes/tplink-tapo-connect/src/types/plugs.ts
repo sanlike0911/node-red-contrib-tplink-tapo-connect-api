@@ -1,8 +1,5 @@
 import { TapoDeviceInfo } from './base';
 
-export const energyMonitoringModels = ['P110', 'P110M', 'P115'];
-export const nonEnergyMonitoringModels = ['P100', 'P105'];
-
 export interface PlugDeviceInfo extends TapoDeviceInfo {
   auto_off_remain_time: number;
   auto_off_status: 'on' | 'off';

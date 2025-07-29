@@ -1,4 +1,4 @@
-import { BaseTapoDevice, TapoCredentials, TapoApiRequest, TapoApiResponse, P105DeviceInfo, P105UsageInfo, FeatureNotSupportedError, DeviceCapabilityError, Result, DeviceMethodOptions } from '../../types';
+import { BaseTapoDevice, TapoCredentials, TapoApiRequest, TapoApiResponse, P105DeviceInfo, P105UsageInfo, FeatureNotSupportedError, DeviceCapabilityError, Result, DeviceMethodOptions, energyMonitoringModels } from '../../types';
 import { UnifiedTapoProtocol } from '../../core/unified-protocol';
 
 export class P105Plug extends BaseTapoDevice {
@@ -27,7 +27,7 @@ export class P105Plug extends BaseTapoDevice {
 
   public async connect(): Promise<void> {
     console.log('P105Plug.connect() called - using unified protocol');
-    
+
     // Check basic device connectivity first
     console.log('Checking device connectivity...');
     const isReachable = await this.checkDeviceConnectivity();
@@ -35,7 +35,7 @@ export class P105Plug extends BaseTapoDevice {
       throw new Error(`Device at ${this.ip} is not reachable. Check IP address and network connectivity.`);
     }
     console.log('Device is reachable, proceeding with unified protocol connection...');
-    
+
     try {
       await this.unifiedProtocol.connect();
       console.log(`Connected successfully using ${this.unifiedProtocol.getActiveProtocol()} protocol`);
@@ -68,7 +68,7 @@ export class P105Plug extends BaseTapoDevice {
 
     const response = await this.sendRequest<any>(request);
     const rawData = response.result;
-    
+
     // Transform raw data to match interface expectations
     const deviceInfo: P105DeviceInfo = {
       ...rawData,
@@ -89,10 +89,10 @@ export class P105Plug extends BaseTapoDevice {
       rssi: 0,
       signalLevel: 0
     };
-    
+
     // Cache device model for feature detection
     this.deviceModel = deviceInfo.model;
-    
+
     return deviceInfo;
   }
 
@@ -101,7 +101,8 @@ export class P105Plug extends BaseTapoDevice {
    */
   public async hasEnergyMonitoring(): Promise<boolean> {
     const cacheKey = 'energy_monitoring';
-    
+
+    // Check cache first
     if (this.featureCache.has(cacheKey)) {
       return this.featureCache.get(cacheKey)!;
     }
@@ -113,24 +114,14 @@ export class P105Plug extends BaseTapoDevice {
         this.deviceModel = deviceInfo.model;
       }
 
-      // Check if model supports energy monitoring
-      const energyMonitoringModels = ['P110', 'P115', 'KP115', 'KP125'];
-      const nonEnergyMonitoringModels = ['P100', 'P105', 'KP105'];
-      
       // Check if device model is known to support energy monitoring
-      if (this.deviceModel && energyMonitoringModels.includes(this.deviceModel)) {
+      if (this.deviceModel && energyMonitoringModels.includes(this.deviceModel as any)) {
         this.featureCache.set(cacheKey, true);
         return true;
       }
-      
-      // Check if device model is known to NOT support energy monitoring
-      if (this.deviceModel && nonEnergyMonitoringModels.includes(this.deviceModel)) {
-        this.featureCache.set(cacheKey, false);
-        return false;
-      }
-      
+
       // For unknown models, try to make a request to determine support
-      if (this.deviceModel && !energyMonitoringModels.includes(this.deviceModel) && !nonEnergyMonitoringModels.includes(this.deviceModel)) {
+      if (this.deviceModel && !energyMonitoringModels.includes(this.deviceModel as any)) {
         try {
           const request: TapoApiRequest = {
             method: 'get_energy_usage'
@@ -143,7 +134,7 @@ export class P105Plug extends BaseTapoDevice {
           return false;
         }
       }
-      
+
       // If we reach here, model was not in any list - shouldn't happen but handle gracefully
       this.featureCache.set(cacheKey, false);
       return false;
@@ -217,9 +208,9 @@ export class P105Plug extends BaseTapoDevice {
 
   public async getUsageInfo(options: DeviceMethodOptions = {}): Promise<P105UsageInfo> {
     const { throwOnUnsupported = true } = options;
-    
+
     const hasEnergyMonitoring = await this.hasEnergyMonitoring();
-    
+
     if (!hasEnergyMonitoring) {
       if (throwOnUnsupported) {
         throw new FeatureNotSupportedError(
@@ -250,7 +241,7 @@ export class P105Plug extends BaseTapoDevice {
       if (error instanceof FeatureNotSupportedError) {
         throw error;
       }
-      
+
       if (!throwOnUnsupported) {
         return {
           todayRuntime: 0,
@@ -260,7 +251,7 @@ export class P105Plug extends BaseTapoDevice {
           currentPower: 0
         };
       }
-      
+
       // If the API call fails, it might indicate lack of support
       throw new DeviceCapabilityError(
         'energy_monitoring',

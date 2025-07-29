@@ -29,13 +29,18 @@ export class KlapAuth {
 
   public async authenticate(): Promise<KlapSession> {
     try {
-      console.log('Starting KLAP authentication...');
+      console.log(`[KLAP-DEBUG] Starting KLAP authentication for device: ${this.deviceIp}`);
+      console.log(`[KLAP-DEBUG] Username: ${this.credentials.username}`);
+      console.log(`[KLAP-DEBUG] Password length: ${this.credentials.password.length}`);
       
       const terminalUUID = uuidv4() + '-' + Date.now() + '-' + Math.random().toString(36).substring(2);
+      console.log(`[KLAP-DEBUG] Generated terminal UUID: ${terminalUUID}`);
       
       // handshake1
       const localSeed = randomBytes(16);
+      console.log(`[KLAP-DEBUG] Generated local seed: ${localSeed.toString('hex')}`);
       
+      console.log(`[KLAP-DEBUG] Sending handshake1 request to: http://${this.deviceIp}/app/handshake1`);
       const response = await axios.post(`http://${this.deviceIp}/app/handshake1`, localSeed, {
         responseType: 'arraybuffer',
         withCredentials: true,
@@ -45,6 +50,14 @@ export class KlapAuth {
           'User-Agent': 'Tapo/1.0'
         }
       }).catch((error) => {
+        console.error(`[KLAP-DEBUG] Handshake1 request failed:`, {
+          status: error?.response?.status,
+          statusText: error?.response?.statusText,
+          code: error?.code,
+          message: error?.message,
+          headers: error?.response?.headers
+        });
+        
         if (error?.response?.status === 404) {
           throw new Error(`KLAP protocol not supported by device at ${this.deviceIp}`);
         }
@@ -57,25 +70,47 @@ export class KlapAuth {
         throw new Error(`KLAP handshake1 failed: ${error?.message || error}`);
       });
       
+      console.log(`[KLAP-DEBUG] Handshake1 response status: ${response.status}`);
+      console.log(`[KLAP-DEBUG] Response headers:`, response.headers);
+      
       const responseBytes = Buffer.from(response.data);
+      console.log(`[KLAP-DEBUG] Response data length: ${responseBytes.length} bytes`);
+      console.log(`[KLAP-DEBUG] Response data (hex): ${responseBytes.toString('hex')}`);
+      
       const setCookieHeader = response.headers['set-cookie']?.[0];
       if (!setCookieHeader) {
+        console.error(`[KLAP-DEBUG] No session cookie received from device`);
         throw new Error('No session cookie received from device');
       }
       
       const sessionCookie = setCookieHeader.substring(0, setCookieHeader.indexOf(';'));
+      console.log(`[KLAP-DEBUG] Session cookie: ${sessionCookie}`);
+      
       const remoteSeed = responseBytes.slice(0, 16);
       const serverHash = responseBytes.slice(16);
+      console.log(`[KLAP-DEBUG] Remote seed: ${remoteSeed.toString('hex')}`);
+      console.log(`[KLAP-DEBUG] Server hash: ${serverHash.toString('hex')}`);
 
       const localAuthHash = this.generateAuthHash(this.credentials.username, this.credentials.password);
+      console.log(`[KLAP-DEBUG] Local auth hash: ${localAuthHash.toString('hex')}`);
+      
       const localSeedAuthHash = this.handshake1AuthHash(localSeed, remoteSeed, localAuthHash);
+      console.log(`[KLAP-DEBUG] Local seed auth hash: ${localSeedAuthHash.toString('hex')}`);
 
       if (!this.compare(localSeedAuthHash, serverHash)) {
+        console.error(`[KLAP-DEBUG] Hash comparison failed - authentication error`);
+        console.error(`[KLAP-DEBUG] Expected: ${localSeedAuthHash.toString('hex')}`);
+        console.error(`[KLAP-DEBUG] Received: ${serverHash.toString('hex')}`);
         throw new Error('Email or password incorrect');
       }
+      
+      console.log(`[KLAP-DEBUG] Handshake1 hash validation successful`);
 
       // handshake2
       const payload = this.handshake2AuthHash(localSeed, remoteSeed, localAuthHash);
+      console.log(`[KLAP-DEBUG] Handshake2 payload: ${payload.toString('hex')}`);
+      console.log(`[KLAP-DEBUG] Sending handshake2 request to: http://${this.deviceIp}/app/handshake2`);
+      
       await axios.post(`http://${this.deviceIp}/app/handshake2`, payload, {
         responseType: 'arraybuffer',
         timeout: 15000,
@@ -85,14 +120,27 @@ export class KlapAuth {
           'User-Agent': 'Tapo/1.0'
         }
       }).catch((error) => {
+        console.error(`[KLAP-DEBUG] Handshake2 request failed:`, {
+          status: error?.response?.status,
+          statusText: error?.response?.statusText,
+          code: error?.code,
+          message: error?.message
+        });
         throw new Error(`KLAP handshake2 failed: ${error?.message || error}`);
       });
+      
+      console.log(`[KLAP-DEBUG] Handshake2 completed successfully`);
 
       // Create encryption session
       const key = this.deriveKey(localSeed, remoteSeed, localAuthHash);
       const iv = this.deriveIv(localSeed, remoteSeed, localAuthHash);
       const sig = this.deriveSig(localSeed, remoteSeed, localAuthHash);
       const seq = this.deriveSeqFromIv(iv);
+      
+      console.log(`[KLAP-DEBUG] Derived key: ${key.toString('hex')}`);
+      console.log(`[KLAP-DEBUG] Derived IV: ${iv.toString('hex')}`);
+      console.log(`[KLAP-DEBUG] Derived signature: ${sig.toString('hex')}`);
+      console.log(`[KLAP-DEBUG] Initial sequence: ${seq.toString('hex')}`);
 
       this.session = {
         authenticated: true,
@@ -106,6 +154,7 @@ export class KlapAuth {
         seq
       };
 
+      console.log(`[KLAP-DEBUG] KLAP session established successfully`);
       return this.session;
     } catch (error) {
       console.error('KLAP authentication error:', error);
@@ -154,9 +203,23 @@ export class KlapAuth {
       }
     });
     
-    const decryptedResponse = this.decrypt(response.data);
+    let decryptedResponse;
+    try {
+      decryptedResponse = this.decrypt(response.data);
+    } catch (decryptError) {
+      throw new Error(`Failed to decrypt KLAP response: ${decryptError instanceof Error ? decryptError.message : decryptError}`);
+    }
     
-    if (decryptedResponse.error_code !== 0) {
+    if (!decryptedResponse) {
+      throw new Error('Failed to decrypt response or received empty response');
+    }
+    
+    // Check if decryptedResponse has error_code property before accessing it
+    if (typeof decryptedResponse !== 'object' || decryptedResponse === null) {
+      throw new Error('Invalid response format - expected object but received: ' + typeof decryptedResponse);
+    }
+    
+    if (decryptedResponse.error_code !== undefined && decryptedResponse.error_code !== 0) {
       // Handle specific KLAP error codes
       if (decryptedResponse.error_code === -1012) {
         throw new Error(`Device busy or command timing issue (KLAP -1012). This may be due to rapid successive commands or device state conflicts.`);
@@ -169,6 +232,12 @@ export class KlapAuth {
       } else {
         throw new Error(`KLAP request failed: ${decryptedResponse.error_code}`);
       }
+    }
+    
+    // For successful responses, return the entire response if result is undefined
+    // This commonly happens with control commands like set_device_info
+    if (decryptedResponse.result === undefined) {
+      return decryptedResponse;
     }
     
     return decryptedResponse.result;

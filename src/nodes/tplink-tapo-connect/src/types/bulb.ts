@@ -1,8 +1,10 @@
 /**
  * Type definitions for Tapo Smart Bulbs (L510, L520, L530)
+ * Single responsibility: Bulb-specific type definitions and utilities
  */
 
 import { TapoDeviceInfo } from './base';
+import { TapoDeviceType } from './device-types';
 
 /**
  * Extended device info for smart bulbs
@@ -175,6 +177,37 @@ export const BULB_CAPABILITIES: Record<string, BulbCapabilities> = {
     maxColorTemp: 6500
   }
 };
+
+/**
+ * Check if device supports brightness control (all bulb types)
+ */
+export function supportsBrightnessControl(deviceType: TapoDeviceType): boolean {
+  const bulbTypes: TapoDeviceType[] = ['L510', 'L520', 'L530'];
+  return bulbTypes.includes(deviceType);
+}
+
+/**
+ * Check if device supports color control (only L530)
+ */
+export function supportsColorControl(deviceType: TapoDeviceType): boolean {
+  return deviceType === 'L530';
+}
+
+/**
+ * Check if device supports color temperature control
+ */
+export function supportsColorTemperature(deviceType: TapoDeviceType): boolean {
+  const colorTempTypes: TapoDeviceType[] = ['L520', 'L530'];
+  return colorTempTypes.includes(deviceType);
+}
+
+/**
+ * Check if device supports light effects
+ */
+export function supportsLightEffects(deviceType: TapoDeviceType): boolean {
+  const effectTypes: TapoDeviceType[] = ['L530'];
+  return effectTypes.includes(deviceType);
+}
 
 /**
  * Predefined named colors in HSV format

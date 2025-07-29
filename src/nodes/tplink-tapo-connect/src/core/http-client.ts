@@ -31,6 +31,10 @@ export class TapoHttpClient {
         headers ? { headers } : undefined
       );
 
+      if (!response.data) {
+        throw this.createTapoError(-1, 'Received empty response from device');
+      }
+
       if (response.data.error_code !== 0) {
         throw this.createTapoError(response.data.error_code, response.data.msg);
       }

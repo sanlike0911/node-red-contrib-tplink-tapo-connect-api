@@ -1,6 +1,5 @@
-import { BaseTapoDevice, TapoCredentials, TapoApiRequest, TapoApiResponse, PlugDeviceInfo, PlugUsageInfo, FeatureNotSupportedError, DeviceCapabilityError, Result, DeviceMethodOptions } from '../../types';
+import { BaseTapoDevice, TapoCredentials, TapoApiRequest, TapoApiResponse, PlugDeviceInfo, PlugUsageInfo, FeatureNotSupportedError, DeviceCapabilityError, Result, DeviceMethodOptions, energyMonitoringModels } from '../../types';
 import { UnifiedTapoProtocol } from '../../core/unified-protocol';
-import { energyMonitoringModels, nonEnergyMonitoringModels } from '../../types'
 
 /**
  * P110 Smart Plug - Plug with energy monitoring capabilities
@@ -118,19 +117,13 @@ export class P110Plug extends BaseTapoDevice {
       }
 
       // Check if device model is known to support energy monitoring
-      if (energyMonitoringModels.includes(this.deviceModel)) {
+      if (energyMonitoringModels.includes(this.deviceModel as any)) {
         this.featureCache.set(cacheKey, true);
         return true;
       }
 
-      // Check if device model is known to NOT support energy monitoring
-      if (nonEnergyMonitoringModels.includes(this.deviceModel)) {
-        this.featureCache.set(cacheKey, false);
-        return false;
-      }
-
       // For unknown models, try to make a request to determine support
-      if (!energyMonitoringModels.includes(this.deviceModel) && !nonEnergyMonitoringModels.includes(this.deviceModel)) {
+      if (!energyMonitoringModels.includes(this.deviceModel as any)) {
         try {
           const request: TapoApiRequest = {
             method: 'get_energy_usage'

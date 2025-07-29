@@ -34,7 +34,7 @@ export interface InternalRetryConfig {
 export const DEFAULT_RETRY_CONFIGS = {
   deviceControl: {
     maxAttempts: 3,
-    baseDelay: 2000,
+    baseDelay: 3000,
     strategy: 'linear' as const,
     busyErrorPatterns: ['klap -1012', 'device busy', 'command timing issue'],
     sessionErrorPatterns: ['klap 1002', 'session expired', 'invalid terminal uuid']
