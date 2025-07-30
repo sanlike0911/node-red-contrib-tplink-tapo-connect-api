@@ -13,6 +13,7 @@ export interface KlapSession {
   iv: Buffer;
   sig: Buffer;
   seq: Buffer;
+  version: 'v1' | 'v2';
 }
 
 const AES_CIPHER_ALGORITHM = 'aes-128-cbc';
@@ -36,39 +37,71 @@ export class KlapAuth {
       const terminalUUID = uuidv4() + '-' + Date.now() + '-' + Math.random().toString(36).substring(2);
       console.log(`[KLAP-DEBUG] Generated terminal UUID: ${terminalUUID}`);
       
-      // handshake1
-      const localSeed = randomBytes(16);
-      console.log(`[KLAP-DEBUG] Generated local seed: ${localSeed.toString('hex')}`);
-      
-      console.log(`[KLAP-DEBUG] Sending handshake1 request to: http://${this.deviceIp}/app/handshake1`);
-      const response = await axios.post(`http://${this.deviceIp}/app/handshake1`, localSeed, {
-        responseType: 'arraybuffer',
-        withCredentials: true,
-        timeout: 15000,
-        headers: {
-          'Content-Type': 'application/octet-stream',
-          'User-Agent': 'Tapo/1.0'
-        }
-      }).catch((error) => {
-        console.error(`[KLAP-DEBUG] Handshake1 request failed:`, {
-          status: error?.response?.status,
-          statusText: error?.response?.statusText,
-          code: error?.code,
-          message: error?.message,
-          headers: error?.response?.headers
-        });
+      // Try KLAP V2 first (modern standard)
+      try {
+        console.log(`[KLAP-DEBUG] Attempting KLAP V2 authentication`);
+        return await this.authenticateV2(terminalUUID);
+      } catch (v2Error) {
+        console.log(`[KLAP-DEBUG] KLAP V2 failed, checking for V1 fallback:`, v2Error);
         
-        if (error?.response?.status === 404) {
-          throw new Error(`KLAP protocol not supported by device at ${this.deviceIp}`);
+        // Check if it's a protocol-level error (404) that suggests trying V1
+        // KLAP V1 is for legacy firmware compatibility (PKCS#1 v1.5 vs OAEP padding differences)
+        // Enable V1 fallback by default for broader device compatibility
+        if (this.shouldTryV1(v2Error as Error)) {
+          console.log(`[KLAP-DEBUG] Attempting KLAP V1 authentication for legacy device compatibility`);
+          try {
+            return await this.authenticateV1(terminalUUID);
+          } catch (v1Error) {
+            console.log(`[KLAP-DEBUG] KLAP V1 also failed:`, v1Error);
+            throw new Error(`KLAP authentication failed. V2: ${(v2Error as Error).message}; V1: ${(v1Error as Error).message}`);
+          }
+        } else {
+          console.log(`[KLAP-DEBUG] V2 error does not suggest trying V1 fallback`);
         }
-        if (error?.code === 'ECONNREFUSED') {
-          throw new Error(`Device at ${this.deviceIp} refused connection - check if device is powered on and IP is correct`);
-        }
-        if (error?.code === 'ETIMEDOUT') {
-          throw new Error(`Connection to device at ${this.deviceIp} timed out - check network connectivity`);
-        }
-        throw new Error(`KLAP handshake1 failed: ${error?.message || error}`);
+        
+        // If not a protocol error, don't try V1
+        throw v2Error;
+      }
+    } catch (error) {
+      console.error('KLAP authentication error:', error);
+      throw error;
+    }
+  }
+
+  private async authenticateV2(terminalUUID: string): Promise<KlapSession> {
+    // handshake1
+    const localSeed = randomBytes(16);
+    console.log(`[KLAP-DEBUG] Generated local seed: ${localSeed.toString('hex')}`);
+    
+    console.log(`[KLAP-DEBUG] Sending handshake1 request to: http://${this.deviceIp}/app/handshake1`);
+    const response = await axios.post(`http://${this.deviceIp}/app/handshake1`, localSeed, {
+      responseType: 'arraybuffer',
+      withCredentials: true,
+      timeout: 15000,
+      headers: {
+        'Content-Type': 'application/octet-stream',
+        'User-Agent': 'Tapo/1.0'
+      }
+    }).catch((error) => {
+      console.error(`[KLAP-DEBUG] Handshake1 request failed:`, {
+        status: error?.response?.status,
+        statusText: error?.response?.statusText,
+        code: error?.code,
+        message: error?.message,
+        headers: error?.response?.headers
       });
+      
+      if (error?.response?.status === 404) {
+        throw new Error(`KLAP V2 protocol not supported by device at ${this.deviceIp}`);
+      }
+      if (error?.code === 'ECONNREFUSED') {
+        throw new Error(`Device at ${this.deviceIp} refused connection - check if device is powered on and IP is correct`);
+      }
+      if (error?.code === 'ETIMEDOUT') {
+        throw new Error(`Connection to device at ${this.deviceIp} timed out - check network connectivity`);
+      }
+      throw new Error(`KLAP handshake1 failed: ${error?.message || error}`);
+    });
       
       console.log(`[KLAP-DEBUG] Handshake1 response status: ${response.status}`);
       console.log(`[KLAP-DEBUG] Response headers:`, response.headers);
@@ -142,7 +175,7 @@ export class KlapAuth {
       console.log(`[KLAP-DEBUG] Derived signature: ${sig.toString('hex')}`);
       console.log(`[KLAP-DEBUG] Initial sequence: ${seq.toString('hex')}`);
 
-      this.session = {
+      const session: KlapSession = {
         authenticated: true,
         timeout: Date.now() + (20 * 60 * 1000),
         deviceIp: this.deviceIp,
@@ -151,15 +184,156 @@ export class KlapAuth {
         key,
         iv,
         sig,
-        seq
+        seq,
+        version: 'v2'
       };
 
-      console.log(`[KLAP-DEBUG] KLAP session established successfully`);
-      return this.session;
-    } catch (error) {
-      console.error('KLAP authentication error:', error);
-      throw error;
+      this.session = session;
+      console.log(`[KLAP-DEBUG] KLAP V2 session established successfully`);
+      return session;
+  }
+
+  private async authenticateV1(terminalUUID: string): Promise<KlapSession> {
+    console.log(`[KLAP-DEBUG] Starting KLAP V1 authentication`);
+    console.log(`[KLAP-DEBUG] V1 uses single handshake step with /app/handshake endpoint`);
+    
+    // V1 uses single handshake endpoint (not /app/handshake1)
+    const localSeed = randomBytes(16);
+    console.log(`[KLAP-DEBUG] Generated local seed for V1: ${localSeed.toString('hex')}`);
+    
+    console.log(`[KLAP-DEBUG] Sending single handshake request to: http://${this.deviceIp}/app/handshake`);
+    const response = await axios.post(`http://${this.deviceIp}/app/handshake`, localSeed, {
+      responseType: 'arraybuffer',
+      withCredentials: true,
+      timeout: 15000,
+      headers: {
+        'Content-Type': 'application/octet-stream',
+        'User-Agent': 'Tapo/1.0'
+      }
+    }).catch((error) => {
+      console.error(`[KLAP-DEBUG] V1 Handshake request failed:`, {
+        status: error?.response?.status,
+        statusText: error?.response?.statusText,
+        code: error?.code,
+        message: error?.message
+      });
+      
+      if (error?.response?.status === 404) {
+        throw new Error(`KLAP V1 protocol not supported by device at ${this.deviceIp}`);
+      }
+      if (error?.code === 'ECONNREFUSED') {
+        throw new Error(`Device at ${this.deviceIp} refused connection - check if device is powered on and IP is correct`);
+      }
+      if (error?.code === 'ETIMEDOUT') {
+        throw new Error(`Connection to device at ${this.deviceIp} timed out - check network connectivity`);
+      }
+      throw new Error(`KLAP V1 handshake failed: ${error?.message || error}`);
+    });
+    
+    console.log(`[KLAP-DEBUG] V1 Handshake response status: ${response.status}`);
+    console.log(`[KLAP-DEBUG] V1 Response headers:`, response.headers);
+    
+    const responseBytes = Buffer.from(response.data);
+    console.log(`[KLAP-DEBUG] V1 Response data length: ${responseBytes.length} bytes`);
+    
+    const setCookieHeader = response.headers['set-cookie']?.[0];
+    if (!setCookieHeader) {
+      console.error(`[KLAP-DEBUG] No session cookie received from V1 handshake`);
+      throw new Error('No session cookie received from V1 handshake');
     }
+    
+    const sessionCookie = setCookieHeader.substring(0, setCookieHeader.indexOf(';'));
+    console.log(`[KLAP-DEBUG] V1 Session cookie: ${sessionCookie}`);
+    
+    const remoteSeed = responseBytes.slice(0, 16);
+    const serverHash = responseBytes.slice(16);
+    console.log(`[KLAP-DEBUG] V1 Remote seed: ${remoteSeed.toString('hex')}`);
+    console.log(`[KLAP-DEBUG] V1 Server hash: ${serverHash.toString('hex')}`);
+
+    const localAuthHash = this.generateAuthHash(this.credentials.username, this.credentials.password);
+    console.log(`[KLAP-DEBUG] V1 Local auth hash: ${localAuthHash.toString('hex')}`);
+    
+    const localSeedAuthHash = this.handshake1AuthHash(localSeed, remoteSeed, localAuthHash);
+    console.log(`[KLAP-DEBUG] V1 Local seed auth hash: ${localSeedAuthHash.toString('hex')}`);
+
+    if (!this.compare(localSeedAuthHash, serverHash)) {
+      console.error(`[KLAP-DEBUG] V1 Hash comparison failed - authentication error`);
+      throw new Error('V1 Email or password incorrect');
+    }
+    
+    console.log(`[KLAP-DEBUG] V1 Hash validation successful`);
+
+    // Create encryption session for V1
+    const key = this.deriveKey(localSeed, remoteSeed, localAuthHash);
+    const iv = this.deriveIv(localSeed, remoteSeed, localAuthHash);
+    const sig = this.deriveSig(localSeed, remoteSeed, localAuthHash);
+    const seq = this.deriveSeqFromIv(iv);
+    
+    console.log(`[KLAP-DEBUG] V1 Derived key: ${key.toString('hex')}`);
+    console.log(`[KLAP-DEBUG] V1 Derived IV: ${iv.toString('hex')}`);
+    console.log(`[KLAP-DEBUG] V1 Derived signature: ${sig.toString('hex')}`);
+    console.log(`[KLAP-DEBUG] V1 Initial sequence: ${seq.toString('hex')}`);
+
+    const session: KlapSession = {
+      authenticated: true,
+      timeout: Date.now() + (20 * 60 * 1000),
+      deviceIp: this.deviceIp,
+      sessionCookie,
+      terminalUUID,
+      key,
+      iv,
+      sig,
+      seq,
+      version: 'v1'
+    };
+
+    this.session = session;
+    console.log(`[KLAP-DEBUG] KLAP V1 session established successfully`);
+    return session;
+  }
+
+  private shouldTryV1(error: Error): boolean {
+    // Try V1 if V2 endpoint is not found (404) or method not allowed (405)
+    // This indicates the device might be running legacy firmware that only supports KLAP V1
+    const errorMessage = error.message.toLowerCase();
+    
+    // Protocol-level errors that suggest V1 compatibility
+    const protocolErrors = [
+      'klap v2 protocol not supported',
+      '404',
+      '405', 
+      'not found',
+      'method not allowed',
+      'handshake1 failed'
+    ];
+    
+    // Connection errors that should not trigger V1 fallback
+    const connectionErrors = [
+      'econnrefused',
+      'etimedout',
+      'enotfound',
+      'network',
+      'dns'
+    ];
+    
+    // Don't try V1 for connection issues
+    for (const connError of connectionErrors) {
+      if (errorMessage.includes(connError)) {
+        console.log(`[KLAP-DEBUG] Connection error detected, skipping V1 fallback: ${connError}`);
+        return false;
+      }
+    }
+    
+    // Try V1 for protocol-level errors
+    for (const protError of protocolErrors) {
+      if (errorMessage.includes(protError)) {
+        console.log(`[KLAP-DEBUG] Protocol error detected, will try V1 fallback: ${protError}`);
+        return true;
+      }
+    }
+    
+    console.log(`[KLAP-DEBUG] Error type does not suggest V1 compatibility`);
+    return false;
   }
 
   public async secureRequest<T>(request: TapoApiRequest): Promise<T> {
@@ -177,9 +351,13 @@ export class KlapAuth {
 
     const encryptedRequest = this.encryptAndSign(klapRequest);
     
-    const response = await axios({
+    // Use appropriate endpoint based on KLAP version
+    const endpoint = this.session.version === 'v1' ? '/app/klap' : '/app/request';
+    console.log(`[KLAP-DEBUG] Sending ${this.session.version.toUpperCase()} request to: http://${this.session.deviceIp}${endpoint}`);
+    
+    const requestConfig: any = {
       method: 'post',
-      url: `http://${this.session.deviceIp}/app/request`,
+      url: `http://${this.session.deviceIp}${endpoint}`,
       data: encryptedRequest,
       responseType: 'arraybuffer',
       timeout: 15000,
@@ -187,11 +365,20 @@ export class KlapAuth {
         'Cookie': this.session.sessionCookie,
         'Content-Type': 'application/octet-stream',
         'User-Agent': 'Tapo/1.0'
-      },
-      params: {
-        seq: this.session.seq.readInt32BE()
       }
-    }).catch((error) => {
+    };
+
+    // V2 uses sequence parameter in URL, V1 does not use sequence parameter
+    if (this.session.version === 'v2') {
+      requestConfig.params = {
+        seq: this.session.seq.readInt32BE()
+      };
+      console.log(`[KLAP-DEBUG] V2 request with sequence: ${this.session.seq.readInt32BE()}`);
+    } else {
+      console.log(`[KLAP-DEBUG] V1 request without sequence parameter`);
+    }
+    
+    const response = await axios(requestConfig).catch((error) => {
       if (error.response?.status === 429) {
         throw new Error('Rate limit exceeded (HTTP 429). Device is receiving too many requests. Please wait before retrying.');
       } else if (error.code === 'ECONNRESET') {
@@ -199,7 +386,7 @@ export class KlapAuth {
       } else if (error.code === 'ETIMEDOUT') {
         throw new Error('Request timeout. Device may be busy or network connection is slow.');
       } else {
-        throw new Error(`KLAP request failed: ${error.message || error}`);
+        throw new Error(`KLAP ${this.session?.version?.toUpperCase() || 'UNKNOWN'} request failed: ${error.message || error}`);
       }
     });
     
@@ -250,7 +437,14 @@ export class KlapAuth {
   public clearSession(): void {
     // Force clear the session without trying to logout
     // This is safer when dealing with session errors
+    if (this.session) {
+      console.log(`[KLAP-DEBUG] Clearing ${this.session.version.toUpperCase()} session`);
+    }
     this.session = undefined;
+  }
+
+  public getSessionVersion(): 'v1' | 'v2' | null {
+    return this.session?.version || null;
   }
 
   private encrypt(payload: any): Buffer {

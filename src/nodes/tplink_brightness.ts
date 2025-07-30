@@ -4,7 +4,7 @@ import { NodeInitializer } from "node-red";
 import { brightnessType } from "./type";
 
 // tplinkTapoConnectWrapper
-import { tplinkTapoConnectWrapper, tplinkTapoConnectWrapperType } from "./tplink-tapo-connect/src/wrapper/tplink-tapo-connect-wrapper";
+import { tplinkTapoConnectWrapper, tplinkTapoConnectWrapperType } from "./tplink-tapo-connect/wrapper/tplink-tapo-connect-wrapper";
 
 const nodeInit: NodeInitializer = (RED): void => {
 

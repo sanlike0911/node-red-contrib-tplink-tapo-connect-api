@@ -30,7 +30,8 @@ export class UnifiedTapoProtocol {
       console.log('Attempting KLAP connection...');
       await this.klapAuth.authenticate();
       this.activeProtocol = 'klap';
-      console.log('KLAP connection successful');
+      const version = this.klapAuth.getSessionVersion();
+      console.log(`KLAP ${version?.toUpperCase()} connection successful`);
       return;
     } catch (error) {
       klapError = error as Error;
@@ -136,6 +137,8 @@ export class UnifiedTapoProtocol {
         await this.klapAuth.authenticate();
         const result = await this.klapAuth.secureRequest<T>(request);
         this.activeProtocol = 'klap';
+        const version = this.klapAuth.getSessionVersion();
+        console.log(`Switched to KLAP ${version?.toUpperCase()} successfully`);
         return result;
       } else {
         this.auth.clearSession();
@@ -195,6 +198,21 @@ export class UnifiedTapoProtocol {
    * Get current active protocol
    */
   public getActiveProtocol(): string | null {
+    if (this.activeProtocol === 'klap') {
+      const version = this.klapAuth.getSessionVersion();
+      return version ? `klap-${version}` : 'klap';
+    }
     return this.activeProtocol;
+  }
+
+  /**
+   * Get detailed protocol information
+   */
+  public getProtocolInfo(): { protocol: string | null; version?: string } {
+    if (this.activeProtocol === 'klap') {
+      const version = this.klapAuth.getSessionVersion();
+      return version ? { protocol: 'klap', version } : { protocol: 'klap' };
+    }
+    return { protocol: this.activeProtocol };
   }
 }

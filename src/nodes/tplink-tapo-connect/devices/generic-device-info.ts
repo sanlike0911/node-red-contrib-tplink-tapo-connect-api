@@ -32,7 +32,7 @@ export class GenericDeviceInfoRetriever extends BaseTapoDevice {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       console.log(`Connection attempt ${attempt}/${maxRetries}`);
       
-      // Try KLAP first
+      // Try KLAP first (modern devices support KLAP V2)
       try {
         console.log('Trying KLAP authentication...');
         await this.klapAuth.authenticate();
@@ -42,9 +42,14 @@ export class GenericDeviceInfoRetriever extends BaseTapoDevice {
       } catch (error) {
         klapError = error as Error;
         console.log('KLAP failed:', error);
+        
+        // Check if it's a -1010 error and provide helpful message
+        if (error instanceof Error && error.message.includes('-1010')) {
+          console.log('Note: Error -1010 indicates authentication issues. Consider checking credentials or device settings.');
+        }
       }
 
-      // If KLAP fails, try Secure Passthrough
+      // If KLAP fails, try Secure Passthrough (older devices)
       if (!this.useKlap) {
         try {
           console.log('Trying Secure Passthrough authentication...');
@@ -55,6 +60,14 @@ export class GenericDeviceInfoRetriever extends BaseTapoDevice {
         } catch (error) {
           securePassthroughError = error as Error;
           console.log('Secure Passthrough failed:', error);
+          
+          // Provide specific guidance for -1010 errors
+          if (error instanceof Error && error.message.includes('-1010')) {
+            console.log('Error -1010 troubleshooting suggestions:');
+            console.log('- Verify username/password in Tapo app');
+            console.log('- Check if device supports remote access');
+            console.log('- Ensure device is online and reachable');
+          }
         }
       }
 

@@ -33,8 +33,29 @@ export class TapoAuth {
       };
 
       return this.session;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Authentication error details:', error);
+      
+      // Handle specific Tapo error codes
+      if (error?.errorCode === -1010) {
+        const detailedMessage = [
+          'Authentication failed with error -1010.',
+          'This typically indicates one of the following issues:',
+          '1. Incorrect username or password',
+          '2. Device requires local account instead of cloud account', 
+          '3. Device is not properly configured for remote access',
+          '4. Account may be locked or suspended',
+          '',
+          'Troubleshooting steps:',
+          '- Verify credentials are correct in the Tapo app',
+          '- Try using device local account if available',
+          '- Check if device is online and accessible',
+          '- Ensure device firmware is up to date'
+        ].join('\n');
+        
+        throw new Error(detailedMessage);
+      }
+      
       throw new Error(`Authentication failed: ${error}`);
     }
   }
