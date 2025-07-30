@@ -89,8 +89,12 @@ const nodeInit: NodeInitializer = (RED): void => {
                     password: msg.payload?.password ?? node.password,
                     deviceIp: msg.payload?.deviceIp ?? node.deviceIp
                 };
-                // debug
-                console.log(`config[${REGISTER_TYPE}]:`, config);
+                // debug (セキュリティ上、認証情報を除外)
+                console.log(`config[${REGISTER_TYPE}]:`, {
+                    deviceIp: config.deviceIp,
+                    email: config.email ? '[REDACTED]' : '',
+                    password: config.password ? '[REDACTED]' : ''
+                });
                 // debug
 
                 let ret: tplinkTapoConnectWrapperType.tapoConnectResults = {

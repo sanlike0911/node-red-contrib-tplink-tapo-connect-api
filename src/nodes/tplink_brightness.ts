@@ -69,7 +69,12 @@ const nodeInit: NodeInitializer = (RED): void => {
                     brightness: msg.payload?.brightness ?? node.brightness
                 };
                 // debug
-                console.log(`config[${REGISTER_TYPE}]:`, config);
+                console.log(`config[${REGISTER_TYPE}]:`, {
+                    deviceIp: config.deviceIp,
+                    brightness: config.brightness,
+                    email: config.email ? '[REDACTED]' : '',
+                    password: config.password ? '[REDACTED]' : ''
+                });
                 // debug
 
                 let ret: tplinkTapoConnectWrapperType.tapoConnectResults = {

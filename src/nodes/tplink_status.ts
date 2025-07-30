@@ -67,7 +67,11 @@ const nodeInit: NodeInitializer = (RED): void => {
                     deviceIp: msg.payload?.deviceIp ?? node.deviceIp
                 };
                 // debug
-                console.log(`config[${REGISTER_TYPE}]:`, config);
+                console.log(`config[${REGISTER_TYPE}]:`, {
+                    deviceIp: config.deviceIp,
+                    email: config.email ? '[REDACTED]' : '',
+                    password: config.password ? '[REDACTED]' : ''
+                });
                 // debug
 
                 let ret: tplinkTapoConnectWrapperType.tapoConnectResults = {
