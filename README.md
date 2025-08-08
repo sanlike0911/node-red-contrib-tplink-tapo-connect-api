@@ -1,7 +1,7 @@
 # node-red-contrib-tplink-tapo-connect-api
 
 This unofficial node-RED node allows connection to TP-Link Tapo devices. This project has been enhanced with AI support to enable new features.
-Starting with v0.50, we have added support for the KLAP protocol. To prioritize the operation of this node, we have simplified its functionality.
+Starting with v0.5x, we have added support for the KLAP protocol. To prioritize the operation of this node, we have simplified its functionality.
 
 ![node](./figs/sample00.png)
 
