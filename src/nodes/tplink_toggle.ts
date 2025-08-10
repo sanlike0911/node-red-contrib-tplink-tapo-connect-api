@@ -107,6 +107,11 @@ const nodeInit: NodeInitializer = (RED): void => {
                     if (ret.result) {
                         // Keep the original deviceIp since deviceId is not an IP address
                         node.status({ fill: "yellow", shape: "dot", text: "resources.message.processing" });
+                        
+                        // device statusをコンソールログに出力
+                        const deviceStatus = ret.tapoDeviceInfo?.device_on ? "ON" : "OFF";
+                        console.log(`[${REGISTER_TYPE}] device status: ${deviceStatus} (IP: ${config.deviceIp})`);
+                        
                         // device on/off?
                         switch (ret.tapoDeviceInfo?.device_on) {
                             case true:

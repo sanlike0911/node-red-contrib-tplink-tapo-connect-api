@@ -10,7 +10,9 @@
       "Bash(npm update)",
       "Bash(npm run test:*)",
       "Bash(npm run install:my-node:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npm run start:*)",
+      "Bash(lsof:*)"
     ],
     "deny": []
   }

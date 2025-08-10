@@ -39,6 +39,8 @@ Starting with v0.50, we have added support for the KLAP protocol. To prioritize 
 
     This node module provides the ability to toggle (on / off) the power of tapo smart plugs.
 
+    **Note:** When executed immediately, the device status may not be synchronized, which can cause toggle operations to fail. Please wait 10-30 seconds before executing the toggle operation.
+
 - turn-on
 
     ![node-command](figs/node-turn-on.png)

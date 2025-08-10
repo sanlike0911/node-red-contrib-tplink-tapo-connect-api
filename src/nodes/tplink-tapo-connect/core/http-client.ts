@@ -8,9 +8,14 @@ export class TapoHttpClient {
   constructor(ip: string, timeout: number = 10000) {
     this.baseUrl = `http://${ip}`;
     
+    // Use shorter timeout in test environment
+    const effectiveTimeout = process.env['TAPO_CONNECTION_TIMEOUT'] 
+      ? parseInt(process.env['TAPO_CONNECTION_TIMEOUT']) 
+      : timeout;
+    
     this.httpClient = axios.create({
       baseURL: this.baseUrl,
-      timeout,
+      timeout: effectiveTimeout,
       headers: {
         'Content-Type': 'application/json',
         'User-Agent': 'Tapo TypeScript Client'

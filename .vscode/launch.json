@@ -10,7 +10,7 @@
             "name": "Attach to Node-RED",
             "port": 9229,
             "address": "localhost",
-            "localRoot": "${workspaceFolder}\\data\\your-node\\nodes",
+            "localRoot": "${workspaceFolder}",
             "remoteRoot": "${workspaceFolder}",
             "protocol": "inspector"
         },
@@ -20,7 +20,7 @@
             "name": "Docker attach to Node-RED",
             "port": 9229,
             "address": "localhost",
-            "localRoot": "${workspaceFolder}\\test\\data\\your-node\\nodes",
+            "localRoot": "${workspaceFolder}",
             "remoteRoot": "${workspaceFolder}",
             "protocol": "inspector"
         },

@@ -72,9 +72,7 @@ const nodeInit: NodeInitializer = (RED): void => {
                 // debug
                 console.log(`config[${REGISTER_TYPE}]:`, {
                     deviceIp: config.deviceIp,
-                    hue: config.hue,
-                    saturation: config.saturation,
-                    color_temp: config.color_temp,
+                    colour: config.colour,
                     email: config.email ? '[REDACTED]' : '',
                     password: config.password ? '[REDACTED]' : ''
                 });

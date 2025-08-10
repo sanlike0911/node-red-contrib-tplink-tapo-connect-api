@@ -111,6 +111,10 @@ export class DeviceFactory {
     }
 
     static getDeviceTypeForMethod(method: string): TapoDeviceType {
+        // Basic control methods suggest plug devices
+        if (method === 'basic_control') {
+            return 'P100'; // Default basic plug
+        }
         // Energy monitoring methods require P110/P115
         if (method === 'getEnergyUsage' || method === 'getCurrentPower') {
             return 'P110';
