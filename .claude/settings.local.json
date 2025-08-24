@@ -12,7 +12,8 @@
       "Bash(npm run install:my-node:*)",
       "Bash(git commit:*)",
       "Bash(npm run start:*)",
-      "Bash(lsof:*)"
+      "Bash(lsof:*)",
+      "Bash(npm pack:*)"
     ],
     "deny": []
   }
