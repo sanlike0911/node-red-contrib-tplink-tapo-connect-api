@@ -145,59 +145,69 @@ export interface BulbCapabilities {
 }
 
 /**
+ * Common capability configurations for bulb types
+ */
+const DIMMABLE_BULB_CAPABILITIES: BulbCapabilities = {
+  brightness: true,
+  color: false,
+  colorTemperature: false,
+  effects: false,
+  minBrightness: 1,
+  maxBrightness: 100
+};
+
+const COLOR_TEMP_BULB_CAPABILITIES: BulbCapabilities = {
+  brightness: true,
+  color: false,
+  colorTemperature: true,
+  effects: false,
+  minBrightness: 1,
+  maxBrightness: 100,
+  minColorTemp: 2500,
+  maxColorTemp: 6500
+};
+
+const FULL_COLOR_BULB_CAPABILITIES: BulbCapabilities = {
+  brightness: true,
+  color: true,
+  colorTemperature: true,
+  effects: true,
+  minBrightness: 1,
+  maxBrightness: 100,
+  minColorTemp: 2500,
+  maxColorTemp: 6500
+};
+
+/**
  * Device capabilities by model
  */
 export const BULB_CAPABILITIES: Record<string, BulbCapabilities> = {
-  'L510': {
-    brightness: true,
-    color: false,
-    colorTemperature: false,
-    effects: false,
-    minBrightness: 1,
-    maxBrightness: 100
-  },
-  'L520': {
-    brightness: true,
-    color: false,
-    colorTemperature: true,
-    effects: false,
-    minBrightness: 1,
-    maxBrightness: 100,
-    minColorTemp: 2500,
-    maxColorTemp: 6500
-  },
-  'L530': {
-    brightness: true,
-    color: true,
-    colorTemperature: true,
-    effects: true,
-    minBrightness: 1,
-    maxBrightness: 100,
-    minColorTemp: 2500,
-    maxColorTemp: 6500
-  }
+  'L510': DIMMABLE_BULB_CAPABILITIES,
+  'L520': COLOR_TEMP_BULB_CAPABILITIES,
+  'L530': FULL_COLOR_BULB_CAPABILITIES,
+  'L535': FULL_COLOR_BULB_CAPABILITIES
 };
 
 /**
  * Check if device supports brightness control (all bulb types)
  */
 export function supportsBrightnessControl(deviceType: TapoDeviceType): boolean {
-  const bulbTypes: TapoDeviceType[] = ['L510', 'L520', 'L530'];
+  const bulbTypes: TapoDeviceType[] = ['L510', 'L520', 'L530', 'L535'];
   return bulbTypes.includes(deviceType);
 }
 
 /**
- * Check if device supports color control (only L530)
+ * Check if device supports color control (L530, L535)
  */
 export function supportsColorControl(deviceType: TapoDeviceType): boolean {
-  return deviceType === 'L530';
+  return deviceType === 'L530' || deviceType === 'L535';
 }
 
 /**
  * Check if device supports color temperature control
  */
 export function supportsColorTemperature(deviceType: TapoDeviceType): boolean {
-  const colorTempTypes: TapoDeviceType[] = ['L520', 'L530'];
+  const colorTempTypes: TapoDeviceType[] = ['L520', 'L530', 'L535'];
   return colorTempTypes.includes(deviceType);
 }
 
@@ -205,7 +215,7 @@ export function supportsColorTemperature(deviceType: TapoDeviceType): boolean {
  * Check if device supports light effects
  */
 export function supportsLightEffects(deviceType: TapoDeviceType): boolean {
-  const effectTypes: TapoDeviceType[] = ['L530'];
+  const effectTypes: TapoDeviceType[] = ['L530', 'L535'];
   return effectTypes.includes(deviceType);
 }
 

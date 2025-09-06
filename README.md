@@ -16,10 +16,11 @@ Starting with v0.50, we have added support for the KLAP protocol. To prioritize 
 | L510 | Smart Bulb (Dimmable) | ❌ | ✅ Supported |
 | L520 | Smart Bulb (Dimmable) | ❌ | ✅ Supported |
 | L530 | Smart Bulb (Color) | ❌ | ✅ Supported |
+| L535 | Smart Bulb (Color) | ❌ | ✅ Supported |
 
 ### Supported Features by Device
 
-| Feature | P100/P105 | P110/P115 | L510/L520 | L530 |
+| Feature | P100/P105 | P110/P115 | L510/L520 | L530/L535 |
 |---------|-----------|-----------|-----------|------|
 | Device Info | ✅ | ✅ | ✅ | ✅ |
 | Power On/Off | ✅ | ✅ | ✅ | ✅ |
