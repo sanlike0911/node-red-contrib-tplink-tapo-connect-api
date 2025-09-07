@@ -46,6 +46,18 @@ export class BulbDevice extends BaseDevice {
 
         await this.klapAuth.authenticate();
         
+        // Add small delay after authentication to prevent immediate -1012 errors
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Configure request executor to use KLAP auth
+        this.setRequestExecutor(async (request) => {
+            if (!this.klapAuth) {
+                throw new Error('KLAP authentication not initialized');
+            }
+            return this.klapAuth.secureRequest(request);
+        });
+        
+        // Get session data from KLAP auth
         const sessionData = {
             sessionId: (this.klapAuth as any).getSessionId?.() || undefined,
             token: (this.klapAuth as any).getToken?.() || undefined,
@@ -65,6 +77,15 @@ export class BulbDevice extends BaseDevice {
 
         const session = await this.auth.authenticate();
         
+        // Configure request executor to use Passthrough auth
+        this.setRequestExecutor(async (request) => {
+            if (!this.auth) {
+                throw new Error('Passthrough authentication not initialized');
+            }
+            return this.auth.secureRequest(request);
+        });
+        
+        // Get session data from passthrough auth
         const sessionData = {
             sessionId: session.sessionId,
             token: session.token,
