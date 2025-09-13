@@ -16,7 +16,8 @@
       "Bash(TAPO_IPADDRESS=192.168.0.39 npm run example:wrapper)",
       "Bash(timeout 60 npm test)",
       "Bash(npm test:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "WebFetch(domain:api.github.com)"
     ],
     "deny": []
   }

@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-tplink-tapo-connect-api",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "description": "This unofficial node-RED node allows connection to TP-Link Tapo devices. This project has been enhanced with AI support to enable new features. Starting with v0.50, we have added support for the KLAP protocol. To prioritize the operation of this node, we have simplified its functionality.",
   "author": "sanlike",
   "license": "Apache",
@@ -13,7 +13,8 @@
     "p115",
     "L510",
     "L520",
-    "L530"
+    "L530",
+    "L535"
   ],
   "main": "none",
   "scripts": {
@@ -50,24 +51,26 @@
   "dependencies": {
     "ansi-styles": "^6.2.1",
     "arpping": "^4.0.0",
-    "local-devices": "^4.0.0",
     "axios": "^1.11.0",
-    "uuid": "^11.1.0",
-    "crypto-js": "^4.2.0"
+    "crypto-js": "^4.2.0",
+    "local-devices": "^4.0.0",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@types/node-red": "^1.3.5",
     "@types/crypto-js": "^4.2.2",
+    "@types/jest": "^30.0.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node-red": "^1.3.5",
     "cpx2": "^8.0.0",
+    "dotenv": "^17.2.1",
+    "mocha": "^11.7.1",
     "node-red": "^4.0.8",
     "node-red-node-test-helper": "^0.3.4",
     "npm-run-all2": "^8.0.4",
     "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.7.2",
-    "mocha": "^11.7.1",
-    "dotenv": "^17.2.1"
+    "typescript": "^5.7.2"
   },
   "repository": {
     "type": "git",

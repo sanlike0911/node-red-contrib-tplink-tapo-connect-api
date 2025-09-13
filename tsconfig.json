@@ -76,6 +76,8 @@
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "src/nodes/tplink-tapo-connect/tests",
+    "src/nodes/tplink-tapo-connect/examples"
   ]
 }

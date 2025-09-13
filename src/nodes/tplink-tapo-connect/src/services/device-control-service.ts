@@ -383,7 +383,34 @@ export class DeviceControlService {
                 }
 
                 const device = await this.getOrCreateDevice(targetIp, credentials, 'setColor');
-                await device.setNamedColor(colour);
+                
+                // Check if colour is a hex code (starts with # or is 6 hex digits)
+                if (colour.startsWith('#') || /^[0-9A-Fa-f]{6}$/.test(colour)) {
+                    // Convert hex to RGB, then to HSV
+                    const hex = colour.replace('#', '');
+                    const red = parseInt(hex.substring(0, 2), 16);
+                    const green = parseInt(hex.substring(2, 4), 16);
+                    const blue = parseInt(hex.substring(4, 6), 16);
+                    
+                    // Convert RGB to HSV using existing ColorUtils
+                    const { ColorUtils } = await import('../types/bulb');
+                    const hsv = ColorUtils.rgbToHsv({ red, green, blue });
+                    
+                    // Send HSV values directly to device
+                    const request = {
+                        method: 'set_device_info',
+                        params: {
+                            hue: hsv.hue,
+                            saturation: hsv.saturation,
+                            brightness: hsv.value
+                        }
+                    };
+                    await device.sendRequest(request);
+                } else {
+                    // Use named color
+                    await device.setNamedColor(colour);
+                }
+                
                 const tapoDeviceInfo = await DeviceFactory.getDeviceInfo(targetIp, credentials);
 
                 return { result: true, tapoDeviceInfo: tapoDeviceInfo };
