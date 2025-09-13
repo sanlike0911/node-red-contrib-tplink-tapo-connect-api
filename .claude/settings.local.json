@@ -14,7 +14,9 @@
       "Bash(npm run start:*)",
       "Bash(lsof:*)",
       "Bash(npm pack:*)",
-      "Bash(gh pr:*)"
+      "Bash(gh pr:*)",
+      "Bash(mv:*)",
+      "Bash(find:*)"
     ],
     "deny": []
   }

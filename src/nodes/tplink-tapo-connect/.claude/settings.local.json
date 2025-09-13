@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(rm:*)",
+      "Bash(npm test)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:docs.rs)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(mv:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(npm run:*)",
+      "Bash(rg:*)",
+      "WebFetch(domain:python-kasa.readthedocs.io)",
+      "Bash(TAPO_IPADDRESS=192.168.0.39 npm run example:wrapper)",
+      "Bash(timeout 60 npm test)",
+      "Bash(npm test:*)",
+      "Bash(mkdir:*)"
+    ],
+    "deny": []
+  }
+}

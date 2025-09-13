@@ -1,0 +1,213 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Current File",
+      "type": "node",
+      "request": "launch",
+      "program": "${file}",
+      "skipFiles": ["<node_internals>/**"],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "envFile": "${workspaceFolder}/.env",
+      "runtimeArgs": ["-r", "ts-node/register"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
+      ],
+      "sourceMaps": true,
+      "restart": true,
+      "timeout": 60000,
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Debug TypeScript",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/index.ts",
+      "runtimeArgs": [
+        "-r",
+        "ts-node/register"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "restart": true,
+      "skipFiles": ["<node_internals>/**"],
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js"
+      ]
+    },
+    {
+      "name": "Debug P100 Example",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/examples/p100-plug-example.ts",
+      "runtimeArgs": [
+        "-r",
+        "ts-node/register"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "restart": true,
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Debug P105 Example",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/examples/p105-plug-example.ts",
+      "runtimeArgs": [
+        "-r",
+        "ts-node/register"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "restart": true,
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Debug P110 Example",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/examples/p110-plug-example.ts",
+      "runtimeArgs": [
+        "-r",
+        "ts-node/register"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "restart": true,
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Debug Wrapper Example",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/examples/wrapper-example.ts",
+      "runtimeArgs": [
+        "-r",
+        "ts-node/register"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "restart": true,
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Debug Jest Tests",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+      "args": [
+        "--runInBand",
+        "--no-cache",
+        "--no-coverage"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "env": {
+        "NODE_ENV": "test"
+      },
+      "envFile": "${workspaceFolder}/.env",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true
+    },
+    {
+      "name": "Debug Current Jest Test",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+      "args": [
+        "--runInBand",
+        "--no-cache",
+        "--no-coverage",
+        "${relativeFile}"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "env": {
+        "NODE_ENV": "test"
+      },
+      "envFile": "${workspaceFolder}/.env",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true
+    },
+    {
+      "name": "Debug L530 Test",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+      "args": [
+        "--runInBand",
+        "--no-cache",
+        "--no-coverage",
+        "--testNamePattern=L530"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "env": {
+        "NODE_ENV": "test"
+      },
+      "envFile": "${workspaceFolder}/.env",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Debug L530 Test File",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+      "args": [
+        "--runInBand",
+        "--no-cache",
+        "--no-coverage",
+        "tests/l530-bulb.test.ts"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "env": {
+        "NODE_ENV": "test"
+      },
+      "envFile": "${workspaceFolder}/.env",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}",
+      "windows": {
+        "args": [
+          "--runInBand",
+          "--no-cache",
+          "--no-coverage",
+          "tests\\l530-bulb.test.ts"
+        ]
+      }
+    }
+  ]
+}
