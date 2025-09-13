@@ -6,12 +6,12 @@
 /**
  * Tapo device categories
  */
-export type TapoDeviceCategory = 'PLUG' | 'BULB' | 'UNKNOWN';
+export type TapoDeviceCategory = 'PLUG' | 'BULB' | 'HUB' | 'UNKNOWN';
 
 /**
  * Supported Tapo device types
  */
-export type TapoDeviceType = 'P100' | 'P105' | 'P110' | 'P110M' | 'P115' | 'L510' | 'L520' | 'L530' | 'L535' | 'UNKNOWN';
+export type TapoDeviceType = 'P100' | 'P105' | 'P110' | 'P110M' | 'P115' | 'P300' | 'P304' | 'L510' | 'L520' | 'L530' | 'L535' | 'L610' | 'L900' | 'L920' | 'L930' | 'H100' | 'UNKNOWN';
 
 /**
  * Device type to category mapping
@@ -22,10 +22,17 @@ export const deviceTypeToCategory: Record<TapoDeviceType, TapoDeviceCategory> = 
   P110: 'PLUG',
   P110M: 'PLUG',
   P115: 'PLUG',
+  P300: 'PLUG',
+  P304: 'PLUG',
   L510: 'BULB',
   L520: 'BULB',
   L530: 'BULB',
   L535: 'BULB',
+  L610: 'BULB',
+  L900: 'BULB',
+  L920: 'BULB',
+  L930: 'BULB',
+  H100: 'HUB',
   UNKNOWN: 'UNKNOWN'
 };
 

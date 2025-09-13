@@ -1,4 +1,4 @@
-import { TapoConnect, TapoCredentials } from '../src';
+import { TapoConnect, TapoCredentials } from '../../src';
 
 describe('P105Plug Factory Tests', () => {
   let credentials: TapoCredentials;
@@ -20,15 +20,15 @@ describe('P105Plug Factory Tests', () => {
   describe('Protocol Support Tests', () => {
     test('should support KLAP V1/V2 protocols', () => {
       // Test that KLAP classes are available
-      const { KlapAuth } = require('../src/core/klap-auth');
-      const { UnifiedTapoProtocol } = require('../src/core/unified-protocol');
+      const { KlapAuth } = require('../../src/core/klap-auth');
+      const { UnifiedTapoProtocol } = require('../../src/core/unified-protocol');
       
       expect(KlapAuth).toBeDefined();
       expect(UnifiedTapoProtocol).toBeDefined();
     });
 
     test('should support automatic protocol detection', () => {
-      const { ProtocolSelector } = require('../src/core/protocol-selector');
+      const { ProtocolSelector } = require('../../src/core/protocol-selector');
       expect(ProtocolSelector).toBeDefined();
     });
   });

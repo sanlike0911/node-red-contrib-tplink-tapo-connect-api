@@ -3,8 +3,8 @@
  * Comprehensive tests for L530 color bulb with effects support
  */
 
-import { TapoConnect, TapoCredentials } from '../src';
-import { TEST_CONFIG, TEST_CREDENTIALS } from './test-config';
+import { TapoConnect, TapoCredentials } from '../../src';
+import { TEST_CONFIG, TEST_CREDENTIALS } from '../test-config';
 
 describe('L530 Smart Bulb Tests', () => {
   let credentials: TapoCredentials;
@@ -23,7 +23,7 @@ describe('L530 Smart Bulb Tests', () => {
 
     test('should have L530 specific capabilities', () => {
       // Verify L530 supports full color and effects
-      const { BULB_CAPABILITIES } = require('../src/types/bulb');
+      const { BULB_CAPABILITIES } = require('../../src/types/bulb');
       const l530Caps = BULB_CAPABILITIES['L530'];
 
       expect(l530Caps).toBeDefined();

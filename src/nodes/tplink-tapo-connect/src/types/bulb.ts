@@ -185,14 +185,27 @@ export const BULB_CAPABILITIES: Record<string, BulbCapabilities> = {
   'L510': DIMMABLE_BULB_CAPABILITIES,
   'L520': COLOR_TEMP_BULB_CAPABILITIES,
   'L530': FULL_COLOR_BULB_CAPABILITIES,
-  'L535': FULL_COLOR_BULB_CAPABILITIES
+  'L535': FULL_COLOR_BULB_CAPABILITIES,
+  'L610': DIMMABLE_BULB_CAPABILITIES,
+  'L900': {
+    brightness: true,
+    color: true,
+    colorTemperature: true,
+    effects: false, // L900 does not support effects
+    minBrightness: 1,
+    maxBrightness: 100,
+    minColorTemp: 2500,
+    maxColorTemp: 6500
+  },
+  'L920': FULL_COLOR_BULB_CAPABILITIES,
+  'L930': FULL_COLOR_BULB_CAPABILITIES
 };
 
 /**
  * Check if device supports brightness control (all bulb types)
  */
 export function supportsBrightnessControl(deviceType: TapoDeviceType): boolean {
-  const bulbTypes: TapoDeviceType[] = ['L510', 'L520', 'L530', 'L535'];
+  const bulbTypes: TapoDeviceType[] = ['L510', 'L520', 'L530', 'L535', 'L610', 'L900', 'L920', 'L930'];
   return bulbTypes.includes(deviceType);
 }
 
@@ -200,14 +213,15 @@ export function supportsBrightnessControl(deviceType: TapoDeviceType): boolean {
  * Check if device supports color control (L530, L535)
  */
 export function supportsColorControl(deviceType: TapoDeviceType): boolean {
-  return deviceType === 'L530' || deviceType === 'L535';
+  const colorTypes: TapoDeviceType[] = ['L530', 'L535', 'L900', 'L920', 'L930'];
+  return colorTypes.includes(deviceType);
 }
 
 /**
  * Check if device supports color temperature control
  */
 export function supportsColorTemperature(deviceType: TapoDeviceType): boolean {
-  const colorTempTypes: TapoDeviceType[] = ['L520', 'L530', 'L535'];
+  const colorTempTypes: TapoDeviceType[] = ['L520', 'L530', 'L535', 'L900', 'L920', 'L930'];
   return colorTempTypes.includes(deviceType);
 }
 
@@ -215,7 +229,7 @@ export function supportsColorTemperature(deviceType: TapoDeviceType): boolean {
  * Check if device supports light effects
  */
 export function supportsLightEffects(deviceType: TapoDeviceType): boolean {
-  const effectTypes: TapoDeviceType[] = ['L530', 'L535'];
+  const effectTypes: TapoDeviceType[] = ['L530', 'L535', 'L920', 'L930'];
   return effectTypes.includes(deviceType);
 }
 

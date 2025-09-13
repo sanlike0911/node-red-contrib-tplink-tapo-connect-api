@@ -23,4 +23,12 @@ module.exports = {
     'lcov',
     'html'
   ],
+  // Force test workers to exit after completion
+  forceExit: true,
+  // Detect open handles that prevent Jest from exiting
+  detectOpenHandles: true,
+  // Clear all timers after each test
+  clearMocks: true,
+  resetMocks: true,
+  restoreMocks: true
 };

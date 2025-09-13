@@ -1,4 +1,4 @@
-import { TapoConnect, TapoCredentials } from '../src';
+import { TapoConnect, TapoCredentials } from '../../src';
 
 describe('P110Plug Factory Tests', () => {
   let credentials: TapoCredentials;
@@ -20,7 +20,7 @@ describe('P110Plug Factory Tests', () => {
   describe('Device Type Support', () => {
     test('should have P110 device capabilities', () => {
       // Test that P110 plug class exists and has expected methods
-      const { P110Plug } = require('../src/devices/plugs/p110-plug');
+      const { P110Plug } = require('../../src/devices/plugs/p110-plug');
       expect(P110Plug).toBeDefined();
       
       // Check prototype methods including energy monitoring

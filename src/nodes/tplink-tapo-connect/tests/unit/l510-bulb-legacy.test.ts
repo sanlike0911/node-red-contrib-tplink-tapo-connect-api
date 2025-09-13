@@ -1,4 +1,4 @@
-import { TapoConnect, TapoCredentials } from '../src';
+import { TapoConnect, TapoCredentials } from '../../src';
 
 describe('L510Bulb Factory Tests', () => {
   let credentials: TapoCredentials;
@@ -25,7 +25,7 @@ describe('L510Bulb Factory Tests', () => {
   describe('Device Type Support', () => {
     test('should have L510 device capabilities', () => {
       // Test that L510 bulb class exists and has expected methods
-      const { L510Bulb } = require('../src/devices/bulbs/l510-bulb');
+      const { L510Bulb } = require('../../src/devices/bulbs/l510-bulb');
       expect(L510Bulb).toBeDefined();
       
       // Check prototype methods

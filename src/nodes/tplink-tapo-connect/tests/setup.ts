@@ -15,12 +15,25 @@ beforeAll(() => {
   process.env['TAPO_CONNECTION_TIMEOUT'] = '2000'; // 2 seconds
 });
 
-afterAll(() => {
+afterEach(() => {
+  // Clear all timers after each test to prevent leaks
+  jest.clearAllTimers();
+});
+
+afterAll(async () => {
   // Clean up any pending operations
   jest.clearAllTimers();
   jest.useRealTimers();
-  
+
   // Clean up environment variables
   delete process.env['TAPO_TEST_MODE'];
   delete process.env['TAPO_CONNECTION_TIMEOUT'];
+
+  // Force garbage collection if available
+  if (global.gc) {
+    global.gc();
+  }
+
+  // Wait a short time for any remaining async operations
+  await new Promise(resolve => setTimeout(resolve, 100));
 });
