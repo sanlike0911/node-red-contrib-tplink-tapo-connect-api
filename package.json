@@ -7,14 +7,7 @@
   "keywords": [
     "node-red",
     "tplink",
-    "p100",
-    "p105",
-    "p110",
-    "p115",
-    "L510",
-    "L520",
-    "L530",
-    "L535"
+    "IoT"
   ],
   "main": "none",
   "scripts": {
@@ -51,7 +44,7 @@
   "dependencies": {
     "ansi-styles": "^6.2.1",
     "arpping": "^4.0.0",
-    "axios": "^1.11.0",
+    "axios": "^1.12.0",
     "crypto-js": "^4.2.0",
     "local-devices": "^4.0.0",
     "uuid": "^11.1.0"
