@@ -17,7 +17,8 @@
       "Bash(timeout 60 npm test)",
       "Bash(npm test:*)",
       "Bash(mkdir:*)",
-      "WebFetch(domain:api.github.com)"
+      "WebFetch(domain:api.github.com)",
+      "Bash(npx jest:*)"
     ],
     "deny": []
   }

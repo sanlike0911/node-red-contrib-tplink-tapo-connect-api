@@ -13,6 +13,7 @@ Starting with v0.50, we have added support for the KLAP protocol. To prioritize 
 | P105 | Smart Plug | ❌ | ✅ Supported |
 | P110 | Smart Plug with Energy Monitoring | ✅ | ✅ Supported |
 | P115 | Smart Plug with Energy Monitoring | ✅ | ✅ Supported |
+| TP15 | Smart Plug | ❌ | 🧪 Experimental Support |
 | L510 | Smart Bulb (Dimmable) | ❌ | ✅ Supported |
 | L520 | Smart Bulb (Dimmable) | ❌ | ✅ Supported |
 | L530 | Smart Bulb (Color) | ❌ | ✅ Supported |
@@ -20,17 +21,17 @@ Starting with v0.50, we have added support for the KLAP protocol. To prioritize 
 
 ### Supported Features by Device
 
-| Feature | P100/P105 | P110/P115 | L510/L520 | L530/L535 |
-|---------|-----------|-----------|-----------|------|
-| Device Info | ✅ | ✅ | ✅ | ✅ |
-| Power On/Off | ✅ | ✅ | ✅ | ✅ |
-| Device Usage | ✅ | ✅ | ✅ | ✅ |
-| Current Power | ❌ | ✅ | ❌ | ❌ |
-| Energy Data | ❌ | ✅ | ❌ | ❌ |
-| Energy Usage | ❌ | ✅ | ❌ | ❌ |
-| Brightness Control | ❌ | ❌ | ✅ | ✅ |
-| Color Control | ❌ | ❌ | ❌ | ✅ |
-| Color Temperature | ❌ | ❌ | ❌ | ✅ |
+| Feature | P100/P105 | P110/P115 | TP15 | L510/L520 | L530/L535 |
+|---------|-----------|-----------|------|-----------|------|
+| Device Info | ✅ | ✅ | 🧪 | ✅ | ✅ |
+| Power On/Off | ✅ | ✅ | 🧪 | ✅ | ✅ |
+| Device Usage | ✅ | ✅ | 🧪 | ✅ | ✅ |
+| Current Power | ❌ | ✅ | ❌ | ❌ | ❌ |
+| Energy Data | ❌ | ✅ | ❌ | ❌ | ❌ |
+| Energy Usage | ❌ | ✅ | ❌ | ❌ | ❌ |
+| Brightness Control | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Color Control | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Color Temperature | ❌ | ❌ | ❌ | ❌ | ✅ |
 
 ## nodes
 
