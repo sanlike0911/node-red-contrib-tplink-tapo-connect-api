@@ -13,39 +13,40 @@ TypeScript/Node.js library for controlling TP-Link Tapo smart devices locally. T
 
 ## Supported Devices
 
-| Device Model | Type | Energy Monitoring | Color Support | Status |
-|--------------|------|------------------|---------------|--------|
-| P100 | Smart Plug | ❌ | ❌ | ✅ Supported |
-| P105 | Smart Plug | ❌ | ❌ | ✅ Supported |
-| P110 | Smart Plug with Energy Monitoring | ✅ | ❌ | ✅ Supported |
-| P115 | Smart Plug with Energy Monitoring | ✅ | ❌ | ✅ Supported |
-| P300 | Multi-Socket Power Strip | ❌ | ❌ | 🚧 Planned |
-| P304 | Multi-Socket Power Strip | ❌ | ❌ | 🚧 Planned |
-| L510 | Smart Bulb (Dimmable White) | ❌ | ❌ | ✅ Supported |
-| L520 | Smart Bulb (Tunable White) | ❌ | 🔶 Color Temperature | ✅ Supported |
-| L530 | Smart Bulb (Color) | ❌ | ✅ Full Color | ✅ Supported |
-| L535 | Smart Bulb (Color) | ❌ | ✅ Full Color | 🚧 Planned |
-| L610 | Smart Bulb (Dimmable White) | ❌ | ❌ | 🚧 Planned |
-| L630 | Smart Bulb (Color) | ❌ | ✅ Full Color | 🚧 Planned |
-| L900 | Light Strip | ❌ | ✅ Full Color | 🚧 Planned |
-| L920 | Light Strip with Effects | ❌ | ✅ Full Color + Effects | 🚧 Planned |
-| L930 | Light Strip with Effects | ❌ | ✅ Full Color + Effects | 🚧 Planned |
+| Device Model | Type                              | Energy Monitoring | Color Support          | Status                 |
+| ------------ | --------------------------------- | ----------------- | ---------------------- | ---------------------- |
+| P100         | Smart Plug                        | ❌                 | ❌                      | ✅ Supported            |
+| P105         | Smart Plug                        | ❌                 | ❌                      | ✅ Supported            |
+| TP15         | Smart Plug                        | ❌                 | ❌                      | 🧪 Experimental Support |
+| P110         | Smart Plug with Energy Monitoring | ✅                 | ❌                      | ✅ Supported            |
+| P115         | Smart Plug with Energy Monitoring | ✅                 | ❌                      | ✅ Supported            |
+| P300         | Multi-Socket Power Strip          | ❌                 | ❌                      | 🚧 Planned              |
+| P304         | Multi-Socket Power Strip          | ❌                 | ❌                      | 🚧 Planned              |
+| L510         | Smart Bulb (Dimmable White)       | ❌                 | ❌                      | ✅ Supported            |
+| L520         | Smart Bulb (Tunable White)        | ❌                 | 🔶 Color Temperature    | ✅ Supported            |
+| L530         | Smart Bulb (Color)                | ❌                 | ✅ Full Color           | ✅ Supported            |
+| L535         | Smart Bulb (Color)                | ❌                 | ✅ Full Color           | 🚧 Planned              |
+| L610         | Smart Bulb (Dimmable White)       | ❌                 | ❌                      | 🚧 Planned              |
+| L630         | Smart Bulb (Color)                | ❌                 | ✅ Full Color           | 🚧 Planned              |
+| L900         | Light Strip                       | ❌                 | ✅ Full Color           | 🚧 Planned              |
+| L920         | Light Strip with Effects          | ❌                 | ✅ Full Color + Effects | 🚧 Planned              |
+| L930         | Light Strip with Effects          | ❌                 | ✅ Full Color + Effects | 🚧 Planned              |
 
 ### Supported Features by Device
 
-| Feature | P100/P105 | P110/P115 | L510 | L520 | L530 |
-|---------|-----------|-----------|------|------|------|
-| Device Info | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Power On/Off | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Device Usage | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Current Power | ❌ | ✅ | ❌ | ❌ | ❌ |
-| Energy Data | ❌ | ✅ | ❌ | ❌ | ❌ |
-| Energy Usage | ❌ | ✅ | ❌ | ❌ | ❌ |
-| Brightness Control | ❌ | ❌ | ✅ | ✅ | ✅ |
-| Color Control | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Color Temperature | ❌ | ❌ | ❌ | ✅ | ✅ |
-| HSV Color Control | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Lighting Effects | ❌ | ❌ | ❌ | ❌ | 🚧 Planned |
+| Feature            | P100/P105 | P110/P115 | L510 | L520 | L530      |
+| ------------------ | --------- | --------- | ---- | ---- | --------- |
+| Device Info        | ✅         | ✅         | ✅    | ✅    | ✅         |
+| Power On/Off       | ✅         | ✅         | ✅    | ✅    | ✅         |
+| Device Usage       | ✅         | ✅         | ✅    | ✅    | ✅         |
+| Current Power      | ❌         | ✅         | ❌    | ❌    | ❌         |
+| Energy Data        | ❌         | ✅         | ❌    | ❌    | ❌         |
+| Energy Usage       | ❌         | ✅         | ❌    | ❌    | ❌         |
+| Brightness Control | ❌         | ❌         | ✅    | ✅    | ✅         |
+| Color Control      | ❌         | ❌         | ❌    | ❌    | ✅         |
+| Color Temperature  | ❌         | ❌         | ❌    | ✅    | ✅         |
+| HSV Color Control  | ❌         | ❌         | ❌    | ❌    | ✅         |
+| Lighting Effects   | ❌         | ❌         | ❌    | ❌    | 🚧 Planned |
 
 ## Installation
 
@@ -318,17 +319,20 @@ const l530 = await TapoConnect.createL530Bulb(ip, credentials);  // Color bulb
 ### Wrapper Classes
 
 #### Main Wrapper (Recommended)
+
 - `tplinkTapoConnectWrapper` - Main wrapper with integrated retry support, batch operations, and device identifier support
 
 ### Retry and Batch Operations
 
 #### RetryOptions Interface
+
 - `maxAttempts` - Maximum number of retry attempts
 - `baseDelay` - Base delay between retries (ms)
 - `strategy` - Retry strategy ('linear' | 'exponential')
 - `onRetry` - Optional callback for retry events
 
 #### Batch Operations
+
 - `executeBatch(operations)` - Execute multiple operations with smart delays
 - `BatchOperation` interface for defining batch operations
 - Automatic error handling and result aggregation
@@ -380,7 +384,8 @@ npm run lint:fix          # Fix linting issues
 
 This project includes comprehensive VS Code debug configurations:
 
-#### Available Debug Configurations:
+#### Available Debug Configurations
+
 - **Debug Current File** - Debug any currently open TypeScript file
 - **Debug P100 Example** - Debug P100 plug example
 - **Debug P105 Example** - Debug P105 plug example  
@@ -389,7 +394,8 @@ This project includes comprehensive VS Code debug configurations:
 - **Debug Jest Tests** - Debug all Jest tests
 - **Debug Current Jest Test** - Debug currently open test file
 
-#### How to Debug:
+#### How to Debug
+
 1. Open any TypeScript file (e.g., `examples/p105-plug-example.ts`)
 2. Set breakpoints by clicking in the gutter
 3. Press `F5` or go to **Run and Debug** panel
@@ -397,6 +403,7 @@ This project includes comprehensive VS Code debug configurations:
 5. Click the green play button
 
 The debugger will:
+
 - Automatically load environment variables from `.env`
 - Use ts-node for TypeScript execution
 - Provide source map support
@@ -432,6 +439,7 @@ The library supports both modern Tapo protocols with automatic fallback:
 ### Type Safety
 
 Full TypeScript support with:
+
 - Comprehensive type definitions
 - Generic error types
 - Result pattern for explicit error handling
