@@ -42,3 +42,6 @@ data/
 # Node-RED #
 #############
 #examples/
+
+# claude
+.claude

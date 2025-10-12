@@ -1,105 +1,81 @@
-# Node-RED 専用 TPLINK TAPO PluginのAPI移植処理
+# Claude Code Spec-Driven Development
 
-## プロジェクトの概要
+Kiro-style Spec Driven Development implementation using claude code slash commands, hooks and agents.
 
-本プロジェクトは、Node-REDのTP-LinkのTapoデバイスを操作するためのカスタムノードである。
+## Project Context
 
-## Claude Codeによる移植プロジェクト
+### Paths
 
-本プロジェクトのカスタムノードが利用するAPIは、新プロトコルであるKLAPに対応していないため、旧APIの「src/nodes/tplink_tapo_connect_wrapper/」のプロジェクトを、新API「src/nodes/tplink-tapo-connect/」のプロジェクトに移植を目的とする。
+- Steering: `.kiro/steering/`
+- Specs: `.kiro/specs/`
+- Commands: `.claude/commands/`
 
-## 開発コマンド
+### Steering vs Specification
 
-### ビルド・テスト関連
+**Steering** (`.kiro/steering/`) - Guide AI with project-wide rules and context
+**Specs** (`.kiro/specs/`) - Formalize development process for individual features
 
-- `npm run build` - TypeScriptをコンパイルし、dist/にファイルをコピーしてNode-REDにインストール
-- `npm run test` - Mochaテストを実行
-- `npm run tsc` - TypeScriptコンパイルのみ
-- `npm run clean` - distディレクトリをクリーンアップ
+### Active Specifications
 
-### 開発・実行関連
+- Check `.kiro/specs/` for active specifications
+- Use `/kiro:spec-status [feature-name]` to check progress
 
-- `npm run start` - Node-REDを起動 (http://localhost:1880)
-- `npm run start:debug` - デバッグモードでNode-REDを起動
+## Development Guidelines
 
-### コピー関連（build時に自動実行）
+- Think in English, generate responses in English
 
-- `npm run copy` - すべてのアセットをコピー
-- `npm run copy:html` - HTMLファイルをコピー
-- `npm run copy:icons` - アイコンファイルをコピー
-- `npm run copy:locales` - 多言語ファイルをコピー
+## Workflow
 
-## アーキテクチャ
+### Phase 0: Steering (Optional)
 
-### API移植の構造
+`/kiro:steering` - Create/update steering documents
+`/kiro:steering-custom` - Create custom steering for specialized contexts
 
-- **旧API**: `src/nodes/tplink_tapo_connect_wrapper/` - 既存のAPI実装
-- **新API**: `src/nodes/tplink-tapo-connect/` - KLAP対応の新API実装
-- **ラッパー**: Node-REDノード側の変更を最小限に抑えるため、ラッパー関数を経由して実行
+Note: Optional for new features or small additions. You can proceed directly to spec-init.
 
-### Node-REDノード構成
+### Phase 1: Specification Creation
 
-プロジェクトは以下のNode-REDカスタムノードを提供：
+1. `/kiro:spec-init [detailed description]` - Initialize spec with detailed project description
+2. `/kiro:spec-requirements [feature]` - Generate requirements document
+3. `/kiro:spec-design [feature]` - Interactive: "Have you reviewed requirements.md? [y/N]"
+4. `/kiro:spec-tasks [feature]` - Interactive: Confirms both requirements and design review
 
-- `tplink_toggle` - デバイスの電源ON/OFF切り替え
-- `tplink_turn_on` - デバイス電源ON
-- `tplink_turn_off` - デバイス電源OFF
-- `tplink_brightness` - スマート電球の明度設定
-- `tplink_colour` - スマート電球の色設定
-- `tplink_command` - 汎用コマンド実行
-- `tplink_custom_request` - カスタムリクエスト送信
-- `tplink_status` - デバイス状態取得
+### Phase 2: Progress Tracking
 
-### 対応デバイス
+`/kiro:spec-status [feature]` - Check current progress and phases
 
-- **スマートプラグ**: P100, P105, P110, P115
-- **スマート電球**: L510E, L530E
-- **スマートストリップ**: L900-10
+## Development Rules
 
-### ディレクトリ構造
-```
+1. **Consider steering**: Run `/kiro:steering` before major development (optional for new features)
+2. **Follow 3-phase approval workflow**: Requirements → Design → Tasks → Implementation
+3. **Approval required**: Each phase requires human review (interactive prompt or manual)
+4. **No skipping phases**: Design requires approved requirements; Tasks require approved design
+5. **Update task status**: Mark tasks as completed when working on them
+6. **Keep steering current**: Run `/kiro:steering` after significant changes
+7. **Check spec compliance**: Use `/kiro:spec-status` to verify alignment
 
-src/nodes/
-├── tplink-tapo-connect/          # 新API (KLAP対応)
-│   ├── core/                     # 認証・暗号化・HTTP通信
-│   ├── devices/                  # デバイス別実装
-│   ├── types/                    # 型定義
-│   ├── utils/                    # ユーティリティ
-│   └── wrapper/                  # ラッパー実装
-├── tplink_tapo_connect_wrapper/  # 旧API
-└── *.ts/*.html                   # Node-REDノード実装
-```
+## Steering Configuration
 
-## 重要な実装ポイント
+### Current Steering Files
 
-### ラッパーパターン
+Managed by `/kiro:steering` command. Updates here reflect command changes.
 
-新旧API間のインターフェース統一のため、ラッパークラスを使用：
+### Active Steering Files
 
-- `tplink_tapo_connect_wrapper.ts` (旧) → `tplink-tapo-connect-wrapper.ts` (新)
-- Node-REDノード側のコード変更を最小限に抑制
+- `product.md`: Always included - Product context and business objectives
+- `tech.md`: Always included - Technology stack and architectural decisions
+- `structure.md`: Always included - File organization and code patterns
 
-### エネルギー使用量対応デバイス
+### Custom Steering Files
+<!-- Added by /kiro:steering-custom command -->
+<!-- Format:
+- `filename.md`: Mode - Pattern(s) - Description
+  Mode: Always|Conditional|Manual
+  Pattern: File patterns for Conditional mode
+-->
 
-P110, P115, KP125M等の特定モデルでエネルギー使用量取得が可能
+### Inclusion Modes
 
-### 認証方式
-
-新APIではKLAP (Kasa Link Authentication Protocol) に対応
-
-## 開発時の注意点
-
-### TypeScript設定
-
-- Node.js 18以上が必要
-- TypeScriptコンパイルは`npm run tsc`または`npm run build`で実行
-
-### テスト
-
-- Mochaを使用
-- テストファイルは`src/nodes/test/*_spec.js`に配置
-
-### 多言語対応
-
-- 英語 (`en-US`) と日本語 (`ja`) に対応
-- ローカライゼーションファイルは`src/nodes/locales/`に配置
+- **Always**: Loaded in every interaction (default)
+- **Conditional**: Loaded for specific file patterns (e.g., "*.test.js")
+- **Manual**: Reference with `@filename.md` syntax
