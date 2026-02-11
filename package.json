@@ -63,7 +63,7 @@
   "dependencies": {
     "ansi-styles": "^6.2.1",
     "arpping": "^4.0.0",
-    "axios": "^1.12.0",
+    "axios": "^1.13.5",
     "crypto-js": "^4.2.0",
     "local-devices": "^4.0.0",
     "uuid": "^11.1.0"
